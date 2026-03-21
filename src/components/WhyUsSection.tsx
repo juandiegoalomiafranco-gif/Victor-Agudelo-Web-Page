@@ -5,17 +5,17 @@ const reasons = [
   {
     icon: Target,
     title: "Experiencia comprobada",
-    description: "30 años trabajando con marcas líderes en Colombia y América Latina.",
+    description: "25+ años trabajando con marcas líderes en Colombia y toda la región.",
   },
   {
     icon: Globe,
-    title: "Cobertura en América",
-    description: "Presencia en 15+ países de la región con logística integrada.",
+    title: "Cobertura nacional",
+    description: "Operación logística en las principales ciudades del país.",
   },
   {
     icon: Leaf,
     title: "Compromiso sostenible",
-    description: "Soluciones con materiales eco-amigables y procesos responsables.",
+    description: "Materiales eco-friendly y procesos responsables con el medio ambiente.",
   },
   {
     icon: Handshake,
@@ -34,11 +34,11 @@ const WhyUsSection = () => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <p className="text-accent text-sm font-semibold uppercase tracking-[0.15em] mb-4">
+          <p className="text-accent text-xs font-body font-semibold uppercase tracking-[0.2em] mb-4">
             ¿Por qué elegirnos?
           </p>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-foreground leading-tight">
-            ¿Por qué Imágenes Gráficas?
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground leading-tight">
+            ¿Por qué <span className="text-gradient-gold italic">Imágenes Gráficas</span>?
           </h2>
         </motion.div>
 
@@ -50,15 +50,15 @@ const WhyUsSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="text-center p-8"
+              className="text-center p-8 group"
             >
-              <div className="w-16 h-16 rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-6">
+              <div className="w-16 h-16 rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-6 group-hover:bg-accent/20 transition-colors duration-300">
                 <reason.icon className="text-accent" size={28} />
               </div>
-              <h3 className="text-lg font-bold text-foreground mb-3">
+              <h3 className="text-lg font-heading font-bold text-foreground mb-3">
                 {reason.title}
               </h3>
-              <p className="text-muted-foreground text-sm leading-relaxed">
+              <p className="text-muted-foreground text-sm leading-relaxed font-body">
                 {reason.description}
               </p>
             </motion.div>

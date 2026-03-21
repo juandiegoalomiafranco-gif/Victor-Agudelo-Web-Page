@@ -5,8 +5,8 @@ import { Menu, X } from "lucide-react";
 const navLinks = [
   { label: "Nosotros", href: "#nosotros" },
   { label: "Servicios", href: "#servicios" },
-  { label: "Casos de éxito", href: "#casos" },
-  { label: "Blog", href: "#blog" },
+  { label: "Portafolio", href: "#portafolio" },
+  { label: "Proceso", href: "#proceso" },
   { label: "Contacto", href: "#contacto" },
 ];
 
@@ -33,19 +33,18 @@ const Navbar = () => {
         initial={{ y: 0 }}
         animate={{ y: hidden ? -100 : 0 }}
         transition={{ duration: 0.3 }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           scrolled
-            ? "bg-background/95 backdrop-blur-md shadow-lg"
+            ? "bg-background/95 backdrop-blur-xl border-b border-border"
             : "bg-transparent"
         }`}
       >
-        <div className="container mx-auto flex items-center justify-between py-4 px-6 lg:px-8">
-          <a href="#" className="flex items-center gap-2">
-            <span
-              className={`text-2xl font-extrabold tracking-tight transition-colors ${
-                scrolled ? "text-foreground" : "text-primary-foreground"
-              }`}
-            >
+        <div className="container mx-auto flex items-center justify-between py-5 px-6 lg:px-8">
+          <a href="#" className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-accent rounded-sm flex items-center justify-center">
+              <span className="text-accent-foreground font-heading font-bold text-sm">IG</span>
+            </div>
+            <span className="text-lg font-heading font-bold text-foreground tracking-tight">
               Imágenes Gráficas
             </span>
           </a>
@@ -55,24 +54,22 @@ const Navbar = () => {
               <a
                 key={link.label}
                 href={link.href}
-                className={`text-sm font-medium transition-colors hover:text-accent ${
-                  scrolled ? "text-foreground" : "text-primary-foreground"
-                }`}
+                className="text-sm font-medium text-foreground/60 hover:text-accent transition-colors duration-300"
               >
                 {link.label}
               </a>
             ))}
             <a
               href="#contacto"
-              className="bg-accent text-accent-foreground px-5 py-2.5 rounded-sm text-sm font-bold hover:brightness-110 transition-all"
+              className="bg-accent text-accent-foreground px-6 py-2.5 rounded-sm text-sm font-bold hover:brightness-110 transition-all duration-300"
             >
-              Hablar con un asesor
+              Cotiza ahora
             </a>
           </div>
 
           <button
             onClick={() => setMobileOpen(true)}
-            className={`lg:hidden ${scrolled ? "text-foreground" : "text-primary-foreground"}`}
+            className="lg:hidden text-foreground"
           >
             <Menu size={28} />
           </button>
@@ -86,13 +83,13 @@ const Navbar = () => {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "tween", duration: 0.3 }}
-            className="fixed inset-0 z-[60] bg-primary flex flex-col"
+            className="fixed inset-0 z-[60] bg-background flex flex-col"
           >
             <div className="flex items-center justify-between p-6">
-              <span className="text-2xl font-extrabold text-primary-foreground">
+              <span className="text-lg font-heading font-bold text-foreground">
                 Imágenes Gráficas
               </span>
-              <button onClick={() => setMobileOpen(false)} className="text-primary-foreground">
+              <button onClick={() => setMobileOpen(false)} className="text-foreground">
                 <X size={28} />
               </button>
             </div>
@@ -102,7 +99,7 @@ const Navbar = () => {
                   key={link.label}
                   href={link.href}
                   onClick={() => setMobileOpen(false)}
-                  className="text-2xl font-bold text-primary-foreground hover:text-accent transition-colors"
+                  className="text-3xl font-heading font-bold text-foreground hover:text-accent transition-colors"
                 >
                   {link.label}
                 </a>
@@ -112,7 +109,7 @@ const Navbar = () => {
                 onClick={() => setMobileOpen(false)}
                 className="bg-accent text-accent-foreground px-8 py-3 rounded-sm text-lg font-bold mt-4"
               >
-                Hablar con un asesor
+                Cotiza ahora
               </a>
             </div>
           </motion.div>

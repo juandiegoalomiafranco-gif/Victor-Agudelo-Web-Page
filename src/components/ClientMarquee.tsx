@@ -5,16 +5,16 @@ const clients = [
 
 const ClientMarquee = () => {
   return (
-    <section className="py-12 bg-background border-b border-border overflow-hidden">
-      <p className="text-center text-sm font-semibold uppercase tracking-[0.15em] text-muted-foreground mb-8">
-        Confían en nosotros
+    <section className="py-10 bg-secondary/50 border-y border-border overflow-hidden">
+      <p className="text-center text-xs font-body font-semibold uppercase tracking-[0.2em] text-muted-foreground mb-6">
+        Marcas que confían en nosotros
       </p>
       <div className="relative overflow-hidden">
-        <div className="animate-marquee flex gap-16 whitespace-nowrap">
+        <div className="animate-marquee flex gap-20 whitespace-nowrap">
           {[...clients, ...clients].map((client, i) => (
             <span
               key={i}
-              className="text-2xl font-bold text-muted-foreground/40 hover:text-foreground transition-colors duration-300 select-none"
+              className="text-xl font-body font-semibold text-foreground/15 hover:text-accent/60 transition-colors duration-500 select-none cursor-default"
             >
               {client}
             </span>
