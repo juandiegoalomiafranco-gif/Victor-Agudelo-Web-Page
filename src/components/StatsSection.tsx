@@ -2,10 +2,10 @@ import { motion, useInView } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 
 const stats = [
-  { value: 30, suffix: "+", label: "Años de experiencia" },
-  { value: 15, suffix: "", label: "Países de cobertura" },
+  { value: 25, suffix: "+", label: "Años de experiencia" },
   { value: 500, suffix: "+", label: "Clientes satisfechos" },
-  { value: 100, suffix: "%", label: "Compromiso con la calidad" },
+  { value: 10000, suffix: "+", label: "Proyectos realizados" },
+  { value: 100, suffix: "%", label: "Compromiso" },
 ];
 
 const Counter = ({ target, suffix }: { target: number; suffix: string }) => {
@@ -31,15 +31,15 @@ const Counter = ({ target, suffix }: { target: number; suffix: string }) => {
   }, [isInView, target]);
 
   return (
-    <span ref={ref} className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-primary-foreground">
-      {count}{suffix}
+    <span ref={ref} className="text-5xl md:text-6xl lg:text-7xl font-heading font-bold text-accent">
+      {count.toLocaleString()}{suffix}
     </span>
   );
 };
 
 const StatsSection = () => {
   return (
-    <section className="py-24 lg:py-32 bg-primary">
+    <section className="py-24 lg:py-32 bg-secondary border-y border-border">
       <div className="container mx-auto px-6 lg:px-8">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-12 text-center">
           {stats.map((stat, i) => (
@@ -51,7 +51,7 @@ const StatsSection = () => {
               transition={{ duration: 0.5, delay: i * 0.1 }}
             >
               <Counter target={stat.value} suffix={stat.suffix} />
-              <p className="text-primary-foreground/60 text-sm md:text-base font-medium mt-3">
+              <p className="text-muted-foreground text-sm md:text-base font-body font-medium mt-3">
                 {stat.label}
               </p>
             </motion.div>
