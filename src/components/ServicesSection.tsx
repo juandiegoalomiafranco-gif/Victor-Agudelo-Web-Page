@@ -1,79 +1,76 @@
 import { motion } from "framer-motion";
-import { Layers, Map, PartyPopper, Palette, Maximize2, Store } from "lucide-react";
+import { ArrowUpRight, Layers, Map, PartyPopper, Palette, Maximize2, Store } from "lucide-react";
 
 const services = [
-  {
-    icon: Layers,
-    title: "Material POP",
-    description: "Displays, exhibidores, habladores y material de punto de compra que captura la atención y genera ventas.",
-  },
-  {
-    icon: Map,
-    title: "Señalización",
-    description: "Sistemas de señalética interior y exterior para orientar, informar e impactar con tu marca.",
-  },
-  {
-    icon: PartyPopper,
-    title: "Publicidad en Eventos",
-    description: "Stands, backings, banners y ambientación que convierte cada evento en una experiencia de marca.",
-  },
-  {
-    icon: Palette,
-    title: "Branding Físico",
-    description: "Identidad visual aplicada a espacios, vehículos, uniformes y todo punto de contacto con tu audiencia.",
-  },
-  {
-    icon: Maximize2,
-    title: "Impresión Gran Formato",
-    description: "Vallas, murales, lonas y gigantografías con resolución y color que impresionan a cualquier distancia.",
-  },
-  {
-    icon: Store,
-    title: "Puntos de Venta",
-    description: "Diseño y producción integral de espacios comerciales que potencian la experiencia de compra.",
-  },
+  { icon: Layers, title: "Material POP", desc: "Displays y lineales de alto impacto." },
+  { icon: Map, title: "Señalización", desc: "Sistemas corporativos interiores o exteriores." },
+  { icon: PartyPopper, title: "Eventos", desc: "Stands y backings promocionales." },
+  { icon: Palette, title: "Branding", desc: "Identidad visual en espacios físicos." },
+  { icon: Maximize2, title: "Gran Formato", desc: "Vallas, lonas y fachadas comerciales." },
+  { icon: Store, title: "Puntos de Venta", desc: "Arquitectura comercial inmersiva." },
 ];
 
-const ServicesSection = () => {
+const ExactServices = () => {
   return (
-    <section id="servicios" className="py-24 lg:py-32 bg-background">
+    <section id="servicios" className="py-24 lg:py-40 bg-white">
       <div className="container mx-auto px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <p className="text-accent text-xs font-body font-semibold uppercase tracking-[0.2em] mb-4">
-            Nuestros servicios
-          </p>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-extrabold text-foreground leading-tight max-w-3xl mx-auto">
-            Todo lo que tu marca necesita para{" "}
-            <span className="text-gradient-brand italic">destacar</span>
-          </h2>
-        </motion.div>
+        
+        {/* Dapper-style asymmetrical header */}
+        <div className="flex flex-col lg:flex-row justify-between items-start mb-20 gap-10">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="flex-1 max-w-3xl"
+          >
+            <div className="inline-flex items-center gap-2 mb-6">
+              <span className="w-2 h-2 rounded-full bg-gold" />
+              <span className="text-primary text-sm font-semibold uppercase tracking-widest">Nuestra Experiencia</span>
+            </div>
+            
+            <h2 className="text-5xl md:text-6xl lg:text-[5rem] font-bold text-primary font-heading leading-[1] tracking-tight">
+              Diseño estructural <br/>que <span className="italic font-light tracking-tighter">genera negocio.</span>
+            </h2>
+          </motion.div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            className="flex-1 lg:max-w-sm pt-4 lg:pt-20"
+          >
+            <p className="text-primary/70 text-base mb-6 font-body font-medium leading-relaxed">
+              No solo hacemos publicidad visual; construimos los activos físicos que tu fuerza de ventas necesita para dominar el punto de compra.
+            </p>
+            <a href="#contacto" className="group inline-flex items-center gap-3 text-primary text-sm font-bold border-b border-primary/20 pb-1 hover:border-primary transition-colors">
+              Explorar capacidades
+              <ArrowUpRight size={16} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+            </a>
+          </motion.div>
+        </div>
+
+        {/* Dapper-style sparse grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
           {services.map((service, i) => (
             <motion.div
               key={service.title}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="group relative bg-card border border-border rounded-lg p-8 hover:border-accent/40 transition-all duration-500 hover:-translate-y-1 hover:shadow-lg"
+              transition={{ duration: 0.7, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
+              className="group cursor-pointer"
             >
-              <div className="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-6 group-hover:bg-accent/20 transition-colors duration-300">
-                <service.icon size={24} className="text-accent" />
+              <div className="w-16 h-16 bg-[#F8F8F8] rounded-md flex items-center justify-center mb-6 group-hover:bg-gold transition-colors duration-500">
+                <service.icon size={28} className="text-primary stroke-[1.5]" />
               </div>
-              <h3 className="text-xl font-heading font-bold text-foreground mb-3">
+              <h3 className="text-2xl font-bold font-heading text-primary mb-3 tracking-tight group-hover:text-gold transition-colors">
                 {service.title}
               </h3>
-              <p className="text-muted-foreground text-sm leading-relaxed">
-                {service.description}
+              <p className="text-primary/70 text-sm font-medium leading-relaxed font-body">
+                {service.desc}
               </p>
-              <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent group-hover:w-full transition-all duration-500 rounded-b-lg" />
             </motion.div>
           ))}
         </div>
@@ -82,4 +79,4 @@ const ServicesSection = () => {
   );
 };
 
-export default ServicesSection;
+export default ExactServices;

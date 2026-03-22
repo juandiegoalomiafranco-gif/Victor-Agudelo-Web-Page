@@ -1,17 +1,8 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Send, MessageCircle, Mail, Phone, MapPin } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 
-const serviceOptions = [
-  "Material POP",
-  "Señalización",
-  "Publicidad en Eventos",
-  "Branding Físico",
-  "Impresión Gran Formato",
-  "Puntos de Venta",
-];
-
-const ContactSection = () => {
+const ExactContact = () => {
   const [formData, setFormData] = useState({
     name: "",
     company: "",
@@ -25,126 +16,102 @@ const ContactSection = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const text = `Hola, soy ${formData.name} de ${formData.company}. Me interesa el servicio de ${formData.service}. ${formData.message}`;
+    const text = `Hola, soy ${formData.name}. ${formData.message}`;
     window.open(`https://wa.me/573001234567?text=${encodeURIComponent(text)}`, "_blank");
   };
 
   return (
-    <section id="contacto" className="py-24 lg:py-32 bg-secondary">
-      <div className="container mx-auto px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <p className="text-accent text-xs font-body font-semibold uppercase tracking-[0.2em] mb-4">
-            Contacto
-          </p>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-extrabold text-foreground leading-tight">
-            ¿Listo para hacer{" "}
-            <span className="text-gradient-brand italic">visible</span> tu marca?
-          </h2>
-        </motion.div>
-
-        <div className="grid lg:grid-cols-5 gap-12 max-w-5xl mx-auto">
-          <motion.form
-            onSubmit={handleSubmit}
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="lg:col-span-3 space-y-5"
-          >
-            <div className="grid sm:grid-cols-2 gap-5">
-              <input
-                type="text"
-                name="name"
-                placeholder="Tu nombre"
-                required
-                value={formData.name}
-                onChange={handleChange}
-                className="w-full bg-card border border-border rounded-md px-4 py-3.5 text-foreground text-sm font-body placeholder:text-muted-foreground focus:outline-none focus:border-accent transition-colors"
-              />
-              <input
-                type="text"
-                name="company"
-                placeholder="Tu empresa"
-                value={formData.company}
-                onChange={handleChange}
-                className="w-full bg-card border border-border rounded-md px-4 py-3.5 text-foreground text-sm font-body placeholder:text-muted-foreground focus:outline-none focus:border-accent transition-colors"
-              />
-            </div>
-            <select
-              name="service"
-              required
-              value={formData.service}
-              onChange={handleChange}
-              className="w-full bg-card border border-border rounded-md px-4 py-3.5 text-foreground text-sm font-body focus:outline-none focus:border-accent transition-colors appearance-none"
-            >
-              <option value="" disabled>Servicio que necesitas</option>
-              {serviceOptions.map((s) => (
-                <option key={s} value={s}>{s}</option>
-              ))}
-            </select>
-            <textarea
-              name="message"
-              placeholder="Cuéntanos sobre tu proyecto..."
-              rows={4}
-              value={formData.message}
-              onChange={handleChange}
-              className="w-full bg-card border border-border rounded-md px-4 py-3.5 text-foreground text-sm font-body placeholder:text-muted-foreground focus:outline-none focus:border-accent transition-colors resize-none"
-            />
-            <button
-              type="submit"
-              className="w-full bg-accent text-accent-foreground px-6 py-4 rounded-md text-base font-bold hover:brightness-110 transition-all inline-flex items-center justify-center gap-2"
-            >
-              <Send size={18} />
-              Enviar cotización
-            </button>
-          </motion.form>
-
+    <section id="contacto" className="py-24 lg:py-40 bg-[#F8F8F8] border-t border-black/[0.05]">
+      <div className="container mx-auto px-6 lg:px-8 max-w-6xl">
+        
+        <div className="grid lg:grid-cols-2 gap-20">
+          {/* Left Text Segment */}
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
+            initial={{ opacity: 0, x: -40 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="lg:col-span-2 space-y-8"
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
-            <div>
-              <h3 className="text-lg font-heading font-bold text-foreground mb-4">
-                Datos de contacto
-              </h3>
-              <ul className="space-y-4">
-                <li className="flex items-start gap-3">
-                  <MapPin className="text-accent shrink-0 mt-0.5" size={18} />
-                  <span className="text-muted-foreground text-sm">Bogotá, Colombia</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <Phone className="text-accent shrink-0 mt-0.5" size={18} />
-                  <span className="text-muted-foreground text-sm">+57 (1) 234 5678</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <Mail className="text-accent shrink-0 mt-0.5" size={18} />
-                  <span className="text-muted-foreground text-sm">info@imagenesgraficas.com</span>
-                </li>
-              </ul>
+            <div className="inline-flex items-center gap-2 mb-6">
+              <span className="w-2 h-2 rounded-sm bg-green-500" />
+              <span className="text-primary text-sm font-semibold uppercase tracking-widest">Let's talk</span>
             </div>
+            
+            <h2 className="text-5xl sm:text-6xl md:text-[5.5rem] font-bold text-primary font-heading leading-[0.9] tracking-tight mb-8">
+              Convierte tus ideas <br/><span className="italic font-light">en realidad.</span>
+            </h2>
 
-            <a
-              href="https://wa.me/573001234567"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center gap-3 w-full bg-emerald-600 text-white px-6 py-4 rounded-md font-bold hover:bg-emerald-700 transition-colors"
-            >
-              <MessageCircle size={22} />
-              Escríbenos por WhatsApp
-            </a>
-
-            <p className="text-muted-foreground text-xs leading-relaxed">
-              Respondemos en menos de 24 horas. También puedes agendar una llamada directamente con nuestro equipo comercial.
+            <p className="text-primary/70 text-lg font-body font-medium leading-relaxed max-w-sm mb-12">
+              Dinos qué tienes en mente. Respondemos rápido y empezamos a trabajar aún más rápido.
             </p>
+
+            <div className="space-y-6">
+              <div className="flex flex-col">
+                <span className="text-primary/50 text-xs font-bold uppercase tracking-widest mb-1">Email</span>
+                <a href="mailto:info@imagenesgraficas.com" className="text-primary font-bold hover:text-accent transition-colors font-heading text-xl">info@imagenesgraficas.com</a>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-primary/50 text-xs font-bold uppercase tracking-widest mb-1">Teléfono</span>
+                <a href="tel:+573001234567" className="text-primary font-bold hover:text-accent transition-colors font-heading text-xl">+57 (1) 234 5678</a>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Right Form Segment - Dapper style minimalistic inputs */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <form onSubmit={handleSubmit} className="bg-white p-8 md:p-12 rounded-xl shadow-2xl border border-black/[0.03] flex flex-col gap-8">
+              
+              <div className="flex flex-col gap-2">
+                <label className="text-primary/60 text-xs font-bold uppercase tracking-widest">Tu Nombre</label>
+                <input
+                  type="text"
+                  name="name"
+                  required
+                  value={formData.name}
+                  onChange={handleChange}
+                  className="w-full border-b border-primary/20 bg-transparent py-3 text-primary text-lg font-body placeholder:text-primary/30 focus:outline-none focus:border-primary transition-colors"
+                  placeholder="Juan Pérez"
+                />
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label className="text-primary/60 text-xs font-bold uppercase tracking-widest">Empresa</label>
+                <input
+                  type="text"
+                  name="company"
+                  value={formData.company}
+                  onChange={handleChange}
+                  className="w-full border-b border-primary/20 bg-transparent py-3 text-primary text-lg font-body placeholder:text-primary/30 focus:outline-none focus:border-primary transition-colors"
+                  placeholder="Mi Empresa S.A."
+                />
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label className="text-primary/60 text-xs font-bold uppercase tracking-widest">Proyecto</label>
+                <textarea
+                  name="message"
+                  required
+                  rows={3}
+                  value={formData.message}
+                  onChange={handleChange}
+                  className="w-full border-b border-primary/20 bg-transparent py-3 text-primary text-lg font-body placeholder:text-primary/30 focus:outline-none focus:border-primary transition-colors resize-none"
+                  placeholder="Necesitamos material POP para..."
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="group flex items-center justify-between w-full mt-4 bg-green-300 text-primary px-6 py-5 rounded-md text-base font-bold hover:bg-green-400 transition-all duration-300 active:scale-[0.99] focus-visible:outline-none"
+              >
+                Solicitar Cotización
+                <ArrowUpRight size={20} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+              </button>
+            </form>
           </motion.div>
         </div>
       </div>
@@ -152,4 +119,4 @@ const ContactSection = () => {
   );
 };
 
-export default ContactSection;
+export default ExactContact;

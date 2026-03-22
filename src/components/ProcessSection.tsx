@@ -1,82 +1,68 @@
 import { motion } from "framer-motion";
-import { MessageSquare, PenTool, Factory, Truck } from "lucide-react";
 
 const steps = [
-  {
-    icon: MessageSquare,
-    number: "01",
-    title: "Briefing",
-    description: "Entendemos tu marca, objetivos y necesidades para diseñar la solución ideal.",
-  },
-  {
-    icon: PenTool,
-    number: "02",
-    title: "Diseño",
-    description: "Creamos propuestas visuales que comunican tu mensaje con impacto y creatividad.",
-  },
-  {
-    icon: Factory,
-    number: "03",
-    title: "Producción",
-    description: "Fabricamos con tecnología de punta y los más altos estándares de calidad.",
-  },
-  {
-    icon: Truck,
-    number: "04",
-    title: "Entrega",
-    description: "Instalación, logística y seguimiento para asegurar resultados impecables.",
-  },
+  { number: "01", title: "Descubrimiento", desc: "Entendemos profundamente los objetivos de negocio y el ecosistema físico donde vive la marca." },
+  { number: "02", title: "Ingeniería Visual", desc: "Diseñamos las estructuras, seleccionamos materiales y validamos la durabilidad y el impacto visual." },
+  { number: "03", title: "Producción", desc: "Fabricamos cada elemento con precisión milimétrica en nuestra planta especializada." },
+  { number: "04", title: "Despliegue", desc: "Instalamos e implementamos en sitio para asegurar una experiencia de marca impecable." },
 ];
 
-const ProcessSection = () => {
+const ExactProcess = () => {
   return (
-    <section id="proceso" className="py-24 lg:py-32 bg-background">
-      <div className="container mx-auto px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <p className="text-accent text-xs font-body font-semibold uppercase tracking-[0.2em] mb-4">
-            Cómo trabajamos
-          </p>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-extrabold text-foreground leading-tight">
-            De la idea a la <span className="text-gradient-brand italic">realidad</span>
-          </h2>
-        </motion.div>
-
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 relative">
-          <div className="hidden lg:block absolute top-16 left-[12.5%] right-[12.5%] h-px bg-border" />
-
-          {steps.map((step, i) => (
+    <section id="proceso" className="py-24 lg:py-40 bg-white">
+      <div className="container mx-auto px-6 lg:px-8 max-w-7xl">
+        <div className="flex flex-col lg:flex-row gap-16 lg:gap-24">
+          
+          {/* Left Sticky Header */}
+          <div className="lg:w-1/3">
             <motion.div
-              key={step.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.15 }}
-              className="relative text-center"
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className="sticky top-40"
             >
-              <div className="relative z-10 w-16 h-16 mx-auto mb-6 bg-card border border-border rounded-full flex items-center justify-center group hover:border-accent transition-colors duration-300 shadow-sm">
-                <step.icon size={24} className="text-accent" />
+              <div className="inline-flex items-center gap-2 mb-6">
+                <span className="w-2 h-2 rounded-sm bg-accent" />
+                <span className="text-primary text-sm font-semibold uppercase tracking-widest">Metodología</span>
               </div>
-              <span className="text-accent/15 text-5xl font-heading font-extrabold absolute top-0 right-4 lg:right-auto lg:left-1/2 lg:-translate-x-1/2 lg:-top-3 select-none">
-                {step.number}
-              </span>
-              <h3 className="text-xl font-heading font-bold text-foreground mb-2">
-                {step.title}
-              </h3>
-              <p className="text-muted-foreground text-sm leading-relaxed">
-                {step.description}
+              <h2 className="text-5xl lg:text-[4rem] font-bold text-primary font-heading leading-none tracking-tight mb-6">
+                Nuestro <br/><span className="italic font-light">proceso.</span>
+              </h2>
+              <p className="text-primary/70 font-body text-lg font-medium">
+                Un sistema comprobado que transforma conceptos abstractos en activos visuales de alto retorno.
               </p>
             </motion.div>
-          ))}
+          </div>
+
+          {/* Right Process Steps */}
+          <div className="lg:w-2/3 flex flex-col gap-12">
+            {steps.map((step, i) => (
+              <motion.div
+                key={step.number}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.7, delay: i * 0.15, ease: [0.16, 1, 0.3, 1] }}
+                className="group relative flex flex-col sm:flex-row gap-6 sm:gap-12 p-8 rounded-xl border border-black/[0.04] bg-[#F8F8F8] hover:bg-white hover:shadow-xl transition-all duration-500"
+              >
+                <div className="text-6xl md:text-7xl font-heading font-extrabold text-primary/10 group-hover:text-accent/30 transition-colors">
+                  {step.number}
+                </div>
+                <div className="pt-2">
+                  <h3 className="text-2xl font-bold font-heading text-primary mb-3">{step.title}</h3>
+                  <p className="text-primary/70 font-body text-base leading-relaxed font-medium">
+                    {step.desc}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+          
         </div>
       </div>
     </section>
   );
 };
 
-export default ProcessSection;
+export default ExactProcess;

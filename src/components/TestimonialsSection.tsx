@@ -1,93 +1,68 @@
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Quote } from "lucide-react";
+import { motion } from "framer-motion";
 
 const testimonials = [
   {
-    quote: "Imágenes Gráficas ha sido nuestro aliado estratégico durante más de una década. Su capacidad de producción y calidad son excepcionales.",
-    name: "Carlos Martínez",
-    role: "Director de Marketing",
-    company: "Postobón",
+    quote: "La rigurosidad con la que manejan cada proyecto no tiene comparación. Desde que confíamos en ellos la producción de nuestros exhibidores, las ventas en retail aumentaron dramáticamente.",
+    author: "Director de Trade Marketing",
+    company: "Multinacional de Bebidas",
   },
   {
-    quote: "La atención al detalle y el compromiso con los tiempos de entrega hacen de Imágenes Gráficas un socio confiable para todos nuestros proyectos.",
-    name: "María López",
-    role: "Gerente de Comunicaciones",
-    company: "Coomeva",
-  },
-  {
-    quote: "Su creatividad y capacidad de adaptación nos han permitido elevar la imagen de nuestra marca en toda la región andina.",
-    name: "Andrés Gómez",
-    role: "Director Comercial",
-    company: "Bavaria",
-  },
+    quote: "Un aliado verdaderamente estratégico. No son solo productores, entienden el ecosistema B2B y diseñan espacios de contacto que verdaderamente hablan por la marca sin necesidad de estar presentes.",
+    author: "Gerente de Marca",
+    company: "Sector Financiero",
+  }
 ];
 
-const TestimonialsSection = () => {
-  const [current, setCurrent] = useState(0);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrent((c) => (c === testimonials.length - 1 ? 0 : c + 1));
-    }, 6000);
-    return () => clearInterval(timer);
-  }, []);
-
+const ExactTestimonials = () => {
   return (
-    <section className="py-24 lg:py-32 bg-secondary">
-      <div className="container mx-auto px-6 lg:px-8 max-w-4xl text-center">
+    <section className="py-24 lg:py-40 bg-primary text-white overflow-hidden relative">
+      <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=2000')] bg-cover opacity-5 mix-blend-overlay pointer-events-none" />
+      
+      <div className="container mx-auto px-6 lg:px-8 max-w-6xl relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="mb-20"
         >
-          <p className="text-accent text-xs font-body font-semibold uppercase tracking-[0.2em] mb-12">
-            Lo que dicen nuestros clientes
-          </p>
-
-          <Quote className="mx-auto text-accent/20 mb-8" size={48} />
-
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={current}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.4 }}
-            >
-              <blockquote className="text-2xl md:text-3xl lg:text-4xl font-heading font-bold text-foreground leading-snug mb-10">
-                "{testimonials[current].quote}"
-              </blockquote>
-              <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-accent/10 flex items-center justify-center">
-                <span className="text-accent font-heading font-bold text-lg">
-                  {testimonials[current].name.charAt(0)}
-                </span>
-              </div>
-              <p className="text-accent font-body font-bold text-lg">
-                {testimonials[current].name}
-              </p>
-              <p className="text-muted-foreground text-sm mt-1">
-                {testimonials[current].role}, {testimonials[current].company}
-              </p>
-            </motion.div>
-          </AnimatePresence>
-
-          <div className="flex justify-center gap-2 mt-12">
-            {testimonials.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setCurrent(i)}
-                className={`h-1.5 rounded-full transition-all duration-300 ${
-                  i === current ? "bg-accent w-10" : "bg-foreground/10 w-6 hover:bg-foreground/20"
-                }`}
-              />
-            ))}
+          <div className="inline-flex items-center gap-2 mb-6">
+            <span className="w-2 h-2 rounded-sm bg-gold" />
+            <span className="text-white/70 text-sm font-semibold uppercase tracking-widest">Lo que dicen</span>
           </div>
+          <h2 className="text-4xl sm:text-5xl lg:text-[5rem] font-bold text-white font-heading leading-none tracking-tight">
+            Nuestros <span className="italic font-light">partners.</span>
+          </h2>
         </motion.div>
+
+        <div className="grid md:grid-cols-2 gap-12 lg:gap-20">
+          {testimonials.map((test, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: i * 0.2, ease: [0.16, 1, 0.3, 1] }}
+              className="flex flex-col"
+            >
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" className="text-gold mb-8 opacity-80">
+                <path d="M14.017 18L14.017 10.609C14.017 4.905 17.748 1.039 23 0L23.995 2.151C21.563 3.068 20.017 5.239 20.017 7.734L20.017 8H24V18H14.017ZM0 18L0 10.609C0 4.905 3.748 1.038 9 0L9.996 2.151C7.563 3.068 6 5.239 6 7.734L6 8H9.983L9.983 18L0 18Z" fill="currentColor"/>
+              </svg>
+              
+              <p className="text-xl md:text-2xl lg:text-3xl font-heading font-medium leading-[1.4] tracking-tight mb-10 text-white/90">
+                "{test.quote}"
+              </p>
+              
+              <div className="mt-auto">
+                <h4 className="text-white font-bold font-body">{test.author}</h4>
+                <p className="text-gold text-sm font-semibold uppercase tracking-widest mt-1">{test.company}</p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </section>
   );
 };
 
-export default TestimonialsSection;
+export default ExactTestimonials;
