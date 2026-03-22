@@ -31,7 +31,7 @@ const Counter = ({ target, suffix }: { target: number; suffix: string }) => {
   }, [isInView, target]);
 
   return (
-    <span ref={ref} className="text-5xl md:text-6xl lg:text-7xl font-heading font-bold text-accent">
+    <span ref={ref} className="text-5xl md:text-6xl lg:text-7xl font-heading font-extrabold text-accent">
       {count.toLocaleString()}{suffix}
     </span>
   );
@@ -39,7 +39,7 @@ const Counter = ({ target, suffix }: { target: number; suffix: string }) => {
 
 const StatsSection = () => {
   return (
-    <section className="py-24 lg:py-32 bg-secondary border-y border-border">
+    <section className="py-24 lg:py-32 bg-primary">
       <div className="container mx-auto px-6 lg:px-8">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-12 text-center">
           {stats.map((stat, i) => (
@@ -51,7 +51,7 @@ const StatsSection = () => {
               transition={{ duration: 0.5, delay: i * 0.1 }}
             >
               <Counter target={stat.value} suffix={stat.suffix} />
-              <p className="text-muted-foreground text-sm md:text-base font-body font-medium mt-3">
+              <p className="text-primary-foreground/70 text-sm md:text-base font-body font-medium mt-3">
                 {stat.label}
               </p>
             </motion.div>

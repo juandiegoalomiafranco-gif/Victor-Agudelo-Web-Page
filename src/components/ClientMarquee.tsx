@@ -5,7 +5,7 @@ const clients = [
 
 const ClientMarquee = () => {
   return (
-    <section className="py-10 bg-secondary/50 border-y border-border overflow-hidden">
+    <section className="py-10 bg-secondary border-y border-border overflow-hidden">
       <p className="text-center text-xs font-body font-semibold uppercase tracking-[0.2em] text-muted-foreground mb-6">
         Marcas que confían en nosotros
       </p>
@@ -14,7 +14,7 @@ const ClientMarquee = () => {
           {[...clients, ...clients].map((client, i) => (
             <span
               key={i}
-              className="text-xl font-body font-semibold text-foreground/15 hover:text-accent/60 transition-colors duration-500 select-none cursor-default"
+              className="text-xl font-body font-bold text-foreground/20 hover:text-accent transition-colors duration-500 select-none cursor-default"
             >
               {client}
             </span>

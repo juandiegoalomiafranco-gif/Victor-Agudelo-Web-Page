@@ -37,8 +37,8 @@ const WhyUsSection = () => {
           <p className="text-accent text-xs font-body font-semibold uppercase tracking-[0.2em] mb-4">
             ¿Por qué elegirnos?
           </p>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground leading-tight">
-            ¿Por qué <span className="text-gradient-gold italic">Imágenes Gráficas</span>?
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-extrabold text-foreground leading-tight">
+            ¿Por qué <span className="text-gradient-brand italic">Imágenes Gráficas</span>?
           </h2>
         </motion.div>
 

@@ -34,7 +34,7 @@ const TestimonialsSection = () => {
   }, []);
 
   return (
-    <section className="py-24 lg:py-32 bg-background">
+    <section className="py-24 lg:py-32 bg-secondary">
       <div className="container mx-auto px-6 lg:px-8 max-w-4xl text-center">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
