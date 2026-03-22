@@ -48,9 +48,9 @@ const ServicesSection = () => {
           <p className="text-accent text-xs font-body font-semibold uppercase tracking-[0.2em] mb-4">
             Nuestros servicios
           </p>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground leading-tight max-w-3xl mx-auto">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-extrabold text-foreground leading-tight max-w-3xl mx-auto">
             Todo lo que tu marca necesita para{" "}
-            <span className="text-gradient-gold italic">destacar</span>
+            <span className="text-gradient-brand italic">destacar</span>
           </h2>
         </motion.div>
 
@@ -62,9 +62,9 @@ const ServicesSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="group relative bg-card border border-border rounded-sm p-8 hover:border-accent/40 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_8px_30px_hsl(48_95%_48%/0.08)]"
+              className="group relative bg-card border border-border rounded-lg p-8 hover:border-accent/40 transition-all duration-500 hover:-translate-y-1 hover:shadow-lg"
             >
-              <div className="w-12 h-12 rounded-sm bg-accent/10 flex items-center justify-center mb-6 group-hover:bg-accent/20 transition-colors duration-300">
+              <div className="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-6 group-hover:bg-accent/20 transition-colors duration-300">
                 <service.icon size={24} className="text-accent" />
               </div>
               <h3 className="text-xl font-heading font-bold text-foreground mb-3">
@@ -73,7 +73,7 @@ const ServicesSection = () => {
               <p className="text-muted-foreground text-sm leading-relaxed">
                 {service.description}
               </p>
-              <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent group-hover:w-full transition-all duration-500" />
+              <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent group-hover:w-full transition-all duration-500 rounded-b-lg" />
             </motion.div>
           ))}
         </div>

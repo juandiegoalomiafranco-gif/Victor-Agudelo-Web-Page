@@ -23,7 +23,7 @@ const cases = [
 
 const CasesSection = () => {
   return (
-    <section id="casos" className="py-24 lg:py-32 bg-secondary">
+    <section id="casos" className="py-24 lg:py-32 bg-background">
       <div className="container mx-auto px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -32,7 +32,7 @@ const CasesSection = () => {
           transition={{ duration: 0.6 }}
           className="mb-16 text-center"
         >
-          <p className="text-accent text-sm font-semibold uppercase tracking-[0.15em] mb-4">
+          <p className="text-accent text-xs font-semibold uppercase tracking-[0.2em] mb-4">
             Casos de éxito
           </p>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-foreground leading-tight">
@@ -48,10 +48,10 @@ const CasesSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.15 }}
-              className="bg-background rounded-sm overflow-hidden group hover:shadow-xl transition-shadow duration-300"
+              className="bg-card rounded-lg overflow-hidden group hover:shadow-lg transition-shadow duration-300 border border-border"
             >
-              <div className="h-56 bg-primary/10 flex items-center justify-center">
-                <span className="text-6xl font-extrabold text-primary/20 group-hover:text-accent/40 transition-colors">
+              <div className="h-56 bg-accent/5 flex items-center justify-center">
+                <span className="text-6xl font-extrabold text-accent/15 group-hover:text-accent/30 transition-colors">
                   {item.client.charAt(0)}
                 </span>
               </div>
@@ -73,20 +73,6 @@ const CasesSection = () => {
             </motion.div>
           ))}
         </div>
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="text-center mt-12"
-        >
-          <a
-            href="#"
-            className="inline-block border-2 border-foreground text-foreground px-6 py-3 rounded-sm text-sm font-bold hover:bg-foreground hover:text-background transition-all"
-          >
-            Ver todos los casos de éxito
-          </a>
-        </motion.div>
       </div>
     </section>
   );

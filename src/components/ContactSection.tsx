@@ -30,7 +30,7 @@ const ContactSection = () => {
   };
 
   return (
-    <section id="contacto" className="py-24 lg:py-32 bg-secondary border-t border-border">
+    <section id="contacto" className="py-24 lg:py-32 bg-secondary">
       <div className="container mx-auto px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -42,9 +42,9 @@ const ContactSection = () => {
           <p className="text-accent text-xs font-body font-semibold uppercase tracking-[0.2em] mb-4">
             Contacto
           </p>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground leading-tight">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-extrabold text-foreground leading-tight">
             ¿Listo para hacer{" "}
-            <span className="text-gradient-gold italic">visible</span> tu marca?
+            <span className="text-gradient-brand italic">visible</span> tu marca?
           </h2>
         </motion.div>
 
@@ -65,7 +65,7 @@ const ContactSection = () => {
                 required
                 value={formData.name}
                 onChange={handleChange}
-                className="w-full bg-background border border-border rounded-sm px-4 py-3.5 text-foreground text-sm font-body placeholder:text-muted-foreground focus:outline-none focus:border-accent transition-colors"
+                className="w-full bg-card border border-border rounded-md px-4 py-3.5 text-foreground text-sm font-body placeholder:text-muted-foreground focus:outline-none focus:border-accent transition-colors"
               />
               <input
                 type="text"
@@ -73,7 +73,7 @@ const ContactSection = () => {
                 placeholder="Tu empresa"
                 value={formData.company}
                 onChange={handleChange}
-                className="w-full bg-background border border-border rounded-sm px-4 py-3.5 text-foreground text-sm font-body placeholder:text-muted-foreground focus:outline-none focus:border-accent transition-colors"
+                className="w-full bg-card border border-border rounded-md px-4 py-3.5 text-foreground text-sm font-body placeholder:text-muted-foreground focus:outline-none focus:border-accent transition-colors"
               />
             </div>
             <select
@@ -81,7 +81,7 @@ const ContactSection = () => {
               required
               value={formData.service}
               onChange={handleChange}
-              className="w-full bg-background border border-border rounded-sm px-4 py-3.5 text-foreground text-sm font-body focus:outline-none focus:border-accent transition-colors appearance-none"
+              className="w-full bg-card border border-border rounded-md px-4 py-3.5 text-foreground text-sm font-body focus:outline-none focus:border-accent transition-colors appearance-none"
             >
               <option value="" disabled>Servicio que necesitas</option>
               {serviceOptions.map((s) => (
@@ -94,11 +94,11 @@ const ContactSection = () => {
               rows={4}
               value={formData.message}
               onChange={handleChange}
-              className="w-full bg-background border border-border rounded-sm px-4 py-3.5 text-foreground text-sm font-body placeholder:text-muted-foreground focus:outline-none focus:border-accent transition-colors resize-none"
+              className="w-full bg-card border border-border rounded-md px-4 py-3.5 text-foreground text-sm font-body placeholder:text-muted-foreground focus:outline-none focus:border-accent transition-colors resize-none"
             />
             <button
               type="submit"
-              className="w-full bg-accent text-accent-foreground px-6 py-4 rounded-sm text-base font-bold hover:brightness-110 transition-all inline-flex items-center justify-center gap-2"
+              className="w-full bg-accent text-accent-foreground px-6 py-4 rounded-md text-base font-bold hover:brightness-110 transition-all inline-flex items-center justify-center gap-2"
             >
               <Send size={18} />
               Enviar cotización
@@ -136,7 +136,7 @@ const ContactSection = () => {
               href="https://wa.me/573001234567"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center gap-3 w-full bg-emerald-600 text-white px-6 py-4 rounded-sm font-bold hover:bg-emerald-700 transition-colors"
+              className="flex items-center justify-center gap-3 w-full bg-emerald-600 text-white px-6 py-4 rounded-md font-bold hover:bg-emerald-700 transition-colors"
             >
               <MessageCircle size={22} />
               Escríbenos por WhatsApp
