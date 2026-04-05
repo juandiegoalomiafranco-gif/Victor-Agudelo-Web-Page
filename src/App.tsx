@@ -104,7 +104,7 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className={`fixed w-full z-50 transition-all duration-700 ${scrolled ? 'translate-y-0' : 'translate-y-0'}`}>
+    <nav aria-label="Navegación principal" className={`fixed w-full z-50 transition-all duration-700 ${scrolled ? 'translate-y-0' : 'translate-y-0'}`}>
       {/* Top Bar */}
       <div className={`w-full transition-all duration-500 overflow-hidden ${scrolled ? 'h-0 opacity-0' : 'h-12 bg-slate-950 text-white/60'}`}>
         <div className="max-w-7xl mx-auto px-6 h-full flex items-center justify-between text-[10px] uppercase tracking-[0.2em] font-bold">
@@ -145,11 +145,11 @@ const Navbar = () => {
           </div>
 
           <div className="hidden lg:flex items-center gap-6">
-            <motion.a 
-              href="#agendar" 
-              whileHover={{ scale: 1.05, backgroundColor: '#0f172a' }}
-              whileTap={{ scale: 0.95 }}
-              className="bg-sky-600 text-white px-8 py-4 rounded-full font-bold text-[10px] uppercase tracking-widest transition-all shadow-xl shadow-sky-200/20 btn-premium"
+            <motion.a
+              href="#agendar"
+              whileHover={{ scale: 1.03, backgroundColor: '#0f172a' }}
+              whileTap={{ scale: 0.97 }}
+              className="bg-sky-600 text-white px-6 py-3 rounded-full font-bold text-[10px] uppercase tracking-widest transition-all"
             >
               Agendar Consulta
             </motion.a>
@@ -210,31 +210,31 @@ const Hero = () => {
             </span>
           </div>
           
-          <h1 className="text-6xl md:text-8xl lg:text-[110px] font-serif text-slate-950 leading-[0.85] mb-12 tracking-[-0.05em]">
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-serif text-slate-950 leading-[0.9] mb-8 tracking-[-0.03em]">
             La nariz que <br />
             <span className="italic font-medium text-sky-600">siempre</span> <br />
             quisiste tener.
           </h1>
-          
-          <p className="text-xl md:text-2xl text-slate-500 font-light max-w-lg mb-16 leading-relaxed">
+
+          <p className="text-lg md:text-xl text-slate-500 font-light max-w-lg mb-10 leading-relaxed">
             Resultados que transforman vidas con la máxima naturalidad y excelencia quirúrgica en Cali.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center gap-8">
-            <motion.a 
-              href="#agendar" 
-              whileHover={{ scale: 1.08, backgroundColor: '#0f172a', boxShadow: '0 25px 50px -12px rgba(14, 165, 233, 0.4)' }}
-              whileTap={{ scale: 0.95 }}
-              className="w-full sm:w-auto bg-sky-600 text-white px-16 py-9 rounded-full font-bold text-xs uppercase tracking-[0.25em] transition-all shadow-2xl shadow-sky-200/40 flex items-center justify-center gap-4"
+          <div className="flex flex-col sm:flex-row items-center gap-4">
+            <motion.a
+              href="#agendar"
+              whileHover={{ scale: 1.03, backgroundColor: '#0f172a' }}
+              whileTap={{ scale: 0.97 }}
+              className="w-full sm:w-auto bg-sky-600 text-white px-10 py-4 rounded-full font-bold text-xs uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3"
             >
               Agendar Consulta
-              <ArrowRight className="w-5 h-5" />
+              <ArrowRight className="w-4 h-4" />
             </motion.a>
-            <motion.a 
-              href="#resultados" 
-              whileHover={{ scale: 1.08, borderColor: '#0ea5e9', color: '#0ea5e9', boxShadow: '0 20px 40px -10px rgba(0, 0, 0, 0.1)' }}
-              whileTap={{ scale: 0.95 }}
-              className="w-full sm:w-auto border border-slate-300 text-slate-950 px-16 py-9 rounded-full font-bold text-xs uppercase tracking-[0.25em] transition-all flex items-center justify-center"
+            <motion.a
+              href="#resultados"
+              whileHover={{ scale: 1.03, borderColor: '#0ea5e9', color: '#0ea5e9' }}
+              whileTap={{ scale: 0.97 }}
+              className="w-full sm:w-auto border border-slate-300 text-slate-950 px-10 py-4 rounded-full font-bold text-xs uppercase tracking-[0.2em] transition-all flex items-center justify-center"
             >
               Ver Resultados
             </motion.a>
@@ -265,27 +265,15 @@ const Hero = () => {
       {/* Right Image */}
       <div className="relative h-full overflow-hidden hidden lg:block">
         <motion.div style={{ y: y1 }} className="h-[120%] w-full">
-          <img 
-            src="https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&q=80&w=2070" 
-            alt="Dr. Victor Agudelo" 
-            className="w-full h-full object-cover object-top grayscale hover:grayscale-0 transition-all duration-1000"
+          <img
+            src="https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&q=80&w=2070"
+            alt="Consultorio del Dr. Víctor Manuel Agudelo, especialista en rinoplastia en Cali"
+            className="w-full h-full object-cover object-top grayscale hover:grayscale-0 transition-all duration-700"
+            fetchPriority="high"
             referrerPolicy="no-referrer"
           />
         </motion.div>
         <div className="absolute inset-0 bg-gradient-to-r from-[#fcfcf9] via-transparent to-transparent"></div>
-        
-        {/* Floating Aesthetic Badge */}
-        <motion.div 
-          initial={{ opacity: 0, x: 50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 1, duration: 1 }}
-          className="absolute bottom-20 left-20 bg-white/10 backdrop-blur-2xl border border-white/20 p-10 rounded-[40px] shadow-2xl"
-        >
-          <div className="text-white">
-            <div className="text-sm uppercase tracking-[0.3em] font-bold opacity-60 mb-2">Filosofía</div>
-            <div className="text-3xl font-serif italic leading-tight">"La belleza es el <br /> equilibrio perfecto."</div>
-          </div>
-        </motion.div>
       </div>
     </section>
   );
@@ -300,9 +288,9 @@ const StatsSection = () => {
   ];
 
   return (
-    <section className="py-40 bg-slate-950 text-white overflow-hidden">
+    <section className="py-20 bg-slate-950 text-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-20">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-12">
           {stats.map((stat, index) => (
             <motion.div
               key={index}
@@ -358,7 +346,7 @@ const Counter = ({ value }: { value: number }) => {
 
 const MeetTheDoctor = () => {
   return (
-    <section id="doctor" className="py-32 bg-white overflow-hidden">
+    <section id="doctor" className="py-20 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-20 items-center">
           <motion.div
@@ -368,10 +356,11 @@ const MeetTheDoctor = () => {
             className="relative"
           >
             <div className="aspect-[4/5] rounded-2xl overflow-hidden shadow-2xl">
-              <img 
-                src="https://images.unsplash.com/photo-1559839734-2b71f1536783?auto=format&fit=crop&q=80&w=2070" 
-                alt="Dr. Victor Agudelo" 
+              <img
+                src="https://images.unsplash.com/photo-1559839734-2b71f1536783?auto=format&fit=crop&q=80&w=2070"
+                alt="Dr. Víctor Manuel Agudelo, médico especialista en rinoplastia y otorrinolaringología en Cali, Colombia"
                 className="w-full h-full object-cover"
+                loading="lazy"
                 referrerPolicy="no-referrer"
               />
             </div>
@@ -414,8 +403,8 @@ const MeetTheDoctor = () => {
             </div>
             
             <div className="flex flex-wrap gap-8 items-center opacity-50 grayscale">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Logo_de_la_Sociedad_Colombiana_de_Cirug%C3%ADa_Pl%C3%A1stica.png/220px-Logo_de_la_Sociedad_Colombiana_de_Cirug%C3%ADa_Pl%C3%A1stica.png" alt="SCCP" className="h-12 object-contain" referrerPolicy="no-referrer" />
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_Logos_Search.svg/2560px-Google_Logos_Search.svg.png" alt="Logo" className="h-8 object-contain" referrerPolicy="no-referrer" />
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Logo_de_la_Sociedad_Colombiana_de_Cirug%C3%ADa_Pl%C3%A1stica.png/220px-Logo_de_la_Sociedad_Colombiana_de_Cirug%C3%ADa_Pl%C3%A1stica.png" alt="Sociedad Colombiana de Cirugía Plástica" className="h-12 object-contain" loading="lazy" referrerPolicy="no-referrer" />
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_Logos_Search.svg/2560px-Google_Logos_Search.svg.png" alt="Reseñas en Google" className="h-8 object-contain" loading="lazy" referrerPolicy="no-referrer" />
             </div>
           </motion.div>
         </div>
@@ -434,9 +423,9 @@ const StaffCarousel = () => {
   ];
 
   return (
-    <section className="py-32 bg-white overflow-hidden">
+    <section className="py-20 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-10">
+        <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-10">
           <div className="max-w-2xl">
             <span className="text-sky-600 font-bold uppercase tracking-[0.2em] text-[10px] mb-6 block">Nuestro Equipo</span>
             <h2 className="text-5xl font-serif font-bold text-slate-900 mb-8">Expertos Comprometidos con tu Seguridad</h2>
@@ -462,11 +451,12 @@ const StaffCarousel = () => {
               viewport={{ once: true }}
               className="group"
             >
-              <div className="aspect-[3/4] rounded-[2.5rem] overflow-hidden mb-6 relative">
-                <img 
-                  src={person.img} 
-                  alt={person.name} 
-                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700"
+              <div className="aspect-[3/4] rounded-2xl overflow-hidden mb-4 relative">
+                <img
+                  src={person.img}
+                  alt={`${person.name} — ${person.role} en el equipo del Dr. Agudelo`}
+                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500"
+                  loading="lazy"
                   referrerPolicy="no-referrer"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-sky-900/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -489,9 +479,9 @@ const VideoReviews = () => {
   ];
 
   return (
-    <section className="py-32 bg-slate-900 text-white overflow-hidden">
+    <section className="py-20 bg-slate-900 text-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center max-w-3xl mx-auto mb-24">
+        <div className="text-center max-w-3xl mx-auto mb-16">
           <span className="text-sky-400 font-bold uppercase tracking-[0.2em] text-[10px] mb-6 block">Testimonios en Video</span>
           <h2 className="text-5xl md:text-6xl font-serif font-bold mb-8">Historias que Inspiran Confianza</h2>
           <p className="text-slate-400 text-lg font-light">Escucha de primera mano las experiencias de nuestros pacientes y cómo su vida cambió después de su procedimiento con el Dr. Agudelo.</p>
@@ -507,11 +497,12 @@ const VideoReviews = () => {
               viewport={{ once: true }}
               className="group cursor-pointer"
             >
-              <div className="aspect-video rounded-[2.5rem] overflow-hidden mb-8 relative border border-white/10">
-                <img 
-                  src={review.img} 
-                  alt={review.title} 
-                  className="w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-110 transition-all duration-700"
+              <div className="aspect-video rounded-2xl overflow-hidden mb-6 relative border border-white/10">
+                <img
+                  src={review.img}
+                  alt={`Testimonio en video: ${review.title} — ${review.name}`}
+                  className="w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-105 transition-all duration-500"
+                  loading="lazy"
                   referrerPolicy="no-referrer"
                 />
                 <div className="absolute inset-0 flex items-center justify-center">
@@ -532,7 +523,7 @@ const VideoReviews = () => {
 
 const MensRhinoplasty = () => {
   return (
-    <section className="py-32 bg-white overflow-hidden">
+    <section className="py-20 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-20 items-center">
           <motion.div
@@ -570,10 +561,11 @@ const MensRhinoplasty = () => {
             className="relative"
           >
             <div className="aspect-square rounded-full overflow-hidden shadow-2xl border-[15px] border-slate-50">
-              <img 
-                src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=2070" 
-                alt="Rinoplastia Masculina" 
+              <img
+                src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=2070"
+                alt="Resultado de rinoplastia masculina: perfil natural y armonioso"
                 className="w-full h-full object-cover"
+                loading="lazy"
                 referrerPolicy="no-referrer"
               />
             </div>
@@ -620,11 +612,9 @@ const Process = () => {
   ];
 
   return (
-    <section className="py-32 bg-slate-900 text-white overflow-hidden relative">
-      <div className="absolute top-0 right-0 w-1/2 h-full bg-sky-600/5 blur-[120px]"></div>
-      
+    <section className="py-20 bg-slate-900 text-white overflow-hidden relative">
       <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <div className="text-center mb-24">
+        <div className="text-center mb-16">
           <span className="text-sky-400 font-bold uppercase tracking-[0.2em] text-[10px] mb-6 block">Tu Camino al Cambio</span>
           <h2 className="text-5xl md:text-6xl font-serif font-bold mb-8">El Proceso de Transformación</h2>
         </div>
@@ -688,7 +678,7 @@ const StickyFAQSection = () => {
   ];
 
   return (
-    <section id="faq" className="py-40 bg-white overflow-hidden">
+    <section id="faq" className="py-20 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid lg:grid-cols-[1fr_2fr] gap-20">
           <div className="relative">
@@ -754,7 +744,7 @@ const BookingForm = () => {
   };
 
   return (
-    <section id="agendar" className="py-32 bg-sky-50 relative overflow-hidden">
+    <section id="agendar" className="py-20 bg-sky-50 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div className="grid lg:grid-cols-2 gap-24 items-center">
           <div>
@@ -787,7 +777,7 @@ const BookingForm = () => {
             </div>
           </div>
 
-          <div className="bg-white rounded-[4rem] p-10 md:p-16 shadow-2xl border border-sky-50">
+          <div className="bg-white rounded-2xl p-8 md:p-12 shadow-md border border-sky-100">
             {step === 1 && (
               <motion.div 
                 initial={{ opacity: 0, x: 20 }}
@@ -926,9 +916,9 @@ const BookingForm = () => {
 
 const Footer = () => {
   return (
-    <footer className="bg-slate-950 text-white py-40 overflow-hidden border-t border-white/5">
+    <footer className="bg-slate-950 text-white py-20 overflow-hidden border-t border-white/5">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="grid lg:grid-cols-[2fr_1fr_1fr] gap-24 mb-32">
+        <div className="grid lg:grid-cols-[2fr_1fr_1fr] gap-16 mb-16">
           <div>
             <a href="#" className="flex flex-col mb-12">
               <span className="font-serif text-4xl font-bold tracking-tighter mb-2">DR. VICTOR AGUDELO</span>
@@ -978,7 +968,7 @@ const Footer = () => {
         </div>
 
         <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8 text-[10px] uppercase tracking-[0.3em] text-slate-600 font-bold">
-          <p>© 2024 Dr. Victor Manuel Agudelo. Excellence in Rhinoplasty.</p>
+          <p>© 2026 Dr. Víctor Manuel Agudelo · Especialista en Rinoplastia · Cali, Colombia</p>
           <div className="flex gap-12">
             <a href="#" className="hover:text-white transition-colors">Privacidad</a>
             <a href="#" className="hover:text-white transition-colors">Términos</a>
@@ -1003,8 +993,8 @@ const BeforeAfterSlider = ({ before, after }: { before: string; after: string })
   };
 
   return (
-    <div 
-      className="relative aspect-[4/5] rounded-[2.5rem] overflow-hidden cursor-ew-resize select-none group shadow-2xl"
+    <div
+      className="relative aspect-[4/5] rounded-2xl overflow-hidden cursor-ew-resize select-none group shadow-md"
       onMouseDown={() => setIsDragging(true)}
       onMouseUp={() => setIsDragging(false)}
       onMouseLeave={() => setIsDragging(false)}
@@ -1013,12 +1003,12 @@ const BeforeAfterSlider = ({ before, after }: { before: string; after: string })
       onTouchEnd={() => setIsDragging(false)}
       onTouchMove={handleMove}
     >
-      <img src={after} alt="Después" className="absolute inset-0 w-full h-full object-cover" referrerPolicy="no-referrer" />
-      <div 
+      <img src={after} alt="Resultado después de rinoplastia con el Dr. Víctor Agudelo" className="absolute inset-0 w-full h-full object-cover" loading="lazy" referrerPolicy="no-referrer" />
+      <div
         className="absolute inset-0 w-full h-full overflow-hidden"
         style={{ clipPath: `inset(0 ${100 - sliderPos}% 0 0)` }}
       >
-        <img src={before} alt="Antes" className="absolute inset-0 w-full h-full object-cover" referrerPolicy="no-referrer" />
+        <img src={before} alt="Foto antes de rinoplastia con el Dr. Víctor Agudelo" className="absolute inset-0 w-full h-full object-cover" loading="lazy" referrerPolicy="no-referrer" />
       </div>
       
       <div 
@@ -1047,7 +1037,7 @@ const Results = () => {
   ];
 
   return (
-    <section id="resultados" className="py-40 bg-[#efefef] overflow-hidden">
+    <section id="resultados" className="py-20 bg-[#efefef] overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid lg:grid-cols-[1fr_2fr] gap-20 items-end mb-24">
           <div>
@@ -1088,9 +1078,9 @@ const UltrasonicTechnology = () => {
   ];
 
   return (
-    <section className="py-40 bg-slate-950 text-white overflow-hidden">
+    <section className="py-20 bg-slate-950 text-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="grid lg:grid-cols-2 gap-24 items-center">
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -1124,16 +1114,17 @@ const UltrasonicTechnology = () => {
               initial={{ opacity: 0, scale: 0.8 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              className="aspect-square rounded-[4rem] overflow-hidden border border-white/10"
+              className="aspect-square rounded-2xl overflow-hidden border border-white/10"
             >
-              <img 
-                src="https://images.unsplash.com/photo-1579154235602-3c2c2446026b?auto=format&fit=crop&q=80&w=1000" 
-                alt="Tecnología Ultrasónica" 
-                className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000"
+              <img
+                src="https://images.unsplash.com/photo-1579154235602-3c2c2446026b?auto=format&fit=crop&q=80&w=1000"
+                alt="Equipo de rinoplastia ultrasónica Piezotome® utilizado por el Dr. Agudelo"
+                className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
+                loading="lazy"
                 referrerPolicy="no-referrer"
               />
             </motion.div>
-            <div className="absolute -bottom-10 -left-10 bg-sky-600 p-10 rounded-[3rem] shadow-2xl">
+            <div className="absolute -bottom-8 -left-8 bg-sky-600 p-6 rounded-2xl shadow-lg">
               <div className="text-4xl font-serif font-bold mb-1">98%</div>
               <div className="text-[10px] uppercase tracking-widest font-bold opacity-80">Precisión Quirúrgica</div>
             </div>
@@ -1146,9 +1137,9 @@ const UltrasonicTechnology = () => {
 
 const InternationalPatients = () => {
   return (
-    <section className="py-40 bg-white overflow-hidden">
+    <section className="py-20 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="bg-[#9baeba] rounded-[4rem] p-12 md:p-24 text-white relative overflow-hidden">
+        <div className="bg-[#9baeba] rounded-3xl p-10 md:p-16 text-white relative overflow-hidden">
           <div className="absolute top-0 right-0 w-1/2 h-full bg-white/5 skew-x-12 translate-x-1/2"></div>
           
           <div className="relative z-10 grid lg:grid-cols-2 gap-20 items-center">
@@ -1174,10 +1165,11 @@ const InternationalPatients = () => {
             </div>
             
             <div className="aspect-video rounded-[2rem] overflow-hidden shadow-2xl">
-              <img 
-                src="https://images.unsplash.com/photo-1577563908411-5077b6dc7624?auto=format&fit=crop&q=80&w=1000" 
-                alt="Cali, Colombia" 
+              <img
+                src="https://images.unsplash.com/photo-1577563908411-5077b6dc7624?auto=format&fit=crop&q=80&w=1000"
+                alt="Vista de Cali, Colombia — destino médico de referencia en Latinoamérica"
                 className="w-full h-full object-cover"
+                loading="lazy"
                 referrerPolicy="no-referrer"
               />
             </div>
@@ -1197,9 +1189,9 @@ const SatisfactionIndex = () => {
   ];
 
   return (
-    <section className="py-40 bg-white overflow-hidden">
+    <section className="py-20 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center mb-24">
+        <div className="text-center mb-16">
           <span className="text-sky-600 font-bold uppercase tracking-[0.3em] text-[10px] mb-6 block">Métricas de Calidad</span>
           <h2 className="text-5xl md:text-7xl font-serif text-slate-900 mb-8 leading-tight tracking-tighter">
             Índice de <span className="italic">Satisfacción</span>
@@ -1243,7 +1235,7 @@ const Testimonials = () => {
   ];
 
   return (
-    <section id="testimonios" className="py-40 bg-white overflow-hidden">
+    <section id="testimonios" className="py-20 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid lg:grid-cols-[1.5fr_1fr] gap-24">
           <div>
@@ -1263,11 +1255,12 @@ const Testimonials = () => {
                   transition={{ delay: i * 0.1 }}
                   className="group cursor-pointer"
                 >
-                  <div className="aspect-[4/5] rounded-[3rem] overflow-hidden mb-8 relative border border-slate-100">
-                    <img 
-                      src={review.img} 
-                      alt={review.title} 
-                      className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-1000"
+                  <div className="aspect-[4/5] rounded-2xl overflow-hidden mb-6 relative border border-slate-100">
+                    <img
+                      src={review.img}
+                      alt={`Testimonio: ${review.title} — paciente del Dr. Víctor Agudelo`}
+                      className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500"
+                      loading="lazy"
                       referrerPolicy="no-referrer"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"></div>
@@ -1294,7 +1287,7 @@ const Testimonials = () => {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.2 }}
-                className="p-10 rounded-[3rem] bg-slate-50 border border-slate-100 hover:bg-white hover:shadow-2xl transition-all duration-500 group"
+                className="p-8 rounded-2xl bg-slate-50 border border-slate-100 hover:bg-white hover:shadow-md transition-all duration-300 group"
               >
                 <div className="flex gap-1 mb-6">
                   {[...Array(5)].map((_, i) => (
@@ -1327,11 +1320,11 @@ const MapSection = () => {
         loading="lazy"
         referrerPolicy="no-referrer-when-downgrade"
       ></iframe>
-      <div className="absolute top-10 left-10 bg-white p-6 rounded-3xl shadow-2xl max-w-xs hidden md:block">
+      <div className="absolute top-6 left-6 bg-white p-5 rounded-xl shadow-lg max-w-xs hidden md:block">
         <h4 className="font-bold text-lg mb-2">Visítanos en Cali</h4>
         <p className="text-sm text-slate-600 mb-4">Av. 4 Norte # 14-38, Consultorio 302. Clínica de Otorrinolaringología.</p>
-        <a href="https://maps.google.com" target="_blank" className="text-sky-600 font-bold text-sm flex items-center gap-2">
-          Cómo llegar <ChevronRight className="w-4 h-4" />
+        <a href="https://maps.google.com" target="_blank" rel="noopener noreferrer" aria-label="Ver cómo llegar al consultorio del Dr. Agudelo en Google Maps" className="text-sky-600 font-bold text-sm flex items-center gap-2">
+          Cómo llegar <ChevronRight className="w-4 h-4" aria-hidden="true" />
         </a>
       </div>
     </section>
@@ -1365,9 +1358,9 @@ const ProceduresCarousel = () => {
   ];
 
   return (
-    <section id="procedimientos" className="py-40 bg-white overflow-hidden">
+    <section id="procedimientos" className="py-20 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="grid lg:grid-cols-[1fr_2fr] gap-24 mb-32">
+        <div className="grid lg:grid-cols-[1fr_2fr] gap-16 mb-20">
           <div>
             <span className="text-sky-600 font-bold uppercase tracking-[0.3em] text-[10px] mb-6 block">Especialidades</span>
             <h2 className="text-5xl md:text-7xl font-serif text-slate-900 leading-tight tracking-tighter">
@@ -1392,11 +1385,12 @@ const ProceduresCarousel = () => {
               transition={{ delay: index * 0.2, duration: 0.8 }}
               className="group"
             >
-              <div className="aspect-[3/4] rounded-[3rem] overflow-hidden mb-10 relative shadow-xl">
-                <img 
-                  src={proc.img} 
-                  alt={proc.title} 
-                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-1000"
+              <div className="aspect-[3/4] rounded-2xl overflow-hidden mb-8 relative shadow-sm">
+                <img
+                  src={proc.img}
+                  alt={`Procedimiento: ${proc.title} — Dr. Víctor Agudelo, Cali`}
+                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500"
+                  loading="lazy"
                   referrerPolicy="no-referrer"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-10">
@@ -1413,26 +1407,44 @@ const ProceduresCarousel = () => {
   );
 };
 
+const WhatsAppButton = () => (
+  <a
+    href="https://wa.me/573113089726?text=Hola%20Dr.%20Agudelo%2C%20quisiera%20agendar%20una%20consulta."
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Contactar al Dr. Agudelo por WhatsApp"
+    className="fixed bottom-6 right-6 z-50 hidden md:flex items-center gap-3 bg-green-500 hover:bg-green-600 text-white px-5 py-3 rounded-full shadow-lg transition-all duration-300 font-bold text-sm"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5" aria-hidden="true">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+    WhatsApp
+  </a>
+);
+
 export default function App() {
   return (
     <div className="min-h-screen bg-white font-sans text-slate-900 selection:bg-sky-100 selection:text-sky-900">
       <Navbar />
-      <Hero />
-      <StatsSection />
-      <MeetTheDoctor />
-      <UltrasonicTechnology />
-      <ProceduresCarousel />
-      <MensRhinoplasty />
-      <Process />
-      <Results />
-      <SatisfactionIndex />
-      <InternationalPatients />
-      <Testimonials />
-      <StickyFAQSection />
-      <BookingForm />
-      <MapSection />
+      <main>
+        <Hero />
+        <StatsSection />
+        <MeetTheDoctor />
+        <UltrasonicTechnology />
+        <ProceduresCarousel />
+        <MensRhinoplasty />
+        <Process />
+        <Results />
+        <SatisfactionIndex />
+        <InternationalPatients />
+        <Testimonials />
+        <StickyFAQSection />
+        <BookingForm />
+        <MapSection />
+      </main>
       <Footer />
       <StickyMobileCTA />
+      <WhatsAppButton />
     </div>
   );
 }
