@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Splide from '@splidejs/splide'
 import '@splidejs/splide/dist/css/splide-core.min.css'
 
@@ -27,12 +27,38 @@ const PROCEDURES: Procedure[] = [
       'Mejoramos la forma, tamaño y simetría con implantes de alta calidad o grasa propia, adaptados a tu anatomía y deseos personales.',
     bgColor: '#2e1a2a',
   },
+  {
+    title: 'Cirugía Facial',
+    description:
+      'Ritidectomía, blefaroplastia y más. Procedimientos de rejuvenecimiento adaptados a tu anatomía única para resultados naturales.',
+    bgColor: '#1e2a2e',
+  },
 ]
 
 export function ProceduresSlider() {
-  const splideRef   = useRef<HTMLDivElement>(null)
-  const progressRef = useRef<HTMLDivElement>(null)
-  const splideInst  = useRef<Splide | null>(null)
+  const splideRef    = useRef<HTMLDivElement>(null)
+  const progressRef  = useRef<HTMLDivElement>(null)
+  const splideInst   = useRef<Splide | null>(null)
+  const autoplayRef  = useRef<ReturnType<typeof setInterval> | null>(null)
+  const [activeIdx, setActiveIdx] = useState(0)
+
+  const startAutoplay = () => {
+    stopAutoplay()
+    autoplayRef.current = setInterval(() => {
+      const s = splideInst.current
+      if (!s) return
+      const end = s.Components.Controller.getEnd()
+      const cur = s.Components.Controller.getIndex()
+      s.go(cur >= end ? 0 : cur + 1)
+    }, 4000)
+  }
+
+  const stopAutoplay = () => {
+    if (autoplayRef.current) {
+      clearInterval(autoplayRef.current)
+      autoplayRef.current = null
+    }
+  }
 
   useEffect(() => {
     const el = splideRef.current
@@ -48,11 +74,11 @@ export function ProceduresSlider() {
       pagination: false,
       speed: 800,
       dragAngleThreshold: 60,
-      rewind: false,
+      rewind: true,
       trimSpace: false,
       breakpoints: {
         991: { perPage: 2, gap: '12px' },
-        767: { perPage: 1, gap: '8px' },
+        767: { perPage: 1.2, gap: '8px' },
       },
     })
 
@@ -66,7 +92,8 @@ export function ProceduresSlider() {
       const progress = end <= 0 ? 100 : Math.min(Math.max(index / end, 0), 1) * 100
       if (bar) bar.style.width = `${progress}%`
 
-      // Toggle active class on slide-card wrappers
+      setActiveIdx(index)
+
       el.querySelectorAll<HTMLElement>('.slide-card').forEach((card, i) => {
         card.classList.toggle('is-active-card', i === index)
       })
@@ -76,8 +103,10 @@ export function ProceduresSlider() {
     splide.mount()
     updateState()
     splideInst.current = splide
+    startAutoplay()
 
     return () => {
+      stopAutoplay()
       splide.destroy()
       splideInst.current = null
     }
@@ -85,45 +114,58 @@ export function ProceduresSlider() {
 
   return (
     <section
+      id="procedimientos"
       className="py-20 overflow-hidden"
       style={{ background: 'var(--color-2)' }}
     >
-      {/* Section header */}
-      <div className="px-6 md:px-12 mb-10 flex items-start justify-between gap-6 flex-wrap">
-        <h2
-          className="text-3xl md:text-4xl leading-tight max-w-xl"
-          style={{ color: 'var(--color-1)', fontWeight: 700 }}
-        >
-          Procedimientos especializados con los más altos estándares de seguridad y resultados.
-        </h2>
-        <a
-          href="#agendar"
-          className="shrink-0 flex items-center gap-2 text-sm transition-colors"
-          style={{
-            border: '1px solid var(--color-11)',
-            borderRadius: '100px',
-            padding: '0.625rem 1.25rem',
-            fontWeight: 500,
-            color: 'var(--color-1)',
-            textDecoration: 'none',
-          }}
-          onMouseEnter={e => {
-            const t = e.currentTarget as HTMLAnchorElement
-            t.style.background = 'var(--color-1)'
-            t.style.color = 'var(--color-4)'
-          }}
-          onMouseLeave={e => {
-            const t = e.currentTarget as HTMLAnchorElement
-            t.style.background = 'transparent'
-            t.style.color = 'var(--color-1)'
-          }}
-        >
-          Ver todos los procedimientos →
-        </a>
+      {/* Header with progress indicator */}
+      <div className="px-6 md:px-12 mb-10">
+        <div className="flex items-end justify-between gap-6 flex-wrap mb-6">
+          <h2
+            className="text-3xl md:text-4xl leading-tight max-w-xl"
+            style={{ color: 'var(--color-1)', fontWeight: 700 }}
+          >
+            Procedimientos
+          </h2>
+          <div
+            className="flex items-center gap-2 text-sm tabular-nums"
+            style={{ color: 'var(--color-12)', fontWeight: 400 }}
+          >
+            <span
+              key={activeIdx}
+              style={{
+                display: 'inline-block',
+                animation: 'slideNum 0.35s cubic-bezier(0.22,1,0.36,1) both',
+              }}
+            >
+              {activeIdx + 1}
+            </span>
+            <span>/</span>
+            <span>{PROCEDURES.length} Procedimientos</span>
+          </div>
+        </div>
+        {/* Top progress bar */}
+        <div style={{ height: '2px', background: 'rgba(0,0,0,0.08)', borderRadius: '4px', overflow: 'hidden' }}>
+          <div
+            ref={progressRef}
+            style={{
+              height: '100%',
+              width: '0%',
+              background: 'var(--color-1)',
+              borderRadius: '4px',
+              transition: 'width 600ms ease',
+            }}
+          />
+        </div>
       </div>
 
       {/* Splide carousel */}
-      <div ref={splideRef} className="splide px-6 md:px-12">
+      <div
+        ref={splideRef}
+        className="splide px-6 md:px-12"
+        onMouseEnter={stopAutoplay}
+        onMouseLeave={startAutoplay}
+      >
         <div className="splide__track">
           <ul className="splide__list">
             {PROCEDURES.map((proc, i) => (
@@ -134,7 +176,6 @@ export function ProceduresSlider() {
                     className="w-full relative overflow-hidden"
                     style={{ borderRadius: '16px', aspectRatio: '3/4', background: proc.bgColor }}
                   >
-                    {/* Title overlay */}
                     <div
                       className="absolute inset-0"
                       style={{
@@ -151,13 +192,13 @@ export function ProceduresSlider() {
                     </div>
                   </div>
 
-                  {/* Info box — slides up when active */}
+                  {/* Info box */}
                   <div className="module_box">
                     <p
                       className="text-[10px] uppercase tracking-[0.18em] mb-2"
                       style={{ color: 'var(--color-12)', fontWeight: 400 }}
                     >
-                      Descripción
+                      Module Overview
                     </p>
                     <p
                       className="text-sm leading-relaxed mb-4"
@@ -171,11 +212,10 @@ export function ProceduresSlider() {
                       style={{
                         color: 'var(--color-1)',
                         fontWeight: 600,
-                        textDecoration: 'underline',
-                        textUnderlineOffset: '4px',
+                        textDecoration: 'none',
                       }}
                     >
-                      Agendar consulta →
+                      Explorar Procedimiento →
                     </a>
                   </div>
                 </div>
@@ -185,10 +225,12 @@ export function ProceduresSlider() {
         </div>
       </div>
 
-      {/* Progress bar */}
-      <div className="mx-6 md:mx-12 mt-5 slider-progress">
-        <div ref={progressRef} className="slider-progress-bar" />
-      </div>
+      <style>{`
+        @keyframes slideNum {
+          from { opacity: 0; transform: translateY(8px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
     </section>
   )
 }

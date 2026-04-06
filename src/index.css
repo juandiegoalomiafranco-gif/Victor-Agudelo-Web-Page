@@ -28,7 +28,7 @@
   --transition-smooth: all 0.5s cubic-bezier(0.25,1,0.5,1);
 }
 
-/* ── Scrollbar (IoH style) ───────────────────────────────── */
+/* ── Scrollbar ───────────────────────────────────────────── */
 ::-webkit-scrollbar-button { width: 0px; height: 0px; }
 ::-webkit-scrollbar-track  { background: transparent; }
 ::-webkit-scrollbar-thumb  { background: transparent; }
@@ -74,12 +74,62 @@
   .transform-style-3d { transform-style: preserve-3d; }
 }
 
-/* ── Hero IoH ────────────────────────────────────────────── */
+/* ── Hero ────────────────────────────────────────────────── */
 .hero.first-screen {
   content-visibility: auto;
   contain-intrinsic-size: auto 100vh;
 }
 .hero { will-change: transform; }
+
+/* Hero H1 — responsive sizes */
+.hero-h1 {
+  font-size: 4rem;
+  line-height: 1;
+  font-weight: 500;
+}
+@media (max-width: 991px) {
+  .hero-h1 {
+    font-size: 4.3rem;
+    line-height: 1;
+  }
+}
+@media (max-width: 767px) {
+  .hero-h1 {
+    font-size: 5rem;
+    line-height: 1.05;
+  }
+}
+@media (max-width: 479px) {
+  .hero-h1 {
+    font-size: 6.2rem;
+    line-height: 1.2;
+  }
+}
+
+/* Testimonials H2 — responsive */
+.testimonials-h2 {
+  font-size: 4rem;
+  line-height: 1.05;
+  max-width: 48rem;
+}
+@media (max-width: 991px) {
+  .testimonials-h2 {
+    font-size: 4.3rem;
+  }
+}
+@media (max-width: 767px) {
+  .testimonials-h2 {
+    font-size: 5rem;
+    line-height: 1.05;
+  }
+}
+@media (max-width: 479px) {
+  .testimonials-h2 {
+    font-size: 6.2rem;
+    line-height: 1.2;
+    width: 100%;
+  }
+}
 
 /* Stat bars */
 .bar_hero {
@@ -93,7 +143,7 @@
   width: 0%;
 }
 
-/* Stat number — hidden until JS reveals */
+/* Stat number */
 .stat-number {
   opacity: 0;
   transition: opacity 0.2s ease;
@@ -111,11 +161,17 @@
 .stat-dot.dot-active { background: #FFFFFF; }
 
 /* ── Scroll-pinned 3D text ───────────────────────────────── */
-/* HeroScrollText — 3D line animation */
 .line {
   display: block;
   transform-style: preserve-3d;
   backface-visibility: hidden;
+}
+
+.narrative-line {
+  display: block;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  will-change: transform, opacity, filter;
 }
 
 /* ── Splide slider ───────────────────────────────────────── */
@@ -136,9 +192,13 @@
 /* Slide card active state */
 .slide-card {
   opacity: 0.45;
-  transition: opacity 0.55s ease;
+  transform: scale(0.96);
+  transition: opacity 0.55s ease, transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
 }
-.slide-card.is-active-card { opacity: 1; }
+.slide-card.is-active-card {
+  opacity: 1;
+  transform: scale(1);
+}
 
 /* Module info box */
 .module_box {
@@ -157,46 +217,6 @@
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
-}
-
-/* ── Navbar ──────────────────────────────────────────────── */
-.header {
-  transition: background-color 0.4s ease, color 0.4s ease;
-}
-.header.is-light { background-color: transparent; }
-.header.is-dark  { background-color: #F1F1F1; }
-
-.h-link div {
-  transition: color 0.4s ease;
-}
-.header.is-light .h-link div { color: #FFFFFF; }
-.header.is-dark  .h-link div { color: #242424; }
-
-.btn-header {
-  transition: background-color 0.4s ease, color 0.4s ease;
-  border-radius: 100px;
-  padding: 0.5rem 1.25rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-}
-.header.is-light .btn-header {
-  background-color: rgba(241,241,241,0.15);
-  color: #FFFFFF;
-}
-.header.is-dark .btn-header {
-  background-color: #242424;
-  color: #FFFFFF;
-}
-
-/* ── FAQ accordion ───────────────────────────────────────── */
-.faq-content {
-  overflow: hidden;
-  height: 0;
-  transition: height 0.4s cubic-bezier(0.25,1,0.5,1);
 }
 
 /* ── Footer oversized text ───────────────────────────────── */

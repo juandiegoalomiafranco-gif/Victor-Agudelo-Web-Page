@@ -1,172 +1,172 @@
-import React, { useState, useRef, useEffect } from 'react'
+import { useState } from 'react'
 
-interface FaqItem {
-  question: string
-  answer: string
-}
-
-const FAQS: FaqItem[] = [
+const FAQS = [
   {
     question: '¿Cómo sé si soy candidato para un procedimiento?',
-    answer:
-      'Durante la consulta inicial evaluamos tu estado de salud general, tus expectativas y las características anatómicas de la zona a tratar. A partir de eso determinamos si eres candidato ideal y qué técnica se adapta mejor a ti.',
+    answer: 'Durante la consulta inicial evaluamos tu estado de salud general, tus expectativas y las características anatómicas de la zona a tratar. A partir de eso determinamos si eres candidato ideal y qué técnica se adapta mejor a ti.',
   },
   {
     question: '¿Cuáles son los riesgos de la cirugía plástica?',
-    answer:
-      'Como toda cirugía, existen riesgos generales como infección, sangrado o reacciones a la anestesia. Trabajamos con protocolos de seguridad estrictos y te informamos en detalle sobre cada riesgo específico antes de tomar cualquier decisión.',
+    answer: 'Como toda cirugía, existen riesgos generales como infección, sangrado o reacciones a la anestesia. Trabajamos con protocolos de seguridad estrictos y te informamos en detalle sobre cada riesgo específico antes de tomar cualquier decisión.',
   },
   {
     question: '¿Cuánto tiempo tarda la recuperación?',
-    answer:
-      'Depende del procedimiento. Rinoplastia: 1–2 semanas de reposo inicial. Liposucción: 1–3 semanas. Mamoplastia: 1–2 semanas. Te entregamos un protocolo de recuperación detallado y seguimiento post-operatorio personalizado.',
+    answer: 'Depende del procedimiento. Rinoplastia: 1–2 semanas de reposo inicial. Liposucción: 1–3 semanas. Mamoplastia: 1–2 semanas. Te entregamos un protocolo de recuperación detallado y seguimiento post-operatorio personalizado.',
   },
   {
     question: '¿Atienden pacientes de otras ciudades o del exterior?',
-    answer:
-      'Sí. Atendemos pacientes de toda Colombia y del exterior. Cali es un destino reconocido para turismo médico. Podemos coordinar consulta virtual previa, alojamiento recomendado y seguimiento remoto post-operatorio.',
+    answer: 'Sí. Atendemos pacientes de toda Colombia y del exterior. Cali es un destino reconocido para turismo médico. Podemos coordinar consulta virtual previa, alojamiento recomendado y seguimiento remoto post-operatorio.',
   },
   {
     question: '¿Cómo es la primera consulta?',
-    answer:
-      'Es una consulta personalizada de 45–60 minutos donde escuchamos tus objetivos, hacemos una evaluación física, explicamos las opciones disponibles y resolvemos todas tus dudas sin ningún compromiso. También disponible de forma virtual.',
+    answer: 'Es una consulta personalizada de 45–60 minutos donde escuchamos tus objetivos, hacemos una evaluación física, explicamos las opciones disponibles y resolvemos todas tus dudas sin ningún compromiso. También disponible de forma virtual.',
   },
 ]
-
-function AccordionItem({
-  item,
-  isOpen,
-  onToggle,
-}: {
-  item: FaqItem
-  isOpen: boolean
-  onToggle: () => void
-  key?: React.Key | null
-}) {
-  const contentRef = useRef<HTMLDivElement>(null)
-  const innerRef   = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const content = contentRef.current
-    const inner   = innerRef.current
-    if (!content || !inner) return
-    content.style.height = isOpen ? `${inner.scrollHeight}px` : '0px'
-  }, [isOpen])
-
-  return (
-    <div
-      className="py-6"
-      style={{ borderBottom: '1px solid var(--color-11)' }}
-    >
-      <button
-        onClick={onToggle}
-        className="w-full flex items-center justify-between gap-4 text-left"
-      >
-        <span
-          className="text-base md:text-lg leading-snug"
-          style={{ color: 'var(--color-1)', fontWeight: 700 }}
-        >
-          {item.question}
-        </span>
-        <span
-          className="shrink-0 text-2xl leading-none select-none"
-          style={{
-            color: 'var(--color-1)',
-            fontWeight: 400,
-            transform: isOpen ? 'rotate(45deg)' : 'rotate(0deg)',
-            transition: 'transform 0.3s ease',
-            display: 'inline-block',
-          }}
-        >
-          +
-        </span>
-      </button>
-
-      <div
-        ref={contentRef}
-        className="faq-content"
-      >
-        <div ref={innerRef} className="pt-4 pb-1">
-          <p
-            className="leading-relaxed text-sm md:text-base"
-            style={{ color: 'var(--color-12)', fontWeight: 400 }}
-          >
-            {item.answer}
-          </p>
-        </div>
-      </div>
-    </div>
-  )
-}
 
 export function FaqAccordion() {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
 
-  return (
-    <section
-      className="py-24 px-6 md:px-12"
-      style={{ background: 'var(--color-4)' }}
-    >
-      <div
-        className="grid md:grid-cols-[1fr_1.5fr] gap-16 mx-auto"
-        style={{ maxWidth: '72rem' }}
-      >
-        {/* Left — sticky */}
-        <div>
-          <div className="md:sticky md:top-28">
-            <h2
-              className="text-3xl md:text-4xl leading-tight mb-6"
-              style={{ color: 'var(--color-1)', fontWeight: 700 }}
-            >
-              Preguntas que te ayudan a decidir con confianza
-            </h2>
-            <p
-              className="text-sm mb-6"
-              style={{ color: 'var(--color-12)', fontWeight: 400 }}
-            >
-              ¿Tienes más dudas? Hablemos.
-            </p>
-            <a
-              href="#agendar"
-              className="inline-flex items-center gap-2 text-sm transition-colors"
-              style={{
-                border: '1px solid var(--color-11)',
-                borderRadius: '100px',
-                padding: '0.625rem 1.25rem',
-                fontWeight: 500,
-                color: 'var(--color-1)',
-                textDecoration: 'none',
-              }}
-              onMouseEnter={e => {
-                const t = e.currentTarget as HTMLAnchorElement
-                t.style.background = 'var(--color-1)'
-                t.style.color = 'var(--color-4)'
-              }}
-              onMouseLeave={e => {
-                const t = e.currentTarget as HTMLAnchorElement
-                t.style.background = 'transparent'
-                t.style.color = 'var(--color-1)'
-              }}
-            >
-              Contáctanos →
-            </a>
-          </div>
-        </div>
+  const toggle = (i: number) =>
+    setOpenIndex(prev => (prev === i ? null : i))
 
-        {/* Right — accordion */}
-        <div
-          style={{ borderTop: '1px solid var(--color-11)' }}
+  return (
+    <section style={{ background: '#080808', padding: '6rem 1.5rem' }}>
+      <div style={{ maxWidth: '46rem', margin: '0 auto' }}>
+        {/* Title */}
+        <h2
+          style={{
+            color: '#ffffff',
+            fontWeight: 700,
+            fontSize: 'clamp(2.4rem, 5vw, 3.75rem)',
+            letterSpacing: '-0.03em',
+            textAlign: 'center',
+            marginBottom: '4rem',
+            lineHeight: 1.1,
+          }}
         >
-          {FAQS.map((item, i) => (
-            <AccordionItem
-              key={i}
-              item={item}
-              isOpen={openIndex === i}
-              onToggle={() => { setOpenIndex(prev => (prev === i ? null : i)) }}
-            />
+          Preguntas frecuentes
+        </h2>
+
+        {/* Chat list */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+          {FAQS.map((faq, i) => (
+            <div key={i}>
+              {/* Question — right aligned like user message */}
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'flex-end',
+                  alignItems: 'center',
+                  gap: '0.625rem',
+                  marginBottom: openIndex === i ? '0.75rem' : '0',
+                }}
+              >
+                {/* +/– toggle button */}
+                <button
+                  onClick={() => toggle(i)}
+                  aria-label={openIndex === i ? 'Cerrar' : 'Abrir'}
+                  style={{
+                    width: '30px',
+                    height: '30px',
+                    borderRadius: '50%',
+                    border: '1px solid rgba(255,255,255,0.22)',
+                    background: 'transparent',
+                    color: '#fff',
+                    fontSize: '1.1rem',
+                    lineHeight: 1,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    cursor: 'pointer',
+                    flexShrink: 0,
+                    transition: 'all 0.3s ease',
+                  }}
+                >
+                  {openIndex === i ? '−' : '+'}
+                </button>
+
+                {/* Bubble */}
+                <div
+                  onClick={() => toggle(i)}
+                  style={{
+                    background: openIndex === i ? 'rgba(38,38,42,0.95)' : '#1c1c20',
+                    border: `1px solid ${openIndex === i ? 'rgba(125,195,255,0.35)' : 'rgba(255,255,255,0.07)'}`,
+                    borderRadius: '18px 18px 4px 18px',
+                    padding: '0.875rem 1.375rem',
+                    color: '#ffffff',
+                    fontSize: '0.9375rem',
+                    fontWeight: 500,
+                    cursor: 'pointer',
+                    maxWidth: '82%',
+                    lineHeight: 1.5,
+                    transition: 'all 0.3s ease',
+                    userSelect: 'none',
+                  }}
+                >
+                  {faq.question}
+                </div>
+              </div>
+
+              {/* Answer — left aligned like doctor reply */}
+              {openIndex === i && (
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '0.625rem',
+                    paddingLeft: '0.25rem',
+                    animation: 'faqIn 0.38s cubic-bezier(0.22,1,0.36,1) both',
+                  }}
+                >
+                  {/* Doctor avatar */}
+                  <div
+                    style={{
+                      width: '34px',
+                      height: '34px',
+                      borderRadius: '50%',
+                      background: 'linear-gradient(135deg, #1e3a5f 0%, #0f2440 100%)',
+                      border: '1px solid rgba(255,255,255,0.12)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '0.65rem',
+                      fontWeight: 700,
+                      color: '#ffffff',
+                      flexShrink: 0,
+                      letterSpacing: '0.03em',
+                    }}
+                  >
+                    VA
+                  </div>
+
+                  {/* Answer bubble */}
+                  <div
+                    style={{
+                      background: 'rgba(255,255,255,0.06)',
+                      border: '1px solid rgba(255,255,255,0.06)',
+                      borderRadius: '4px 18px 18px 18px',
+                      padding: '0.875rem 1.375rem',
+                      color: 'rgba(255,255,255,0.78)',
+                      fontSize: '0.9rem',
+                      lineHeight: 1.72,
+                      maxWidth: '82%',
+                    }}
+                  >
+                    {faq.answer}
+                  </div>
+                </div>
+              )}
+            </div>
           ))}
         </div>
       </div>
+
+      <style>{`
+        @keyframes faqIn {
+          from { opacity: 0; transform: translateY(12px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
     </section>
   )
 }

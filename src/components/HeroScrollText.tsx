@@ -1,78 +1,80 @@
 // src/components/HeroScrollText.tsx
-
-import { useEffect, useRef } from 'react'
+import { useLayoutEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import SplitType from 'split-type'
 
-// Register at module level — critical for bug fix
 gsap.registerPlugin(ScrollTrigger)
 
 const TEXT_BLOCKS = [
-  'Elegir un cirujano plástico es una de las decisiones más importantes de tu vida.',
-  'Miles de pacientes llegaron con las mismas dudas que tú tienes ahora...',
-  '¿Y si encontraras al especialista que te guía con honestidad, desde la primera consulta hasta el resultado final?',
+  {
+    lines: [
+      'Elegir un cirujano plástico',
+      'es una de las decisiones',
+      'más importantes de tu vida.',
+    ],
+  },
+  {
+    lines: [
+      'Miles de pacientes llegaron',
+      'con las mismas dudas',
+      'que tú tienes ahora...',
+    ],
+  },
+  {
+    lines: [
+      '¿Y si encontraras al especialista',
+      'que te guía con honestidad,',
+      'desde la primera consulta',
+      'hasta el resultado final?',
+    ],
+  },
 ]
 
 const PILLS = ['Inseguro', 'Confundido', 'Nervioso', 'Dudoso', 'Perdido', 'Ansioso']
 
 export function HeroScrollText() {
-  const sectionRef  = useRef<HTMLDivElement>(null)
-  const pinnedRef   = useRef<HTMLDivElement>(null)
-  const textRefs    = useRef<(HTMLDivElement | null)[]>([])
-  const pillRefs    = useRef<(HTMLDivElement | null)[]>([])
-  const loaderRefs  = useRef<(HTMLDivElement | null)[]>([])
+  const outerRef   = useRef<HTMLDivElement>(null)
+  const innerRef   = useRef<HTMLDivElement>(null)
+  const textRefs   = useRef<(HTMLDivElement | null)[]>([])
+  const pillRefs   = useRef<(HTMLDivElement | null)[]>([])
+  const loaderRefs = useRef<(HTMLDivElement | null)[]>([])
 
-  useEffect(() => {
-    const section = sectionRef.current
-    const pinned  = pinnedRef.current
-    if (!section || !pinned) return
+  useLayoutEffect(() => {
+    const outer = outerRef.current
+    const inner = innerRef.current
+    if (!outer || !inner) return
 
-    let splits: (SplitType | null)[] = []
-    let master: gsap.core.Timeline
-
-    // Delay to ensure DOM + fonts are ready
-    const initTimer = setTimeout(() => {
-      splits = textRefs.current.map(el => {
-        if (!el) return null
-        const split = new SplitType(el, { types: 'lines', tagName: 'div' })
-        gsap.set(el, { opacity: 1 })
-        return split
-      })
-
-      master = gsap.timeline({
-        scrollTrigger: {
-          trigger: section,       // outer — provides scroll height
-          start: 'top top',
-          end: '+=4000',
-          scrub: true,
-          pin: pinned,            // inner — gets pinned
-        },
-      })
-
+    const ctx = gsap.context(() => {
       const BLUR_IN  = 'blur(18px)'
       const BLUR_OUT = 'blur(14px)'
 
-      const add3DEffect = (
-        el: HTMLDivElement | null,
-        loader: HTMLDivElement | null
-      ) => {
-        if (!el) return
-        const lines = el.querySelectorAll('.line')
+      const master = gsap.timeline({
+        scrollTrigger: {
+          trigger: outer,
+          start: 'top top',
+          end: '+=4000',
+          scrub: 1.2,
+          pin: inner,
+        },
+      })
 
-        master.to(el, { opacity: 1, y: 0, duration: 0.2, ease: 'none' })
+      const addBlock = (el: HTMLDivElement | null, loader: HTMLDivElement | null) => {
+        if (!el) return
+        const lines = el.querySelectorAll('.narrative-line')
+
+        master.to(el, { opacity: 1, duration: 0.1, ease: 'none' })
         master.fromTo(
           lines,
-          { opacity: 0, yPercent: 50, z: -200, rotateX: 10,  filter: BLUR_IN  },
-          { opacity: 1, yPercent: 0,  z: 0,    rotateX: 0,   filter: 'blur(0px)',
+          { opacity: 0, yPercent: 50, z: -200, rotateX: 10, filter: BLUR_IN },
+          { opacity: 1, yPercent: 0,  z: 0,    rotateX: 0,  filter: 'blur(0px)',
             duration: 2, stagger: 0.08, ease: 'power3.out' },
           '<'
         )
         if (loader) {
           master.fromTo(
             loader,
-            { width: '0%' },
-            { width: '100%', ease: 'none', duration: 2 },
+            { scaleX: 0 },
+            { scaleX: 1, ease: 'none', duration: 2, transformOrigin: 'left center' },
             '<'
           )
         }
@@ -82,14 +84,11 @@ export function HeroScrollText() {
             duration: 2, stagger: 0.08, ease: 'power3.in' },
           '>0.5'
         )
-        master.to(el, { opacity: 0, y: -20, duration: 0.2, ease: 'none' })
+        master.to(el, { opacity: 0, duration: 0.1, ease: 'none' })
       }
 
-      // Block 1
-      add3DEffect(textRefs.current[0], loaderRefs.current[0])
-
-      // Block 2
-      add3DEffect(textRefs.current[1], loaderRefs.current[1])
+      addBlock(textRefs.current[0], loaderRefs.current[0])
+      addBlock(textRefs.current[1], loaderRefs.current[1])
 
       // Word cloud pills
       const p = pillRefs.current
@@ -99,86 +98,118 @@ export function HeroScrollText() {
           { opacity: 1, y: 0,  filter: 'blur(0px)', duration: 0.4, ease: 'power3.out' })
         .fromTo([p[1], p[4]],
           { opacity: 0, y: 20, filter: BLUR_IN },
-          { opacity: 1, y: 0,  filter: 'blur(0px)', duration: 0.4, ease: 'power3.out' },
-          '>0.2')
+          { opacity: 1, y: 0,  filter: 'blur(0px)', duration: 0.4, ease: 'power3.out' }, '>0.2')
         .fromTo([p[0], p[5]],
           { opacity: 0, y: 20, filter: BLUR_IN },
-          { opacity: 1, y: 0,  filter: 'blur(0px)', duration: 0.4, ease: 'power3.out' },
-          '>0.2')
+          { opacity: 1, y: 0,  filter: 'blur(0px)', duration: 0.4, ease: 'power3.out' }, '>0.2')
         .to([p[0], p[5]], { opacity: 0, y: -20, filter: BLUR_OUT, duration: 0.3, ease: 'power3.in' })
         .to([p[1], p[4]], { opacity: 0, y: -20, filter: BLUR_OUT, duration: 0.3, ease: 'power3.in' }, '>0.15')
         .to([p[2], p[3]], { opacity: 0, y: -20, filter: BLUR_OUT, duration: 0.3, ease: 'power3.in' }, '>0.15')
 
-      // Block 3
-      add3DEffect(textRefs.current[2], loaderRefs.current[2])
+      addBlock(textRefs.current[2], loaderRefs.current[2])
 
-    }, 100)
+    }, outerRef)
 
-    return () => {
-      clearTimeout(initTimer)
-      if (master) master.kill()
-      ScrollTrigger.getAll().forEach(t => t.kill())
-      splits.forEach(s => s?.revert())
-    }
+    return () => ctx.revert()
   }, [])
 
   return (
-    <div ref={sectionRef} style={{ height: '4000px' }}>
+    <div ref={outerRef} style={{ height: '400vh', position: 'relative', zIndex: 2 }}>
       <div
-        ref={pinnedRef}
-        style={{ position: 'sticky', top: 0, height: '100vh', overflow: 'hidden' }}
-        className="flex items-center justify-center bg-[#0a0a0a]"
+        ref={innerRef}
+        style={{
+          position: 'sticky',
+          top: 0,
+          height: '100vh',
+          overflow: 'hidden',
+          background: 'radial-gradient(ellipse at 50% 60%, #0d1a2d 0%, #060606 65%)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
       >
-        {/* Background overlay */}
-        <div className="absolute inset-0 bg-black/82 z-0" />
-
-        {/* Left progress loaders */}
-        <div className="absolute left-10 top-1/2 -translate-y-1/2 z-20 flex flex-col gap-[10px]">
+        {/* Progress bars - bottom */}
+        <div style={{
+          position: 'absolute',
+          bottom: '3rem',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          display: 'flex',
+          gap: '8px',
+          zIndex: 20,
+        }}>
           {[0, 1, 2].map(i => (
-            <div key={i} className="relative" style={{ width: '48px', height: '1.5px', background: 'rgba(255,255,255,0.15)' }}>
+            <div key={i} style={{ width: '48px', height: '2px', background: 'rgba(255,255,255,0.12)', borderRadius: '4px', overflow: 'hidden' }}>
               <div
                 ref={el => { loaderRefs.current[i] = el }}
-                style={{ position: 'absolute', inset: 0, width: '0%', background: 'rgba(255,255,255,0.9)' }}
+                style={{ width: '100%', height: '100%', background: 'rgba(255,255,255,0.85)', transformOrigin: 'left center', transform: 'scaleX(0)' }}
               />
             </div>
           ))}
         </div>
 
         {/* Text blocks */}
-        {TEXT_BLOCKS.map((text, i) => (
+        {TEXT_BLOCKS.map((block, i) => (
           <div
             key={i}
             ref={el => { textRefs.current[i] = el }}
-            className="absolute z-20 w-full max-w-3xl px-16 text-center opacity-0"
-            style={{ perspective: '1000px', transform: 'translateY(20px)' }}
+            style={{
+              position: 'absolute',
+              zIndex: 20,
+              width: '100%',
+              maxWidth: '52rem',
+              padding: '0 2rem',
+              textAlign: 'center',
+              opacity: 0,
+              perspective: '1200px',
+              transformStyle: 'preserve-3d',
+            }}
           >
-            <p
-              className="text-white font-light"
-              style={{
-                fontSize: 'clamp(1.8rem, 4vw, 3.2rem)',
-                lineHeight: 1.3,
-                letterSpacing: '-0.02em',
-                transformStyle: 'preserve-3d',
-              }}
-            >
-              {text}
-            </p>
+            {block.lines.map((line, j) => (
+              <div
+                key={j}
+                className="narrative-line"
+                style={{
+                  display: 'block',
+                  textAlign: 'center',
+                  transformStyle: 'preserve-3d',
+                  backfaceVisibility: 'hidden',
+                  willChange: 'transform, opacity, filter',
+                  fontSize: 'clamp(1.75rem, 4vw, 3.2rem)',
+                  lineHeight: 1.15,
+                  fontWeight: 500,
+                  color: '#ffffff',
+                  letterSpacing: '-0.02em',
+                }}
+              >
+                {line}
+              </div>
+            ))}
           </div>
         ))}
 
         {/* Word cloud pills */}
-        <div className="absolute z-20 flex flex-wrap gap-3 justify-center max-w-lg px-8">
+        <div style={{
+          position: 'absolute',
+          zIndex: 20,
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: '0.75rem',
+          justifyContent: 'center',
+          maxWidth: '36rem',
+          padding: '0 2rem',
+        }}>
           {PILLS.map((word, i) => (
             <div
               key={i}
               ref={el => { pillRefs.current[i] = el }}
-              className="opacity-0"
               style={{
+                opacity: 0,
                 border: '1px solid rgba(255,255,255,0.2)',
                 background: 'rgba(255,255,255,0.06)',
                 padding: '10px 24px',
                 borderRadius: '999px',
-                fontSize: '0.9rem',
+                fontSize: '0.875rem',
                 letterSpacing: '0.04em',
                 color: 'rgba(255,255,255,0.85)',
               }}
@@ -187,7 +218,6 @@ export function HeroScrollText() {
             </div>
           ))}
         </div>
-
       </div>
     </div>
   )
