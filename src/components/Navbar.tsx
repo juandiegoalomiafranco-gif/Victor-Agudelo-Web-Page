@@ -1,125 +1,173 @@
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ChevronDown, ArrowUpRight } from "lucide-react";
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
-const navLinks = [
-  { label: "Servicios", href: "#servicios", hasDropdown: true },
-  { label: "Experiencia", href: "#nosotros", hasDropdown: true },
-  { label: "Casos", href: "#portafolio", hasDropdown: false },
-  { label: "Recursos", href: "#proceso", hasDropdown: true },
-  { label: "Equipo", href: "#equipo", hasDropdown: false },
-];
-
-const ExactNavbar = () => {
-  const [scrolled, setScrolled] = useState(false);
-  const [hidden, setHidden] = useState(false);
+const Navbar: React.FC = () => {
+  const [isVisible, setIsVisible] = useState(true);
+  const [isScrolled, setIsScrolled] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      const currentY = window.scrollY;
-      setScrolled(currentY > 10);
-      setHidden(currentY > lastScrollY && currentY > 200);
-      setLastScrollY(currentY);
+      const currentScrollY = window.scrollY;
+      setIsVisible(currentScrollY < lastScrollY || currentScrollY < 100);
+      setIsScrolled(currentScrollY > 50);
+      setLastScrollY(currentScrollY);
     };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY]);
+
+  const navLinks = [
+    { name: 'Especialidad', href: '#nosotros' },
+    { name: 'Procedimientos', href: '#procedimientos' },
+    { name: 'Proceso', href: '#proceso' },
+    { name: 'Galería', href: '#galeria' },
+    { name: 'Contacto', href: '#contacto' },
+  ];
+
+  const openWhatsApp = () => {
+    const msg = encodeURIComponent('Hola Dr. Agudelo, me gustaría agendar una consulta.');
+    window.open(`https://wa.me/573XXXXXXXXX?text=${msg}`, '_blank');
+  };
 
   return (
     <>
-      <div className="fixed top-4 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none">
-        <motion.nav
-          initial={{ y: -100 }}
-          animate={{ y: hidden ? -100 : 0 }}
-          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-          className={`pointer-events-auto transition-all duration-300 w-full rounded-md md:rounded-[4px] px-3 py-2.5 md:py-1.5 flex items-center justify-between ${
-            scrolled
-              ? "bg-white/95 backdrop-blur-xl shadow-lg border border-black/[0.03] max-w-5xl"
-              : "bg-white shadow-md border border-black/[0.03] max-w-5xl"
-          }`}
-          style={{
-            // Mimicking the extremely specific slight border radius of Dapper's pill
-            borderRadius: "6px"
-          }}
-        >
-          {/* Logo (Left) */}
-          <a href="#" className="flex items-center gap-2 pl-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold rounded-sm group">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="text-primary group-hover:rotate-12 transition-transform">
-              <path d="M12 0C12 0 12 10 24 12C24 12 12 14 12 24C12 24 12 14 0 12C0 12 12 10 12 0Z" fill="currentColor"/>
-            </svg>
-            <span className="font-heading font-extrabold text-lg text-primary tracking-tight">Imágenes Gráficas</span>
+      <motion.nav
+        initial={{ y: -80 }}
+        animate={{ y: isVisible ? 0 : -80 }}
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        className="fixed top-0 left-0 w-full z-50 transition-all duration-500"
+        style={{
+          background: isScrolled
+            ? 'rgba(13,17,23,0.92)'
+            : 'transparent',
+          backdropFilter: isScrolled ? 'blur(20px)' : 'none',
+          borderBottom: isScrolled ? '1px solid rgba(201,169,110,0.12)' : 'none',
+          padding: isScrolled ? '16px 0' : '28px 0',
+        }}
+      >
+        <div className="container mx-auto px-6 flex items-center justify-between">
+
+          {/* Logo */}
+          <a href="#hero" className="flex items-center gap-3 group">
+            <div
+              className="w-10 h-10 flex items-center justify-center text-sm font-black transition-all duration-300 group-hover:scale-105"
+              style={{
+                border: '1px solid rgba(201,169,110,0.6)',
+                color: '#C9A96E',
+                fontFamily: "'Playfair Display', serif",
+                fontSize: '18px',
+              }}
+            >
+              VA
+            </div>
+            <div className="hidden sm:block">
+              <p className="text-[10px] uppercase tracking-[0.35em] font-semibold leading-none" style={{ color: '#C9A96E' }}>
+                Dr. Víctor Agudelo
+              </p>
+              <p className="text-[9px] uppercase tracking-[0.25em] opacity-40 leading-tight mt-0.5" style={{ color: '#F8F8F8' }}>
+                Cali · Colombia
+              </p>
+            </div>
           </a>
 
-          {/* Links (Center) */}
-          <div className="hidden lg:flex items-center gap-6">
-            {navLinks.map((link) => (
+          {/* Desktop Nav */}
+          <div className="hidden lg:flex items-center gap-10">
+            {navLinks.map(link => (
               <a
-                key={link.label}
+                key={link.name}
                 href={link.href}
-                className="text-[13px] font-bold text-primary hover:text-accent transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm flex items-center gap-1 font-body tracking-tight"
+                className="text-[11px] font-semibold uppercase tracking-[0.2em] transition-all duration-300 relative group"
+                style={{ color: 'rgba(248,248,248,0.55)' }}
+                onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.color = '#C9A96E'}
+                onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.color = 'rgba(248,248,248,0.55)'}
               >
-                {link.label}
-                {link.hasDropdown && <ChevronDown size={14} className="opacity-70" />}
+                {link.name}
+                <span
+                  className="absolute -bottom-1 left-0 w-0 h-px transition-all duration-300 group-hover:w-full"
+                  style={{ background: '#C9A96E' }}
+                />
               </a>
             ))}
           </div>
 
-          {/* CTA Button (Right) */}
+          {/* CTA */}
           <div className="hidden lg:flex items-center gap-4">
-            <a
-              href="#contacto"
-              className="group flex items-center gap-3 text-primary text-[13px] font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm pr-1"
+            <button
+              onClick={openWhatsApp}
+              className="px-6 py-3 text-[11px] font-semibold uppercase tracking-widest transition-all duration-300"
+              style={{
+                background: '#C9A96E',
+                color: '#0D1117',
+              }}
+              onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = '#E8C97A'}
+              onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = '#C9A96E'}
             >
-              Hablemos
-              <span className="bg-green-300 text-primary p-1 rounded-[3px] overflow-hidden transition-all duration-300 group-hover:bg-green-400">
-                <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-              </span>
-            </a>
+              Agendar Consulta ↗
+            </button>
           </div>
 
-          {/* Mobile Menu Toggle */}
+          {/* Mobile hamburger */}
           <button
-            onClick={() => setMobileOpen(true)}
-            className="lg:hidden text-primary p-1.5 active:scale-95 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-md"
+            className="lg:hidden flex flex-col gap-1.5 p-2"
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label="Menu"
           >
-            <Menu size={20} />
+            <motion.span
+              animate={{ rotate: menuOpen ? 45 : 0, y: menuOpen ? 8 : 0 }}
+              className="block w-6 h-0.5"
+              style={{ background: '#C9A96E' }}
+            />
+            <motion.span
+              animate={{ opacity: menuOpen ? 0 : 1 }}
+              className="block w-6 h-0.5"
+              style={{ background: '#C9A96E' }}
+            />
+            <motion.span
+              animate={{ rotate: menuOpen ? -45 : 0, y: menuOpen ? -8 : 0 }}
+              className="block w-6 h-0.5"
+              style={{ background: '#C9A96E' }}
+            />
           </button>
-        </motion.nav>
-      </div>
+        </div>
+      </motion.nav>
 
+      {/* Mobile menu */}
       <AnimatePresence>
-        {mobileOpen && (
+        {menuOpen && (
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            transition={{ type: "tween", duration: 0.2 }}
-            className="fixed inset-0 z-[60] bg-[#F8F8F8] flex flex-col pt-24 px-6"
+            transition={{ duration: 0.3 }}
+            className="fixed top-0 left-0 w-full h-screen z-40 flex flex-col justify-center items-center gap-10"
+            style={{ background: 'rgba(13,17,23,0.98)' }}
           >
-            <button onClick={() => setMobileOpen(false)} className="absolute top-6 right-6 text-primary p-2 active:scale-95 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm bg-black/5">
-              <X size={24} />
-            </button>
-            <div className="flex flex-col flex-1 gap-6">
-              {navLinks.map((link) => (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  onClick={() => setMobileOpen(false)}
-                  className="text-4xl font-heading font-bold text-primary hover:text-accent transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent tracking-tighter"
-                >
-                  {link.label}
-                </a>
-              ))}
-              <a
-                href="#contacto"
-                onClick={() => setMobileOpen(false)}
-                className="bg-green-300 text-primary px-8 py-5 rounded-md text-lg font-bold mt-8 text-center transition-all duration-300 active:scale-[0.98] font-body flex items-center justify-center gap-2"
+            {navLinks.map((link, i) => (
+              <motion.a
+                key={link.name}
+                href={link.href}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.07 }}
+                onClick={() => setMenuOpen(false)}
+                className="text-2xl font-bold uppercase tracking-widest"
+                style={{ fontFamily: "'Playfair Display', serif", color: '#F8F8F8' }}
               >
-                Hablemos <ArrowUpRight size={20} />
-              </a>
-            </div>
+                {link.name}
+              </motion.a>
+            ))}
+            <motion.button
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: navLinks.length * 0.07 }}
+              onClick={() => { openWhatsApp(); setMenuOpen(false); }}
+              className="px-10 py-4 text-sm font-semibold uppercase tracking-widest mt-4"
+              style={{ background: '#C9A96E', color: '#0D1117' }}
+            >
+              Agendar Consulta ↗
+            </motion.button>
           </motion.div>
         )}
       </AnimatePresence>
@@ -127,4 +175,4 @@ const ExactNavbar = () => {
   );
 };
 
-export default ExactNavbar;
+export default Navbar;

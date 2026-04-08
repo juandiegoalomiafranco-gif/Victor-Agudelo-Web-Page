@@ -1,33 +1,37 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import ClientMarquee from "@/components/ClientMarquee";
-import AboutSection from "@/components/AboutSection";
-import ServicesSection from "@/components/ServicesSection";
 import StatsSection from "@/components/StatsSection";
-import PortfolioSection from "@/components/PortfolioSection";
+import ServicesSection from "@/components/ServicesSection";
+import AboutSection from "@/components/AboutSection";
 import ProcessSection from "@/components/ProcessSection";
+import EvaluadorVirtual from "@/components/EvaluadorVirtual";
 import TestimonialsSection from "@/components/TestimonialsSection";
-import WhyUsSection from "@/components/WhyUsSection";
 import CTASection from "@/components/CTASection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
+import WhatsAppFloat from "@/components/WhatsAppFloat";
+import ScrollProgressBar from "@/components/ScrollProgressBar";
 
 const Index = () => {
   return (
-    <div className="overflow-x-hidden">
+    <div className="relative min-h-screen" style={{ background: '#0D1117' }}>
+      <ScrollProgressBar />
       <Navbar />
-      <Hero />
-      <ClientMarquee />
-      <AboutSection />
-      <ServicesSection />
-      <StatsSection />
-      <PortfolioSection />
-      <ProcessSection />
-      <TestimonialsSection />
-      <WhyUsSection />
-      <CTASection />
-      <ContactSection />
+      <main>
+        <Hero />
+        <ClientMarquee />
+        <StatsSection />
+        <AboutSection />
+        <ServicesSection />
+        <ProcessSection />
+        <EvaluadorVirtual />
+        <TestimonialsSection />
+        <CTASection />
+        <ContactSection />
+      </main>
       <Footer />
+      <WhatsAppFloat />
     </div>
   );
 };

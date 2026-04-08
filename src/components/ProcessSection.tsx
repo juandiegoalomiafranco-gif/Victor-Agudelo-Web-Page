@@ -1,68 +1,201 @@
-import { motion } from "framer-motion";
+import React, { useRef } from 'react';
+import { motion, useScroll, useSpring } from 'framer-motion';
 
 const steps = [
-  { number: "01", title: "Descubrimiento", desc: "Entendemos profundamente los objetivos de negocio y el ecosistema físico donde vive la marca." },
-  { number: "02", title: "Ingeniería Visual", desc: "Diseñamos las estructuras, seleccionamos materiales y validamos la durabilidad y el impacto visual." },
-  { number: "03", title: "Producción", desc: "Fabricamos cada elemento con precisión milimétrica en nuestra planta especializada." },
-  { number: "04", title: "Despliegue", desc: "Instalamos e implementamos en sitio para asegurar una experiencia de marca impecable." },
+  {
+    number: '01',
+    title: 'Primera Consulta',
+    description: 'Evaluación diagnóstica personalizada. El Dr. Agudelo analiza su anatomía facial, historia clínica y objetivos estéticos o funcionales. Sin compromisos — solo claridad sobre su caso.',
+    icon: '🩺',
+    detail: 'Sin costo de consulta inicial para pacientes de Cali',
+  },
+  {
+    number: '02',
+    title: 'Plan Quirúrgico',
+    description: 'Diseño del resultado esperado con simulación digital. Se definen la técnica, los tiempos de recuperación, el costo total y las fechas disponibles. Transparencia total antes de decidir.',
+    icon: '📋',
+    detail: 'Simulación digital del resultado final',
+  },
+  {
+    number: '03',
+    title: 'Intervención Quirúrgica',
+    description: 'Procedimiento realizado con técnicas mínimamente invasivas de última generación. Anestesia local o general según el caso. Tiempos quirúrgicos optimizados para la seguridad del paciente.',
+    icon: '⚕️',
+    detail: 'Clínica certificada en Cali, Colombia',
+  },
+  {
+    number: '04',
+    title: 'Seguimiento y Recuperación',
+    description: 'Acompañamiento postoperatorio completo. Controles médicos programados, guía detallada de cuidados en casa y canal directo de comunicación con el Dr. Agudelo durante todo el proceso.',
+    icon: '🌟',
+    detail: 'WhatsApp directo con el médico tratante',
+  },
 ];
 
-const ExactProcess = () => {
+const ProcessSection: React.FC = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start center', 'end center'],
+  });
+  const scaleY = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
+
   return (
-    <section id="proceso" className="py-24 lg:py-40 bg-white">
-      <div className="container mx-auto px-6 lg:px-8 max-w-7xl">
-        <div className="flex flex-col lg:flex-row gap-16 lg:gap-24">
-          
-          {/* Left Sticky Header */}
-          <div className="lg:w-1/3">
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="sticky top-40"
-            >
-              <div className="inline-flex items-center gap-2 mb-6">
-                <span className="w-2 h-2 rounded-sm bg-accent" />
-                <span className="text-primary text-sm font-semibold uppercase tracking-widest">Metodología</span>
-              </div>
-              <h2 className="text-5xl lg:text-[4rem] font-bold text-primary font-heading leading-none tracking-tight mb-6">
-                Nuestro <br/><span className="italic font-light">proceso.</span>
-              </h2>
-              <p className="text-primary/70 font-body text-lg font-medium">
-                Un sistema comprobado que transforma conceptos abstractos en activos visuales de alto retorno.
-              </p>
-            </motion.div>
+    <section
+      id="proceso"
+      ref={containerRef}
+      className="py-32 relative overflow-hidden"
+      style={{ background: '#0D1117' }}
+    >
+      {/* Background */}
+      <div
+        className="absolute right-0 bottom-0 w-80 h-80 pointer-events-none"
+        style={{ background: 'radial-gradient(circle, rgba(201,169,110,0.04) 0%, transparent 70%)' }}
+      />
+
+      <div className="container mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-20">
+
+        {/* Left — sticky label */}
+        <div className="lg:sticky lg:top-40 h-fit flex flex-col gap-8">
+          <div className="flex items-center gap-4">
+            <div className="h-px w-12" style={{ background: '#C9A96E' }} />
+            <span className="text-[10px] uppercase tracking-[0.4em] font-semibold" style={{ color: '#C9A96E' }}>
+              Metodología // Proceso
+            </span>
           </div>
 
-          {/* Right Process Steps */}
-          <div className="lg:w-2/3 flex flex-col gap-12">
+          <h2
+            className="leading-none"
+            style={{
+              fontFamily: "'Playfair Display', serif",
+              fontSize: 'clamp(2.5rem, 5vw, 4.5rem)',
+              fontWeight: 800,
+              color: '#F8F8F8',
+            }}
+          >
+            Un Camino<br />
+            <span
+              className="italic"
+              style={{
+                background: 'linear-gradient(135deg, #C9A96E, #E8C97A)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+              }}
+            >
+              Sin Sorpresas.
+            </span>
+          </h2>
+
+          <p
+            className="text-base leading-relaxed max-w-sm"
+            style={{ color: 'rgba(248,248,248,0.55)' }}
+          >
+            Desde la primera consulta hasta el resultado final, cada paso está diseñado para que el
+            paciente tenga claridad, seguridad y confianza.
+          </p>
+
+          {/* Mini stats */}
+          <div className="flex items-center gap-8 mt-4">
+            <div>
+              <p className="text-4xl font-black" style={{ fontFamily: "'Playfair Display', serif", color: '#C9A96E' }}>
+                7-14<span className="text-xl" style={{ color: '#F8F8F8' }}> días</span>
+              </p>
+              <p className="text-[10px] uppercase tracking-wider mt-1" style={{ color: 'rgba(248,248,248,0.35)' }}>
+                Recuperación rinoplastia
+              </p>
+            </div>
+            <div className="w-px h-12" style={{ background: 'rgba(201,169,110,0.2)' }} />
+            <div>
+              <p className="text-4xl font-black" style={{ fontFamily: "'Playfair Display', serif", color: '#C9A96E' }}>
+                100<span className="text-xl" style={{ color: '#F8F8F8' }}>%</span>
+              </p>
+              <p className="text-[10px] uppercase tracking-wider mt-1" style={{ color: 'rgba(248,248,248,0.35)' }}>
+                Seguimiento garantizado
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Right — scrollable timeline */}
+        <div className="relative pt-8">
+          {/* Vertical line track */}
+          <div
+            className="absolute left-7 top-0 w-px h-full"
+            style={{ background: 'rgba(201,169,110,0.1)' }}
+          />
+          {/* Animated progress line */}
+          <motion.div
+            style={{ scaleY, originY: 0 }}
+            className="absolute left-7 top-0 w-px h-full z-10"
+            // background via inline style because framer-motion needs style prop
+          >
+            <div className="w-full h-full" style={{ background: '#C9A96E' }} />
+          </motion.div>
+
+          <div className="flex flex-col gap-24 relative z-20">
             {steps.map((step, i) => (
               <motion.div
                 key={step.number}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.7, delay: i * 0.15, ease: [0.16, 1, 0.3, 1] }}
-                className="group relative flex flex-col sm:flex-row gap-6 sm:gap-12 p-8 rounded-xl border border-black/[0.04] bg-[#F8F8F8] hover:bg-white hover:shadow-xl transition-all duration-500"
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: '-80px' }}
+                transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                className="flex gap-10 group"
               >
-                <div className="text-6xl md:text-7xl font-heading font-extrabold text-primary/10 group-hover:text-accent/30 transition-colors">
-                  {step.number}
+                {/* Step circle */}
+                <div
+                  className="flex-shrink-0 w-14 h-14 flex items-center justify-center transition-all duration-500 relative z-30"
+                  style={{
+                    background: '#0D1117',
+                    border: '1px solid rgba(201,169,110,0.3)',
+                  }}
+                >
+                  <span className="text-xl">{step.icon}</span>
                 </div>
-                <div className="pt-2">
-                  <h3 className="text-2xl font-bold font-heading text-primary mb-3">{step.title}</h3>
-                  <p className="text-primary/70 font-body text-base leading-relaxed font-medium">
-                    {step.desc}
+
+                {/* Content */}
+                <div className="flex flex-col gap-3 pt-1">
+                  <div className="flex items-center gap-3">
+                    <span
+                      className="font-mono text-xs font-semibold"
+                      style={{ color: 'rgba(201,169,110,0.5)' }}
+                    >
+                      {step.number}
+                    </span>
+                    <div className="h-px w-8" style={{ background: 'rgba(201,169,110,0.3)' }} />
+                  </div>
+
+                  <h3
+                    className="text-2xl font-bold transition-colors duration-500 group-hover:text-yellow-400"
+                    style={{ fontFamily: "'Playfair Display', serif", color: '#F8F8F8' }}
+                  >
+                    {step.title}
+                  </h3>
+
+                  <p className="text-sm leading-relaxed max-w-md" style={{ color: 'rgba(248,248,248,0.55)' }}>
+                    {step.description}
                   </p>
+
+                  <div
+                    className="flex items-center gap-2 mt-2 px-4 py-2 text-xs"
+                    style={{
+                      border: '1px solid rgba(201,169,110,0.2)',
+                      background: 'rgba(201,169,110,0.05)',
+                      color: '#C9A96E',
+                    }}
+                  >
+                    <span>✓</span>
+                    <span>{step.detail}</span>
+                  </div>
                 </div>
               </motion.div>
             ))}
           </div>
-          
         </div>
       </div>
     </section>
   );
 };
 
-export default ExactProcess;
+export default ProcessSection;

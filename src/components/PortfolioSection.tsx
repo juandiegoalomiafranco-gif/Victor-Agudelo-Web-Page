@@ -1,111 +1,126 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import TextReveal from './TextReveal';
 
-const categories = ["Todos", "Eventos", "POP", "Señalización", "Branding"];
+interface Project {
+  id: number;
+  title: string;
+  category: string;
+  image: string;
+  size: 'large' | 'medium' | 'small';
+}
 
-const projects = [
-  { title: "Stand Bavaria Expomarketing", category: "Eventos", img: "https://images.unsplash.com/photo-1540317580384-e5d43616b9aa?q=80&w=800" },
-  { title: "Display Postobón Navidad", category: "POP", img: "https://images.unsplash.com/photo-1556740758-90de374c12ad?q=80&w=800" },
-  { title: "Señalética Centro Comercial", category: "Señalización", img: "https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?q=80&w=800" },
-  { title: "Branding Flota Colombina", category: "Branding", img: "https://images.unsplash.com/photo-1561070791-2526d30994b5?q=80&w=800" },
-];
+const PortfolioSection: React.FC = () => {
+  const [filter, setFilter] = useState('Todos');
 
-const ExactPortfolio = () => {
-  const [activeFilter, setActiveFilter] = useState("Todos");
+  const projects: Project[] = [
+    { id: 1, title: "Stand Bavaria Expomarketing", category: "Eventos", image: "https://images.unsplash.com/photo-1558403194-611308249627?auto=format&fit=crop&q=80", size: 'large' },
+    { id: 2, title: "Display Postobón Navidad", category: "POP", image: "https://images.unsplash.com/photo-1582213776866-3d706599d14a?auto=format&fit=crop&q=80", size: 'medium' },
+    { id: 3, title: "Señalética Centro Comercial", category: "Señalización", image: "https://images.unsplash.com/photo-1579541814924-49fef17c5be5?auto=format&fit=crop&q=80", size: 'medium' },
+    { id: 4, title: "Branding Flota Colombina", category: "Branding", image: "https://images.unsplash.com/photo-1549480824-0010041d0879?auto=format&fit=crop&q=80", size: 'small' },
+    { id: 5, title: "Kit Alpina Temporada", category: "Gran Formato", image: "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&q=80", size: 'small' },
+  ];
 
-  const filtered = activeFilter === "Todos"
-    ? projects
-    : projects.filter((p) => p.category === activeFilter);
+  const categories = ["Todos", "Eventos", "POP", "Señalización", "Branding", "Gran Formato"];
+
+  const filteredProjects = filter === 'Todos' 
+    ? projects 
+    : projects.filter(p => p.category === filter);
 
   return (
-    <section id="portafolio" className="py-24 lg:py-40 bg-white">
-      <div className="container mx-auto px-6 lg:px-8 max-w-7xl">
-        
-        {/* Dapper-style Header */}
-        <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <div className="inline-flex items-center gap-2 mb-6">
-              <span className="w-2 h-2 rounded-sm bg-accent" />
-              <span className="text-primary text-sm font-semibold uppercase tracking-widest">Estudios de Caso</span>
-            </div>
-            <h2 className="text-4xl sm:text-5xl lg:text-7xl font-bold text-primary font-heading leading-none tracking-tight">
-              Impacto visual <br/><span className="italic font-light">en acción.</span>
+    <section id="portafolio" className="py-40 bg-background border-t border-foreground/5">
+      <div className="container mx-auto px-6">
+        <div className="flex flex-col md:flex-row justify-between items-end mb-24 gap-8">
+          <div className="max-w-2xl">
+            <h2 className="text-6xl md:text-8xl font-black tracking-tighter leading-none mb-6">
+              PROYECTOS <br />
+              <span className="text-primary italic">SELECCIONADOS</span>
             </h2>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="flex flex-wrap gap-2 md:justify-end max-w-sm"
-          >
+            <p className="text-[10px] font-black uppercase tracking-[0.4em] opacity-40">
+              UNA CRÓNICA DE COMUNICACIÓN FÍSICA Y DISEÑO INDUSTRIAL.
+            </p>
+          </div>
+          
+          <div className="flex flex-wrap gap-2">
             {categories.map((cat) => (
               <button
                 key={cat}
-                onClick={() => setActiveFilter(cat)}
-                className={`px-4 py-2 rounded-md text-xs font-body font-bold uppercase tracking-wider transition-all duration-300 active:scale-95 border ${
-                  activeFilter === cat
-                    ? "bg-primary text-white border-primary"
-                    : "bg-transparent text-primary/60 border-primary/10 hover:border-primary/30"
+                onClick={() => setFilter(cat)}
+                className={`px-6 py-3 text-[10px] font-black uppercase tracking-widest transition-all duration-300 border ${
+                  filter === cat 
+                    ? 'bg-foreground text-background border-foreground' 
+                    : 'bg-transparent text-foreground/40 border-foreground/10 hover:border-foreground/40 hover:text-foreground'
                 }`}
               >
                 {cat}
               </button>
             ))}
-          </motion.div>
+          </div>
         </div>
 
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeFilter}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.4 }}
-            className="grid sm:grid-cols-2 gap-8 lg:gap-12"
-          >
-            {filtered.map((project, i) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-1 auto-rows-[400px]">
+          <AnimatePresence mode='popLayout'>
+            {filteredProjects.map((project, idx) => (
               <motion.div
-                key={project.title}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
-                className="group relative block cursor-pointer"
+                key={project.id}
+                layout
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.8 }}
+                className={`relative group overflow-hidden border border-foreground/5 ${
+                    project.size === 'large' ? 'lg:col-span-8 lg:row-span-2' : 
+                    project.size === 'medium' ? 'lg:col-span-4 lg:row-span-2' : 
+                    'lg:col-span-4 lg:row-span-1'
+                }`}
               >
-                <div className="aspect-[4/3] w-full rounded-xl overflow-hidden mb-6 relative bg-[#f0f0f0]">
-                  <img 
-                    src={project.img} 
-                    alt={project.title} 
-                    className="w-full h-full object-cover filter grayscale contrast-125 group-hover:grayscale-0 transition-all duration-[1500ms] group-hover:scale-105"
+                {/* Image Wrap */}
+                <div className="w-full h-full overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-1000">
+                  <motion.img 
+                    src={project.image} 
+                    alt={project.title}
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+                    className="w-full h-full object-cover"
                   />
-                  {/* Floating CTA box matching Dapper style */}
-                  <div className="absolute top-4 right-4 w-12 h-12 bg-white rounded-md flex items-center justify-center translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 shadow-xl">
-                    <ArrowUpRight size={20} className="text-primary" />
+                </div>
+
+                {/* Overlay */}
+                <div className="absolute inset-0 bg-white/90 opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-between p-10 transform translate-y-4 group-hover:translate-y-0">
+                  <div className="flex justify-between items-start">
+                    <span className="text-primary text-[10px] font-black uppercase tracking-[0.3em] border-b border-primary pb-1">
+                      {project.category}
+                    </span>
+                    <span className="font-mono text-[10px] opacity-40">REF: IG-0{project.id}</span>
+                  </div>
+                  
+                  <div>
+                    <h4 className="text-4xl font-black text-foreground tracking-tighter leading-none mb-6">
+                      {project.title}
+                    </h4>
+                    <div className="w-12 h-12 border-2 border-foreground flex items-center justify-center text-foreground hover:bg-foreground hover:text-white transition-all duration-300">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                          <line x1="7" y1="17" x2="17" y2="7"></line>
+                          <polyline points="7 7 17 7 17 17"></polyline>
+                      </svg>
+                    </div>
                   </div>
                 </div>
-                
-                <p className="text-primary/60 font-body text-xs font-bold uppercase tracking-widest mb-2">
-                  {project.category}
-                </p>
-                <h3 className="text-2xl lg:text-3xl font-heading font-extrabold text-primary tracking-tight group-hover:text-accent transition-colors">
-                  {project.title}
-                </h3>
               </motion.div>
             ))}
-          </motion.div>
-        </AnimatePresence>
+          </AnimatePresence>
+        </div>
 
+        <div className="mt-32 text-center">
+            <button className="text-[10px] font-black uppercase tracking-[0.5em] opacity-30 hover:opacity-100 transition-all flex items-center gap-8 mx-auto group">
+              <span className="w-12 h-px bg-foreground/20 group-hover:w-20 group-hover:bg-primary transition-all duration-500" />
+              VER ARCHIVO COMPLETO
+              <span className="w-12 h-px bg-foreground/20 group-hover:w-20 group-hover:bg-primary transition-all duration-500" />
+            </button>
+        </div>
       </div>
     </section>
   );
 };
 
-export default ExactPortfolio;
+export default PortfolioSection;

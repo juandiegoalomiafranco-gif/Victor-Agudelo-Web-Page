@@ -4,47 +4,41 @@
 
 @layer base {
   :root {
-    --background: 0 0% 95%;
-    --foreground: 220 60% 13%;
+    /* Deep Navy Dark Theme — Dr. Víctor Agudelo */
+    --background: 220 28% 7%;      /* #0D1117 Deep Navy */
+    --foreground: 0 0% 97%;        /* #F8F8F8 Off White */
 
-    --card: 0 0% 100%;
-    --card-foreground: 220 60% 13%;
+    --card: 224 26% 12%;           /* #161C27 Slate Dark */
+    --card-foreground: 0 0% 97%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 220 60% 13%;
+    --popover: 224 26% 12%;
+    --popover-foreground: 0 0% 97%;
 
-    --primary: 220 60% 13%;
-    --primary-foreground: 0 0% 95%;
+    --primary: 39 46% 61%;         /* #C9A96E Gold Elegant */
+    --primary-foreground: 220 28% 7%;
 
-    --secondary: 0 0% 100%;
-    --secondary-foreground: 220 60% 13%;
+    --secondary: 224 26% 14%;      /* #1A1F2E Slate */
+    --secondary-foreground: 0 0% 97%;
 
-    --muted: 0 0% 90%;
-    --muted-foreground: 220 10% 45%;
+    --muted: 224 20% 16%;
+    --muted-foreground: 0 0% 70%;
 
-    --accent: 211 73% 43%;
-    --accent-foreground: 0 0% 100%;
-
-    --gold: 49 99% 49%;
-    --gold-foreground: 220 60% 13%;
+    --accent: 39 46% 61%;          /* Gold */
+    --accent-foreground: 220 28% 7%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 0 0% 88%;
-    --input: 0 0% 88%;
-    --ring: 211 73% 43%;
+    --border: 224 20% 18%;
+    --input: 224 20% 18%;
+    --ring: 39 46% 61%;
 
-    --radius: 0.375rem;
+    --radius: 0rem;
 
-    --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 220 60% 13%;
-    --sidebar-primary: 220 60% 13%;
-    --sidebar-primary-foreground: 0 0% 95%;
-    --sidebar-accent: 0 0% 95%;
-    --sidebar-accent-foreground: 220 60% 13%;
-    --sidebar-border: 0 0% 90%;
-    --sidebar-ring: 211 73% 43%;
+    /* Custom tokens */
+    --gold: 39 46% 61%;
+    --navy: 220 28% 7%;
+    --slate: 224 26% 14%;
   }
 }
 
@@ -56,73 +50,133 @@
   }
 
   body {
-    @apply bg-background text-foreground font-body;
+    @apply bg-background text-foreground;
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+    background-color: #0D1117;
+    color: #F8F8F8;
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-heading;
+  h1, h2, h3 {
+    font-family: 'Playfair Display', serif;
+    letter-spacing: -0.02em;
   }
 
+  h4, h5, h6 {
+    font-family: 'Inter', sans-serif;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+  }
+
+  /* Selection */
   ::selection {
-    background: hsl(211 73% 43% / 0.2);
-    color: hsl(220 60% 13%);
+    background: rgba(201, 169, 110, 0.3);
+    color: #F8F8F8;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0D1117;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #C9A96E;
+    border-radius: 2px;
   }
 }
 
-@layer utilities {
-  .text-gradient-brand {
-    background: linear-gradient(135deg, hsl(211 73% 43%), hsl(211 73% 55%));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .text-gradient-gold {
-    background: linear-gradient(135deg, hsl(49 99% 49%), hsl(42 95% 55%));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
+/* Gold line animation */
+@keyframes goldLine {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
 }
 
-@keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-.animate-marquee {
-  animation: marquee 25s linear infinite;
-}
-
-.animate-marquee:hover {
-  animation-play-state: paused;
-}
-
+/* Floating animation */
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-20px); }
+  50% { transform: translateY(-12px); }
 }
 
-.animate-float {
-  animation: float 6s ease-in-out infinite;
+/* Pulse gold */
+@keyframes pulseGold {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(201, 169, 110, 0.4); }
+  50% { box-shadow: 0 0 0 20px rgba(201, 169, 110, 0); }
 }
 
-@keyframes pulse-glow {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 0.8; }
+/* Shimmer */
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
 }
 
-.animate-pulse-glow {
-  animation: pulse-glow 3s ease-in-out infinite;
+.animate-float { animation: float 4s ease-in-out infinite; }
+.animate-pulse-gold { animation: pulseGold 2s ease-in-out infinite; }
+
+/* Gold gradient text */
+.gold-gradient {
+  background: linear-gradient(135deg, #C9A96E 0%, #E8C97A 50%, #C9A96E 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 3s linear infinite;
 }
 
-@keyframes gradient-shift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+/* Glass card */
+.glass-card {
+  background: rgba(26, 31, 46, 0.5);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(201, 169, 110, 0.15);
 }
 
-.animate-gradient {
-  background-size: 200% 200%;
-  animation: gradient-shift 8s ease infinite;
+/* Premium button */
+.btn-gold {
+  background: transparent;
+  border: 1px solid #C9A96E;
+  color: #C9A96E;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  overflow: hidden;
+}
+.btn-gold::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: #C9A96E;
+  transition: left 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  z-index: 0;
+}
+.btn-gold:hover::before { left: 0; }
+.btn-gold:hover { color: #0D1117; }
+.btn-gold > * { position: relative; z-index: 1; }
+
+/* Section reveal */
+.reveal-up {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.reveal-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Noise overlay */
+.noise-overlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  opacity: 0.04;
+  mix-blend-mode: overlay;
+}
+
+/* Dot grid background */
+.dot-grid {
+  background-image: radial-gradient(rgba(201, 169, 110, 0.12) 1px, transparent 1px);
+  background-size: 28px 28px;
 }

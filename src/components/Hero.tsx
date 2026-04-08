@@ -1,128 +1,255 @@
-import { motion } from "framer-motion";
-import { ArrowDownRight, ArrowUpRight } from "lucide-react";
+import React, { useEffect, useRef } from 'react';
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import AuroraBackground from './AuroraBackground';
 
-const ExactHero = () => {
+const Hero: React.FC = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start start', 'end start'],
+  });
+
+  const spring = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
+  const y = useTransform(spring, [0, 1], ['0%', '30%']);
+  const opacity = useTransform(spring, [0, 0.6], [1, 0]);
+  const scale = useTransform(spring, [0, 1], [1, 1.08]);
+
+  const openWhatsApp = () => {
+    const msg = encodeURIComponent('Hola Dr. Agudelo, me gustaría agendar una consulta. ¿Cuál es su disponibilidad?');
+    window.open(`https://wa.me/573XXXXXXXXX?text=${msg}`, '_blank');
+  };
+
   return (
-    <section id="hero" className="relative min-h-screen pt-32 pb-20 overflow-hidden bg-[#F8F8F8]">
-      {/* Heavy noise overlay to match Dapper's grainy texture */}
-      <div 
-        className="absolute inset-0 opacity-[0.04] pointer-events-none -z-10 mix-blend-overlay"
-        style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}
-      />
-
-      <div className="container mx-auto px-6 lg:px-8 h-full flex flex-col justify-center">
-        
-        {/* Top small badge */}
+    <section
+      id="hero"
+      ref={containerRef}
+      className="relative min-h-screen flex items-center overflow-hidden"
+      style={{ background: '#0D1117' }}
+    >
+      <AuroraBackground>
+        {/* Parallax background image */}
         <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="inline-flex items-center gap-2 mb-8"
+          className="absolute inset-0 z-0"
+          style={{ y, scale }}
         >
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" className="text-gold">
-            <path d="M12 0C12 0 12 10 24 12C24 12 12 14 12 24C12 24 12 14 0 12C0 12 12 10 12 0Z" fill="currentColor"/>
-          </svg>
-          <span className="text-primary text-xs sm:text-sm font-semibold font-body tracking-tight">
-            Imágenes Gráficas B2B
-          </span>
+          <div
+            className="w-full h-full"
+            style={{
+              backgroundImage: `linear-gradient(to bottom, rgba(13,17,23,0.7) 0%, rgba(13,17,23,0.4) 40%, rgba(13,17,23,0.85) 100%), url('https://images.unsplash.com/photo-1551190822-a9333d879b1f?q=80&w=2070')`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+            }}
+          />
         </motion.div>
 
-        <div className="flex flex-col lg:flex-row gap-0 lg:gap-8 justify-between relative mt-4">
-          
-          {/* Left Text Column */}
-          <div className="max-w-4xl z-10 w-full lg:w-3/5">
-            {/* The giant headline with Dapper-style mix of sans-serif and italic serif/sans */}
-            <motion.h1
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-              className="text-6xl sm:text-[5rem] md:text-[6.5rem] lg:text-[7rem] font-bold text-primary font-heading leading-[0.95] tracking-tight"
-            >
-              Construimos <span className="italic font-light tracking-tighter text-primary">sistemas<br/>visuales publicitarios</span> de alto rendimiento para marcas <span className="font-extrabold text-primary">B2B</span>.
-            </motion.h1>
+        {/* Main content */}
+        <motion.div
+          className="relative z-20 container mx-auto px-6 pt-32 pb-24 flex flex-col justify-center min-h-screen"
+          style={{ opacity }}
+        >
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
 
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.3 }}
-              className="mt-20 sm:mt-32 max-w-sm"
-            >
-              <p className="text-sm md:text-base text-primary/80 font-body mb-8 font-medium leading-relaxed">
-                Diseñamos, optimizamos y escalamos estructuras de publicidad visual y material POP que generan reconocimiento y escalan el ROI.
-              </p>
-              
-              <a
-                href="#servicios"
-                className="group inline-flex items-center gap-3 text-primary text-sm font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold rounded-md"
+            {/* Left column */}
+            <div className="lg:col-span-7 flex flex-col gap-8">
+
+              {/* Badge */}
+              <motion.div
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="flex items-center gap-4"
               >
-                Descubre más
-                <span className="bg-gold text-primary p-1.5 rounded-sm overflow-hidden group-hover:-translate-y-1 transition-transform inline-flex">
-                  <ArrowDownRight size={16} className="group-hover:translate-x-1 group-hover:translate-y-1 transition-transform" />
+                <div className="h-px w-12" style={{ background: '#C9A96E' }} />
+                <span
+                  className="text-[10px] uppercase tracking-[0.4em] font-semibold"
+                  style={{ color: '#C9A96E' }}
+                >
+                  Otorrinolaringología · Cirugía Plástica Facial
                 </span>
-              </a>
-            </motion.div>
-          </div>
+              </motion.div>
 
-          {/* Right Image/Graphic Column - Absolute positioning mimicking the leaf in Dapper */}
-          <div className="lg:absolute lg:right-0 lg:top-[15%] w-full lg:w-[45%] h-[500px] lg:h-[700px] mt-12 lg:mt-0 right-0 overflow-hidden lg:overflow-visible -z-0">
-            <motion.div
-              initial={{ opacity: 0, x: 50, scale: 0.95 }}
-              whileInView={{ opacity: 1, x: 0, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.4 }}
-              className="relative w-full h-full"
-            >
-              {/* Using a monochrome plant or abstract aesthetic similar to Dapper's leaf */}
-              <img 
-                src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=1200" 
-                alt="Hoja visual" 
-                className="w-full h-full object-cover object-right-bottom filter grayscale contrast-125 hover:grayscale-0 transition-all duration-[2000ms] lg:mask-image-right"
-                style={{ WebkitMaskImage: "linear-gradient(to right, transparent, black 30%)" }}
-              />
+              {/* Main Headline */}
+              <motion.h1
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                className="leading-none"
+                style={{
+                  fontFamily: "'Playfair Display', serif",
+                  fontSize: 'clamp(3rem, 8vw, 7rem)',
+                  fontWeight: 800,
+                  color: '#F8F8F8',
+                  letterSpacing: '-0.02em',
+                }}
+              >
+                Precisión
+                <br />
+                <span
+                  className="italic"
+                  style={{
+                    background: 'linear-gradient(135deg, #C9A96E 0%, #E8C97A 50%, #C9A96E 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    backgroundClip: 'text',
+                  }}
+                >
+                  Quirúrgica.
+                </span>
+                <br />
+                Resultados
+                <br />
+                Naturales.
+              </motion.h1>
 
-              {/* Dapper-style specific accent squares */}
-              <div className="hidden lg:flex absolute right-4 bottom-32 flex-col gap-1">
-                <div className="w-8 h-8 bg-gold/80 ml-8" />
-                <div className="w-8 h-8 bg-gold" />
-                <div className="w-8 h-8 bg-gold/40" />
-              </div>
+              {/* Subtitle */}
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.7 }}
+                className="max-w-lg text-lg leading-relaxed"
+                style={{ color: 'rgba(248,248,248,0.65)', fontFamily: "'Inter', sans-serif" }}
+              >
+                Dr. Víctor Manuel Agudelo — especialista en Rinoplastia, Cirugía Plástica Facial y
+                ORL. Más de 60 cirugías mensuales con resultados que preservan la identidad natural.
+              </motion.p>
 
-              {/* Floating Statistic Card overlapping the image */}
+              {/* CTAs */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: 0.8 }}
-                className="absolute left-4 lg:-left-20 bottom-8 sm:bottom-16 bg-white p-5 rounded-lg shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] border border-black/[0.04] w-[260px] flex gap-4"
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.9 }}
+                className="flex flex-wrap gap-4 items-center"
               >
-                <div className="flex-1 flex flex-col justify-between">
-                  <p className="text-xs font-semibold leading-tight text-primary font-body tracking-tight">
-                    Estrategias visuales que han liderado un incremento del 200% en cotizaciones.
-                  </p>
-                  
-                  {/* Small logo/brand mention */}
-                  <div className="mt-4 flex items-center justify-between">
-                     <span className="font-heading font-bold text-lg tracking-tighter">ig.</span>
-                     <span className="bg-gold text-primary p-1 rounded-sm">
-                       <ArrowUpRight size={12} />
-                     </span>
+                <button
+                  onClick={openWhatsApp}
+                  className="group flex items-center gap-3 px-8 py-4 text-sm font-semibold uppercase tracking-widest transition-all duration-400"
+                  style={{
+                    background: '#C9A96E',
+                    color: '#0D1117',
+                    letterSpacing: '0.15em',
+                  }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = '#E8C97A'; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = '#C9A96E'; }}
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                  </svg>
+                  Agenda tu Consulta
+                </button>
+
+                <a
+                  href="#procedimientos"
+                  className="flex items-center gap-3 px-8 py-4 text-sm font-semibold uppercase tracking-widest transition-all duration-400"
+                  style={{
+                    border: '1px solid rgba(201,169,110,0.5)',
+                    color: '#C9A96E',
+                    letterSpacing: '0.15em',
+                  }}
+                  onMouseEnter={e => {
+                    (e.currentTarget as HTMLAnchorElement).style.borderColor = '#C9A96E';
+                    (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(201,169,110,0.08)';
+                  }}
+                  onMouseLeave={e => {
+                    (e.currentTarget as HTMLAnchorElement).style.borderColor = 'rgba(201,169,110,0.5)';
+                    (e.currentTarget as HTMLAnchorElement).style.background = 'transparent';
+                  }}
+                >
+                  Ver Procedimientos ↓
+                </a>
+              </motion.div>
+            </div>
+
+            {/* Right column — floating credential card */}
+            <motion.div
+              className="lg:col-span-5 hidden lg:block"
+              initial={{ opacity: 0, x: 40 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 1, delay: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <div
+                className="p-8 relative"
+                style={{
+                  background: 'rgba(26,31,46,0.6)',
+                  backdropFilter: 'blur(20px)',
+                  border: '1px solid rgba(201,169,110,0.2)',
+                }}
+              >
+                {/* Gold top line */}
+                <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: 'linear-gradient(90deg, transparent, #C9A96E, transparent)' }} />
+
+                <div className="space-y-6">
+                  <div>
+                    <p className="text-[10px] uppercase tracking-[0.4em] mb-1" style={{ color: '#C9A96E' }}>
+                      Especialista Certificado
+                    </p>
+                    <h3 className="text-2xl font-bold" style={{ fontFamily: "'Playfair Display', serif", color: '#F8F8F8' }}>
+                      Dr. Víctor Manuel<br />Agudelo
+                    </h3>
+                  </div>
+
+                  <div className="h-px" style={{ background: 'rgba(201,169,110,0.2)' }} />
+
+                  <div className="space-y-3 text-sm" style={{ color: 'rgba(248,248,248,0.7)' }}>
+                    <div className="flex items-start gap-3">
+                      <span style={{ color: '#C9A96E' }}>—</span>
+                      <span>Médico Cirujano — Universidad del Valle, Cali</span>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <span style={{ color: '#C9A96E' }}>—</span>
+                      <span>Especialista ORL — Universidad San Martín, Bogotá</span>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <span style={{ color: '#C9A96E' }}>—</span>
+                      <span>Miembro SCCPFR y ACORL desde 2004</span>
+                    </div>
+                  </div>
+
+                  <div className="h-px" style={{ background: 'rgba(201,169,110,0.2)' }} />
+
+                  <div className="grid grid-cols-2 gap-4">
+                    {[
+                      { value: '60+', label: 'Cirugías / Mes' },
+                      { value: '20+', label: 'Años Experiencia' },
+                    ].map(s => (
+                      <div key={s.label}>
+                        <p className="text-3xl font-bold" style={{ fontFamily: "'Playfair Display', serif", color: '#C9A96E' }}>
+                          {s.value}
+                        </p>
+                        <p className="text-[10px] uppercase tracking-wider mt-1" style={{ color: 'rgba(248,248,248,0.4)' }}>
+                          {s.label}
+                        </p>
+                      </div>
+                    ))}
                   </div>
                 </div>
-                {/* Visual miniature chart or photo inside card */}
-                <div className="w-[80px] h-full rounded-md overflow-hidden bg-gray-100 flex-shrink-0 relative">
-                  <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=200" className="w-full h-full object-cover grayscale" alt="Estadística" />
-                </div>
-              </motion.div>
+              </div>
             </motion.div>
+
           </div>
-          
-        </div>
-      </div>
+
+          {/* Scroll indicator */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.5, duration: 1 }}
+            className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3"
+          >
+            <span className="text-[9px] uppercase tracking-[0.4em]" style={{ color: 'rgba(201,169,110,0.6)' }}>
+              Scroll
+            </span>
+            <motion.div
+              animate={{ y: [0, 8, 0] }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+              className="w-[1px] h-10"
+              style={{ background: 'linear-gradient(to bottom, #C9A96E, transparent)' }}
+            />
+          </motion.div>
+
+        </motion.div>
+
+      </AuroraBackground>
     </section>
   );
 };
 
-export default ExactHero;
+export default Hero;
