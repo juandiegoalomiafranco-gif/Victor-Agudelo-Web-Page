@@ -8,7 +8,6 @@ import {
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
-import { HeroScrollText }  from './components/HeroScrollText'
 import { ProceduresSlider } from './components/ProceduresSlider'
 import { FaqAccordion }    from './components/FaqAccordion'
 
@@ -267,260 +266,190 @@ const Navbar = () => {
 
 // ─── Data de bloques narrativos ──────────────────────────────────────────────
 const BLOCKS = [
-  {
-    label: '01',
-    text: 'Cada nariz cuenta una historia.\nLa tuya merece ser perfecta.',
-  },
-  {
-    label: '02',
-    text: 'Tecnología Piezotome®.\nPrecisión que el bisturí\nno puede alcanzar.',
-  },
-  {
-    label: '03',
-    text: 'Más de 500 cirugías avalan\ncada decisión del Dr. Agudelo.',
-  },
-];
+  { text: 'Cada nariz cuenta una historia.\nLa tuya merece ser perfecta.' },
+  { text: 'Tecnología Piezotome®.\nPrecisión que el bisturí\nno puede alcanzar.' },
+  { text: 'Más de 500 cirugías avalan\ncada decisión del Dr. Agudelo.' },
+]
 
-// ─── Hero + Narrative Section ────────────────────────────────────────────────
-const HeroSection = () => {
-  const outerRef = useRef<HTMLDivElement>(null);
-  const innerRef = useRef<HTMLDivElement>(null);
-  const frameRef = useRef<HTMLDivElement>(null);
-  const heroTextRef = useRef<HTMLDivElement>(null);
-  const blockRefs = [
+// ─── Sticky Narrative con Clip-Path Scroll Shrink ────────────────────────────
+const StickyNarrativeSection = () => {
+  const outerRef       = useRef<HTMLDivElement>(null)
+  const frameRef       = useRef<HTMLDivElement>(null)
+  const heroOverlayRef = useRef<HTMLDivElement>(null)
+  const innerRef       = useRef<HTMLDivElement>(null)
+  const blockRefs      = [
     useRef<HTMLDivElement>(null),
     useRef<HTMLDivElement>(null),
     useRef<HTMLDivElement>(null),
-  ];
-  const counterRef = useRef<HTMLSpanElement>(null);
-  const ease = [0.22, 1, 0.36, 1] as const;
+  ]
 
   useEffect(() => {
-    let ctx: any;
+    let ctx: any
 
     Promise.all([
       import('gsap').then((m: any) => m.default ?? m.gsap ?? m),
       import('gsap/ScrollTrigger').then((m: any) => m.ScrollTrigger),
       import('split-type').then((m: any) => m.default ?? m),
     ]).then(([gsap, ScrollTrigger, SplitType]: any[]) => {
-      gsap.registerPlugin(ScrollTrigger);
+      gsap.registerPlugin(ScrollTrigger)
 
       ctx = gsap.context(() => {
-        const frame = frameRef.current;
-        const heroText = heroTextRef.current;
 
-        // ── ANIMACIÓN 1: clip-path shrink sincronizada con el inicio del scroll ──
+        // ── Salida hero: scale-up + fade — bidireccional limpio, sin Y ──
+        gsap.to(heroOverlayRef.current, {
+          opacity: 0,
+          scale: 1.09,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: outerRef.current,
+            start: 'top top',
+            end: '30% top',
+            scrub: 1.8,
+          },
+        })
+
+        // ── Clip-path shrink ──
         ScrollTrigger.create({
           trigger: outerRef.current,
           start: 'top top',
-          end: '20% top', // Termina de encogerse relativamente rápido
-          scrub: 1.5,
+          end: '25.2% bottom',
+          scrub: 1.44,
           onUpdate: (self: any) => {
-            const p = self.progress;
-            const inset = p * 40;
-            const radius = p * 24;
-            if (frame) {
-              frame.style.clipPath = `inset(${inset}px round ${radius}px)`;
+            const p = self.progress
+            const inset  = p * 44
+            const radius = p * 28
+            if (frameRef.current) {
+              frameRef.current.style.clipPath = `inset(${inset}px round ${radius}px)`
             }
           },
-        });
+        })
 
-        // ── ANIMACIÓN 2: Hero Text Fade Out al scrollear ──
-        if (heroText) {
-          gsap.to(heroText, {
-            scrollTrigger: {
-              trigger: outerRef.current,
-              start: 'top top',
-              end: '15% top',
-              scrub: 1,
-            },
-            y: -150,
-            opacity: 0,
-            scale: 0.9,
-            filter: 'blur(10px)',
-            ease: 'none',
-          });
-        }
-
-        // ── ANIMACIÓN 3: texto narrativo ──
+        // ── Timeline de texto narrativo ──
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: outerRef.current,
-            start: '15% top', // Inicia justo cuando el texto del Hero ya está opaco/desapareciendo
+            start: '22% top',
             end: 'bottom bottom',
-            scrub: 1.2,
+            scrub: 1.08,
+            pin: innerRef.current,
+            anticipatePin: 1,
           },
-        });
+        })
 
-        BLOCKS.forEach((_: any, idx: number) => {
-          const el = blockRefs[idx].current?.querySelector('[data-split]');
-          if (!el) return;
-          const s = new SplitType(el, { types: 'lines' });
-          const lines = s.lines ?? [];
-          const inAt = idx * 2.2;
-          const outAt = inAt + 1.8;
+        BLOCKS.forEach((_, idx) => {
+          const el    = blockRefs[idx].current?.querySelector('[data-split]')
+          if (!el) return
+          const s     = new SplitType(el, { types: 'lines' })
+          const lines = s.lines ?? []
+          const inAt  = idx * 2.2
+          const outAt = inAt + 1.8
 
-          gsap.set(lines, {
-            opacity: 0,
-            yPercent: 60,
-            rotateX: 15,
-            filter: 'blur(20px)',
-            z: -300,
-          });
+          gsap.set(lines, { opacity: 0, yPercent: 55, rotateX: 14, filter: 'blur(18px)', z: -280 })
 
-          tl.to(
-            lines,
-            {
-              opacity: 1,
-              yPercent: 0,
-              rotateX: 0,
-              filter: 'blur(0px)',
-              z: 0,
-              duration: 1.5,
-              stagger: 0.08,
-              ease: 'power3.out',
-            },
-            inAt
-          );
+          tl.to(lines, {
+            opacity: 1, yPercent: 0, rotateX: 0, filter: 'blur(0px)', z: 0,
+            duration: 1.35, stagger: 0.072, ease: 'power3.out',
+          }, inAt)
 
           if (idx < BLOCKS.length - 1) {
-            tl.to(
-              lines,
-              { opacity: 0, yPercent: -30, duration: 0.8, stagger: 0.05 },
-              outAt
-            );
+            tl.to(lines, {
+              opacity: 0, yPercent: -28, filter: 'blur(10px)',
+              duration: 0.8, stagger: 0.04,
+            }, outAt)
           }
+        })
 
-          tl.to(
-            counterRef.current,
-            { innerText: String(idx + 1), duration: 0.01 },
-            inAt + 0.5
-          );
-        });
-      }, outerRef);
-    });
+      }, outerRef)
+    }).catch(() => {})
 
-    return () => ctx?.revert();
-  }, []);
+    return () => ctx?.revert()
+  }, [])
 
   return (
-    <section ref={outerRef} id="inicio" className="hero-narrative-section relative" style={{ height: '480vh', background: 'var(--color-1)', zIndex: 10 }}>
-      {/* Marco adhesivo */}
+    <div ref={outerRef} className="narrative-section relative" style={{ height: '420vh' }}>
+
+      {/* Frame con clip-path */}
       <div
         ref={frameRef}
         className="sticky top-0 h-screen w-screen overflow-hidden"
         style={{ clipPath: 'inset(0px round 0px)' }}
       >
-        {/* Imagen de fondo (combinación del antiguo Hero y la clínica) */}
         <img
-          src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=1600&q=80"
-          alt="Clínica Dr. Agudelo"
-          className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none"
-          fetchPriority="high"
+          src="https://images.unsplash.com/photo-1530026405186-ed1f139313f3?w=1920&q=85"
+          alt="Quirófano Dr. Víctor Agudelo"
+          className="absolute inset-0 w-full h-full object-cover object-center"
         />
-        <div className="absolute inset-0 bg-slate-950/60" />
+        {/* Gradient overlay */}
+        <div className="absolute inset-0" style={{
+          background: 'linear-gradient(to bottom, rgba(4,8,16,0.62) 0%, rgba(4,8,16,0.52) 45%, rgba(4,8,16,0.75) 100%)',
+        }} />
 
-        {/* ── Contenido Inicial del Hero ── */}
-        <div ref={heroTextRef} className="absolute inset-0 flex flex-col flex-1 items-center justify-center text-center max-w-4xl mx-auto px-6 w-full z-20">
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.2, ease: ease }}
-            className="hero-h1"
-            style={{ color: 'var(--color-4)', fontWeight: 500, letterSpacing: '-0.03em' }}
+        {/* ── Hero: frase única + CTAs, 100% sólido desde el inicio ── */}
+        <div
+          ref={heroOverlayRef}
+          className="absolute inset-0 flex flex-col items-center justify-center text-center"
+          style={{ zIndex: 20, padding: '0 1.5rem' }}
+        >
+          <h1
+            style={{
+              fontSize: 'clamp(1.8rem, 3vw, 3rem)',
+              fontWeight: 600,
+              lineHeight: 1.15,
+              letterSpacing: '-0.025em',
+              maxWidth: '520px',
+              color: '#ffffff',
+            }}
           >
-            Cirugía plástica con precisión, resultados que transforman
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.5, ease: ease }}
-            className="mt-5 text-base md:text-lg leading-relaxed max-w-xl"
-            style={{ color: 'var(--color-5)', fontWeight: 400 }}
-          >
-            Especialista certificado en cirugía plástica estética y reconstructiva. Basado en Cali, atendiendo pacientes de toda Colombia y el exterior.
-          </motion.p>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8, ease: ease }}
-            className="mt-8 pointer-events-auto"
-          >
-            <a
-              href="#agendar"
-              className="inline-flex items-center gap-3 text-sm"
-              style={{
-                color: 'var(--color-4)', fontWeight: 500,
-                border: '1px solid rgba(255,255,255,0.3)', borderRadius: '100px',
-                padding: '0.875rem 1.75rem', textDecoration: 'none',
-                backdropFilter: 'blur(8px)', background: 'rgba(255,255,255,0.10)',
-                transition: 'all 0.3s ease',
-              }}
-              onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(255,255,255,0.2)' }}
-              onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(255,255,255,0.10)' }}
-            >
-              Agendar consulta
-              <span style={{ fontSize: '1.1rem' }}>→</span>
-            </a>
-          </motion.div>
+            Precisión estética.<br />
+            <span style={{ fontWeight: 400, opacity: 0.8 }}>Que respeta tu identidad.</span>
+          </h1>
         </div>
 
-        {/* ── Textos Narrativos (Pineados) ── */}
+        {/* ── Bloques narrativos: aparecen después del encogimiento ── */}
         <div
           ref={innerRef}
-          className="relative h-screen flex items-center justify-center overflow-hidden perspective-deep z-10 pointer-events-none"
+          className="absolute inset-0 flex items-center justify-center"
+          style={{ perspective: '1200px', zIndex: 10 }}
         >
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_50%,rgba(2,132,199,0.08),transparent)] pointer-events-none" />
-          
-          {/* Indicadores Laterales y Contador */}
-          <div className="absolute right-12 top-1/2 -translate-y-1/2 flex items-center justify-center w-12 h-12 bg-white/5 backdrop-blur-md border border-white/10 rounded-full font-mono text-xs text-white/50">
-            <span ref={counterRef}>1</span>
-            <span className="mx-1">/</span>
-            <span>3</span>
-          </div>
-          
-          <div className="absolute left-8 top-1/2 -translate-y-1/2 flex flex-col gap-3">
-            {BLOCKS.map((b, i) => (
-              <div key={b.label} className="flex items-center gap-4">
-                <div className={`text-xs font-mono tracking-widest ${i === 0 ? 'text-sky-400' : 'text-white/30'}`}>
-                  {b.label}
-                </div>
-                <div className={`w-px h-8 ${i === 0 ? 'bg-sky-400' : 'bg-white/10'}`} />
-              </div>
-            ))}
-          </div>
-
-          {/* Text Blocks */}
-          <div className="absolute inset-0 flex items-center px-12 z-20">
+          <div
+            className="relative w-full max-w-4xl mx-auto px-10 text-center"
+            style={{ transformStyle: 'preserve-3d' }}
+          >
             {BLOCKS.map((block, i) => (
               <div
                 key={i}
                 ref={blockRefs[i]}
-                className={
-                  i === 0
-                    ? 'relative'
-                    : 'absolute inset-0 flex items-center justify-center px-12'
-                }
+                className={i === 0 ? 'relative' : 'absolute inset-0 flex items-center justify-center px-10'}
               >
-                <div className="mx-auto text-center">
-                  <p className="text-sky-500/80 text-xs font-mono tracking-[0.3em] mb-6 uppercase">
-                    {block.label} / {BLOCKS.length.toString().padStart(2, '0')}
-                  </p>
-                  <p
-                    data-split
-                    className="font-serif text-3xl md:text-5xl lg:text-6xl text-white leading-[1.2] max-w-3xl whitespace-pre-line block mx-auto text-center"
-                  >
-                    {block.text}
-                  </p>
-                </div>
+                <p
+                  data-split
+                  style={{
+                    fontFamily: 'var(--font-sans)',
+                    fontSize: 'clamp(2rem, 4.5vw, 4.5rem)',
+                    fontWeight: 700,
+                    lineHeight: 1.1,
+                    letterSpacing: '-0.03em',
+                    color: '#ffffff',
+                    whiteSpace: 'pre-line',
+                  }}
+                >
+                  {block.text}
+                </p>
               </div>
             ))}
           </div>
         </div>
       </div>
-    </section>
-  );
-};
+
+      <style>{`
+        @keyframes scrollLine {
+          0%, 100% { transform: scaleY(1); opacity: 0.8; }
+          50% { transform: scaleY(0.4); opacity: 0.3; }
+        }
+      `}</style>
+    </div>
+  )
+}
 
 
 // ─── Differentiators ─────────────────────────────────────────────────────────
@@ -552,12 +481,16 @@ const DifferentiatorsSection = () => {
     <section id="diferenciadores" className="py-28" style={{ background: 'var(--color-4)' }}>
       <div className="max-w-7xl mx-auto px-6">
         {/* Section title */}
-        <h2
-          className="diff-title text-4xl md:text-5xl text-center mb-16"
-          style={{ color: 'var(--color-1)', fontWeight: 700 }}
-        >
-          What makes us different
-        </h2>
+        <div className="diff-title text-center mb-16">
+          <p style={{ fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#94a3b8', marginBottom: '1rem' }}>
+            Por qué elegirnos
+          </p>
+          <h2
+            style={{ color: 'var(--color-1)', fontWeight: 700, fontSize: 'clamp(2.4rem, 4vw, 3.5rem)', letterSpacing: '-0.03em', lineHeight: 1.05 }}
+          >
+            Lo que nos hace diferentes
+          </h2>
+        </div>
 
         <div className="grid md:grid-cols-2 gap-12 items-start">
           {/* LEFT — slider content */}
@@ -601,8 +534,7 @@ const DifferentiatorsSection = () => {
                 transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
               >
                 <h3
-                  className="text-3xl md:text-4xl mb-5 leading-tight"
-                  style={{ color: 'var(--color-1)', fontWeight: 700, letterSpacing: '-0.02em' }}
+                  style={{ color: 'var(--color-1)', fontWeight: 700, letterSpacing: '-0.03em', lineHeight: 1.1, fontSize: 'clamp(1.8rem, 3vw, 2.6rem)', marginBottom: '1.25rem' }}
                 >
                   {diff.headline}
                 </h3>
@@ -1036,9 +968,11 @@ export default function App() {
     import('lenis').then((m: any) => {
       const Lenis = m.default ?? m
       lenis = new Lenis({
-        duration: 1.2,
+        duration: 1.6,
         easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
         smoothWheel: true,
+        wheelMultiplier: 0.85,
+        touchMultiplier: 1.8,
       })
       lenis.on('scroll', ScrollTrigger.update)
       const raf = (time: number) => { lenis.raf(time); requestAnimationFrame(raf) }
@@ -1080,9 +1014,8 @@ export default function App() {
     <div style={{ minHeight: '100vh', background: 'var(--color-1)' }}>
       <Navbar />
       <main>
-        <HeroSection />
+        <StickyNarrativeSection />
         <div style={{ position: 'relative', zIndex: 2 }}>
-          <HeroScrollText />
           <ProceduresSlider />
           <DifferentiatorsSection />
           <TestimonialsSection />

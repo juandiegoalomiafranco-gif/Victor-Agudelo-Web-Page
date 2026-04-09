@@ -185,7 +185,7 @@ export function ProceduresSlider() {
                     <div className="absolute bottom-5 left-5 right-5">
                       <span
                         className="text-xl"
-                        style={{ color: 'var(--color-4)', fontWeight: 700 }}
+                        style={{ color: 'var(--color-4)', fontWeight: 700, fontFamily: 'var(--font-serif)' }}
                       >
                         {proc.title}
                       </span>
