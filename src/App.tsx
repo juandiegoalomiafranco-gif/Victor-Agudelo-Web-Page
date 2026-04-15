@@ -264,24 +264,11 @@ const Navbar = () => {
   )
 }
 
-// ─── Data de bloques narrativos ──────────────────────────────────────────────
-const BLOCKS = [
-  { text: 'Cada nariz cuenta una historia.\nLa tuya merece ser perfecta.' },
-  { text: 'Tecnología Piezotome®.\nPrecisión que el bisturí\nno puede alcanzar.' },
-  { text: 'Más de 500 cirugías avalan\ncada decisión del Dr. Agudelo.' },
-]
-
-// ─── Sticky Narrative con Clip-Path Scroll Shrink ────────────────────────────
+// ─── Sticky Hero con Clip-Path Scroll Shrink ─────────────────────────────────
 const StickyNarrativeSection = () => {
   const outerRef       = useRef<HTMLDivElement>(null)
   const frameRef       = useRef<HTMLDivElement>(null)
   const heroOverlayRef = useRef<HTMLDivElement>(null)
-  const innerRef       = useRef<HTMLDivElement>(null)
-  const blockRefs      = [
-    useRef<HTMLDivElement>(null),
-    useRef<HTMLDivElement>(null),
-    useRef<HTMLDivElement>(null),
-  ]
 
   useEffect(() => {
     let ctx: any
@@ -289,22 +276,28 @@ const StickyNarrativeSection = () => {
     Promise.all([
       import('gsap').then((m: any) => m.default ?? m.gsap ?? m),
       import('gsap/ScrollTrigger').then((m: any) => m.ScrollTrigger),
-      import('split-type').then((m: any) => m.default ?? m),
-    ]).then(([gsap, ScrollTrigger, SplitType]: any[]) => {
+    ]).then(([gsap, ScrollTrigger]: any[]) => {
       gsap.registerPlugin(ScrollTrigger)
 
       ctx = gsap.context(() => {
 
-        // ── Salida hero: scale-up + fade — bidireccional limpio, sin Y ──
+        // ── Estado inicial explícito ──
+        gsap.set(heroOverlayRef.current, { transformOrigin: 'center center', opacity: 1, scale: 1 })
+
+        // ── Salida hero: scale-up + fade ──
         gsap.to(heroOverlayRef.current, {
           opacity: 0,
           scale: 1.09,
           ease: 'none',
+          overwrite: 'auto',
           scrollTrigger: {
             trigger: outerRef.current,
             start: 'top top',
             end: '30% top',
-            scrub: 1.8,
+            scrub: 0.8,
+            onEnterBack: () => {
+              gsap.set(heroOverlayRef.current, { opacity: 1, scale: 1 })
+            },
           },
         })
 
@@ -312,8 +305,8 @@ const StickyNarrativeSection = () => {
         ScrollTrigger.create({
           trigger: outerRef.current,
           start: 'top top',
-          end: '25.2% bottom',
-          scrub: 1.44,
+          end: '80% bottom',
+          scrub: 1.2,
           onUpdate: (self: any) => {
             const p = self.progress
             const inset  = p * 44
@@ -324,41 +317,6 @@ const StickyNarrativeSection = () => {
           },
         })
 
-        // ── Timeline de texto narrativo ──
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: outerRef.current,
-            start: '22% top',
-            end: 'bottom bottom',
-            scrub: 1.08,
-            pin: innerRef.current,
-            anticipatePin: 1,
-          },
-        })
-
-        BLOCKS.forEach((_, idx) => {
-          const el    = blockRefs[idx].current?.querySelector('[data-split]')
-          if (!el) return
-          const s     = new SplitType(el, { types: 'lines' })
-          const lines = s.lines ?? []
-          const inAt  = idx * 2.2
-          const outAt = inAt + 1.8
-
-          gsap.set(lines, { opacity: 0, yPercent: 55, rotateX: 14, filter: 'blur(18px)', z: -280 })
-
-          tl.to(lines, {
-            opacity: 1, yPercent: 0, rotateX: 0, filter: 'blur(0px)', z: 0,
-            duration: 1.35, stagger: 0.072, ease: 'power3.out',
-          }, inAt)
-
-          if (idx < BLOCKS.length - 1) {
-            tl.to(lines, {
-              opacity: 0, yPercent: -28, filter: 'blur(10px)',
-              duration: 0.8, stagger: 0.04,
-            }, outAt)
-          }
-        })
-
       }, outerRef)
     }).catch(() => {})
 
@@ -366,7 +324,7 @@ const StickyNarrativeSection = () => {
   }, [])
 
   return (
-    <div ref={outerRef} className="narrative-section relative" style={{ height: '420vh' }}>
+    <div ref={outerRef} className="narrative-section relative" style={{ height: '200vh' }}>
 
       {/* Frame con clip-path */}
       <div
@@ -375,20 +333,22 @@ const StickyNarrativeSection = () => {
         style={{ clipPath: 'inset(0px round 0px)' }}
       >
         <img
-          src="https://images.unsplash.com/photo-1530026405186-ed1f139313f3?w=1920&q=85"
+          src="https://images.unsplash.com/photo-1551190822-a9333d879b1f?w=1920&q=85"
           alt="Quirófano Dr. Víctor Agudelo"
           className="absolute inset-0 w-full h-full object-cover object-center"
+          style={{ background: '#0a0a0a' }}
+          onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
         />
         {/* Gradient overlay */}
         <div className="absolute inset-0" style={{
           background: 'linear-gradient(to bottom, rgba(4,8,16,0.62) 0%, rgba(4,8,16,0.52) 45%, rgba(4,8,16,0.75) 100%)',
         }} />
 
-        {/* ── Hero: frase única + CTAs, 100% sólido desde el inicio ── */}
+        {/* ── Hero: frase única, 100% sólida desde el inicio ── */}
         <div
           ref={heroOverlayRef}
           className="absolute inset-0 flex flex-col items-center justify-center text-center"
-          style={{ zIndex: 20, padding: '0 1.5rem' }}
+          style={{ zIndex: 20, padding: '0 1.5rem', transformOrigin: 'center center', willChange: 'transform, opacity' }}
         >
           <h1
             style={{
@@ -404,49 +364,7 @@ const StickyNarrativeSection = () => {
             <span style={{ fontWeight: 400, opacity: 0.8 }}>Que respeta tu identidad.</span>
           </h1>
         </div>
-
-        {/* ── Bloques narrativos: aparecen después del encogimiento ── */}
-        <div
-          ref={innerRef}
-          className="absolute inset-0 flex items-center justify-center"
-          style={{ perspective: '1200px', zIndex: 10 }}
-        >
-          <div
-            className="relative w-full max-w-4xl mx-auto px-10 text-center"
-            style={{ transformStyle: 'preserve-3d' }}
-          >
-            {BLOCKS.map((block, i) => (
-              <div
-                key={i}
-                ref={blockRefs[i]}
-                className={i === 0 ? 'relative' : 'absolute inset-0 flex items-center justify-center px-10'}
-              >
-                <p
-                  data-split
-                  style={{
-                    fontFamily: 'var(--font-sans)',
-                    fontSize: 'clamp(2rem, 4.5vw, 4.5rem)',
-                    fontWeight: 700,
-                    lineHeight: 1.1,
-                    letterSpacing: '-0.03em',
-                    color: '#ffffff',
-                    whiteSpace: 'pre-line',
-                  }}
-                >
-                  {block.text}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
       </div>
-
-      <style>{`
-        @keyframes scrollLine {
-          0%, 100% { transform: scaleY(1); opacity: 0.8; }
-          50% { transform: scaleY(0.4); opacity: 0.3; }
-        }
-      `}</style>
     </div>
   )
 }
@@ -891,43 +809,43 @@ const Footer = () => (
     <div className="max-w-7xl mx-auto px-6 pt-20 pb-10">
       <div className="grid md:grid-cols-4 gap-12 mb-16">
         <div>
-          <p style={{ color: 'var(--color-4)', fontWeight: 700, fontSize: '1.1rem', letterSpacing: '-0.02em', marginBottom: '1rem' }}>Dr. Agudelo</p>
-          <p className="text-sm leading-relaxed" style={{ color: 'var(--color-12)', fontWeight: 400, maxWidth: '18rem' }}>
+          <p style={{ color: '#ffffff', fontWeight: 700, fontSize: '1.1rem', letterSpacing: '-0.02em', marginBottom: '1rem' }}>Dr. Agudelo</p>
+          <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.5)', fontWeight: 400, maxWidth: '18rem' }}>
             Resultados naturales. Confianza real. Especialista en cirugía plástica estética y reconstructiva en Cali, Colombia.
           </p>
           <div className="flex gap-4 mt-6">
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram" style={{ color: 'var(--color-12)' }}><Instagram className="w-5 h-5" /></a>
-            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook" style={{ color: 'var(--color-12)' }}><Facebook className="w-5 h-5" /></a>
-            <a href="https://wa.me/573000000000" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" style={{ color: 'var(--color-12)' }}><MessageSquare className="w-5 h-5" /></a>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram" style={{ color: 'rgba(255,255,255,0.5)' }}><Instagram className="w-5 h-5" /></a>
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook" style={{ color: 'rgba(255,255,255,0.5)' }}><Facebook className="w-5 h-5" /></a>
+            <a href="https://wa.me/573000000000" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" style={{ color: 'rgba(255,255,255,0.5)' }}><MessageSquare className="w-5 h-5" /></a>
           </div>
         </div>
         <div>
-          <p className="text-xs uppercase tracking-widest mb-5" style={{ color: 'var(--color-12)', fontWeight: 600 }}>Navegación</p>
+          <p className="text-xs uppercase tracking-widest mb-5" style={{ color: 'rgba(255,255,255,0.35)', fontWeight: 600 }}>Navegación</p>
           <ul className="flex flex-col gap-3">
             {['Inicio', 'Procedimientos', 'La Clínica', 'Testimonios', 'Contacto'].map(l => (
               <li key={l}>
                 <a href={`#${l.toLowerCase().replace(/\s/g, '')}`} className="text-sm transition-colors"
-                  style={{ color: 'var(--color-12)', fontWeight: 400, textDecoration: 'none' }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = 'var(--color-4)' }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = 'var(--color-12)' }}
+                  style={{ color: 'rgba(255,255,255,0.55)', fontWeight: 400, textDecoration: 'none' }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = '#ffffff' }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = 'rgba(255,255,255,0.55)' }}
                 >{l}</a>
               </li>
             ))}
           </ul>
         </div>
         <div>
-          <p className="text-xs uppercase tracking-widest mb-5" style={{ color: 'var(--color-12)', fontWeight: 600 }}>Ubicación</p>
+          <p className="text-xs uppercase tracking-widest mb-5" style={{ color: 'rgba(255,255,255,0.35)', fontWeight: 600 }}>Ubicación</p>
           <div className="flex gap-3">
-            <MapPin className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--color-9)' }} />
-            <p className="text-sm leading-relaxed" style={{ color: 'var(--color-12)', fontWeight: 400 }}>Cl. 5 #38-05<br />Cali, Colombia</p>
+            <MapPin className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'rgba(255,255,255,0.4)' }} />
+            <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.5)', fontWeight: 400 }}>Cl. 5 #38-05<br />Cali, Colombia</p>
           </div>
         </div>
         <div>
-          <p className="text-xs uppercase tracking-widest mb-5" style={{ color: 'var(--color-12)', fontWeight: 600 }}>Contacto</p>
+          <p className="text-xs uppercase tracking-widest mb-5" style={{ color: 'rgba(255,255,255,0.35)', fontWeight: 600 }}>Contacto</p>
           <ul className="flex flex-col gap-3">
-            <li><a href="https://wa.me/573000000000" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm" style={{ color: 'var(--color-12)', fontWeight: 400, textDecoration: 'none' }}><MessageSquare className="w-4 h-4 shrink-0" style={{ color: 'var(--color-9)' }} />+57 300 000 0000</a></li>
-            <li><a href="mailto:contacto@drvictoragudelo.com" className="flex items-center gap-2 text-sm" style={{ color: 'var(--color-12)', fontWeight: 400, textDecoration: 'none' }}><Mail className="w-4 h-4 shrink-0" style={{ color: 'var(--color-9)' }} />contacto@drvictoragudelo.com</a></li>
-            <li><a href="tel:+5726001234" className="flex items-center gap-2 text-sm" style={{ color: 'var(--color-12)', fontWeight: 400, textDecoration: 'none' }}><Phone className="w-4 h-4 shrink-0" style={{ color: 'var(--color-9)' }} />+57 (2) 600-1234</a></li>
+            <li><a href="https://wa.me/573000000000" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm" style={{ color: 'rgba(255,255,255,0.5)', fontWeight: 400, textDecoration: 'none' }}><MessageSquare className="w-4 h-4 shrink-0" style={{ color: 'rgba(255,255,255,0.4)' }} />+57 300 000 0000</a></li>
+            <li><a href="mailto:contacto@drvictoragudelo.com" className="flex items-center gap-2 text-sm" style={{ color: 'rgba(255,255,255,0.5)', fontWeight: 400, textDecoration: 'none' }}><Mail className="w-4 h-4 shrink-0" style={{ color: 'rgba(255,255,255,0.4)' }} />contacto@drvictoragudelo.com</a></li>
+            <li><a href="tel:+5726001234" className="flex items-center gap-2 text-sm" style={{ color: 'rgba(255,255,255,0.5)', fontWeight: 400, textDecoration: 'none' }}><Phone className="w-4 h-4 shrink-0" style={{ color: 'rgba(255,255,255,0.4)' }} />+57 (2) 600-1234</a></li>
           </ul>
         </div>
       </div>
@@ -935,8 +853,8 @@ const Footer = () => (
         Dr. Agudelo
       </div>
       <div className="flex flex-col md:flex-row justify-between items-center gap-3 pt-8">
-        <p className="text-xs" style={{ color: 'rgba(255,255,255,0.2)', fontWeight: 400 }}>2026 © Dr. Víctor Manuel Agudelo. Todos los derechos reservados.</p>
-        <p className="text-xs" style={{ color: 'rgba(255,255,255,0.15)', fontWeight: 400 }}>Médico Cirujano · Registro RETHUS verificado</p>
+        <p className="text-xs" style={{ color: 'rgba(255,255,255,0.3)', fontWeight: 400 }}>2026 © Dr. Víctor Manuel Agudelo. Todos los derechos reservados.</p>
+        <p className="text-xs" style={{ color: 'rgba(255,255,255,0.25)', fontWeight: 400 }}>Médico Cirujano · Registro RETHUS verificado</p>
       </div>
     </div>
   </footer>

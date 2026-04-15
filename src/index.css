@@ -175,9 +175,11 @@
   will-change: transform, opacity, filter;
 }
 
-/* ── Splide slider ───────────────────────────────────────── */
-.splide__track { overflow: visible !important; }
-.splide__pagination { display: none; }
+/* ── Procedures infinite scroll ─────────────────────────────── */
+@keyframes proceduresScroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(calc(-50% - 8px)); }
+}
 
 .slider-progress {
   background: rgba(36,36,36,0.1);
