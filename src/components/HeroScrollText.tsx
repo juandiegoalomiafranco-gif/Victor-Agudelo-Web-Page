@@ -8,29 +8,28 @@ gsap.registerPlugin(ScrollTrigger)
 const TEXT_BLOCKS = [
   {
     lines: [
-      'Elegir un cirujano plástico',
-      'es una de las decisiones',
-      'más importantes de tu vida.',
+      'Elegir a quién confiarle',
+      'tu nariz es, quizás,',
+      'la decisión más personal que tomarás.',
     ],
   },
   {
     lines: [
-      'Miles de pacientes llegaron',
-      'con las mismas dudas',
-      'que tú tienes ahora...',
+      'No buscas una nariz perfecta.',
+      'Buscas la tuya —',
+      'una que armonice y no se note.',
     ],
   },
   {
     lines: [
-      '¿Y si encontraras al especialista',
-      'que te guía con honestidad,',
-      'desde la primera consulta',
-      'hasta el resultado final?',
+      'Con más de 20 años',
+      'y 200 casos documentados,',
+      'cada resultado se diseña para un solo rostro: el tuyo.',
     ],
   },
 ]
 
-const PILLS = ['Inseguro', 'Confundido', 'Nervioso', 'Dudoso', 'Perdido', 'Ansioso']
+const PILLS = ['¿Dolerá?', '¿Se notará?', '¿Cuánto demora?', '¿Natural?', '¿Respiraré bien?', '¿Vale la pena?']
 
 export function HeroScrollText() {
   const outerRef   = useRef<HTMLDivElement>(null)
@@ -52,7 +51,7 @@ export function HeroScrollText() {
         scrollTrigger: {
           trigger: outer,
           start: 'top top',
-          end: '+=4000',
+          end: '+=2200',
           scrub: 1.2,
           pin: inner,
         },
@@ -67,21 +66,21 @@ export function HeroScrollText() {
           lines,
           { opacity: 0, yPercent: 50, z: -200, rotateX: 10, filter: BLUR_IN },
           { opacity: 1, yPercent: 0,  z: 0,    rotateX: 0,  filter: 'blur(0px)',
-            duration: 2, stagger: 0.08, ease: 'power3.out' },
+            duration: 1.2, stagger: 0.08, ease: 'power3.out' },
           '<'
         )
         if (loader) {
           master.fromTo(
             loader,
             { scaleX: 0 },
-            { scaleX: 1, ease: 'none', duration: 2, transformOrigin: 'left center' },
+            { scaleX: 1, ease: 'none', duration: 1.2, transformOrigin: 'left center' },
             '<'
           )
         }
         master.to(
           lines,
           { opacity: 0, yPercent: -50, z: -300, rotateX: -12, filter: BLUR_OUT,
-            duration: 2, stagger: 0.08, ease: 'power3.in' },
+            duration: 1.2, stagger: 0.08, ease: 'power3.in' },
           '>0.5'
         )
         master.to(el, { opacity: 0, duration: 0.1, ease: 'none' })

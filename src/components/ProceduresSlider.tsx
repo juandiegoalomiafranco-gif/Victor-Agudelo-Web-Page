@@ -8,28 +8,52 @@ interface Procedure {
 
 const PROCEDURES: Procedure[] = [
   {
-    title: 'Rinoplastia',
+    title: 'Rinoplastia Estética',
     description:
-      'Redefinimos la armonía facial mediante técnicas de precisión que mejoran la función y la estética de la nariz, preservando tu identidad natural.',
+      'Modificamos forma, tamaño y proporciones para que el resultado armonice con tu rostro. Técnica Estructural con ultrasonido piezoeléctrico para mayor precisión y menor trauma óseo.',
     bgColor: '#1e1e2e',
   },
   {
-    title: 'Liposucción',
+    title: 'Rinoplastia Afrolatina',
     description:
-      'Esculpimos el contorno corporal eliminando grasa localizada resistente al ejercicio, con resultados duraderos y recuperación optimizada.',
+      'Técnica especializada para narices con características afrolatinas, preservando la identidad del paciente y logrando resultados naturales. Un procedimiento que pocos especialistas en Cali ofrecen.',
     bgColor: '#1a2e1e',
   },
   {
-    title: 'Mamoplastia de Aumento',
+    title: 'Rinoplastia Secundaria',
     description:
-      'Mejoramos la forma, tamaño y simetría con implantes de alta calidad o grasa propia, adaptados a tu anatomía y deseos personales.',
-    bgColor: '#2e1a2a',
+      'Para pacientes que tuvieron una cirugía previa y no quedaron satisfechos. Corrección de deformidades, asimetrías o problemas funcionales. Procedimiento de alta complejidad.',
+    bgColor: '#2e1a1a',
   },
   {
-    title: 'Cirugía Facial',
+    title: 'Mentoplastia',
     description:
-      'Ritidectomía, blefaroplastia y más. Procedimientos de rejuvenecimiento adaptados a tu anatomía única para resultados naturales.',
+      'Modificación del mentón para mejorar el perfil facial. Frecuentemente combinada con rinoplastia para lograr un equilibrio facial total.',
     bgColor: '#1e2a2e',
+  },
+  {
+    title: 'Otoplastia',
+    description:
+      'Corrección de la forma o posición de las orejas. Procedimiento con alta satisfacción y resultados definitivos.',
+    bgColor: '#2a1e2e',
+  },
+  {
+    title: 'Blefaroplastia',
+    description:
+      'Cirugía de párpados superiores e inferiores para rejuvenecer la mirada, eliminar bolsas y exceso de piel con un aspecto natural.',
+    bgColor: '#1e2a1e',
+  },
+  {
+    title: 'Reducción de Papada con Láser',
+    description:
+      'Contorno facial con tecnología láser. Sin cirugía, mínima recuperación.',
+    bgColor: '#2e2a1e',
+  },
+  {
+    title: 'Toxina Botulínica · Ácido Hialurónico · Láser CO2',
+    description:
+      'Tratamientos de rejuvenecimiento sin cirugía para complementar o mantener los resultados de procedimientos más complejos.',
+    bgColor: '#1a1e2e',
   },
 ]
 
@@ -56,7 +80,7 @@ export function ProceduresSlider() {
             className="flex items-center gap-2 text-sm tabular-nums"
             style={{ color: 'var(--color-12)', fontWeight: 400 }}
           >
-            <span>04 Procedimientos</span>
+            <span>08 Procedimientos</span>
           </div>
         </div>
       </div>
@@ -78,7 +102,7 @@ export function ProceduresSlider() {
             gap: '16px',
             width: 'max-content',
             paddingLeft: '1.5rem',
-            animation: 'proceduresScroll 20s linear infinite',
+            animation: 'proceduresScroll 34s linear infinite',
           }}
         >
           {[...PROCEDURES, ...PROCEDURES].map((proc, i) => {

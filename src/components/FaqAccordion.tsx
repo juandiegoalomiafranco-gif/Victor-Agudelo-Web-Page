@@ -2,24 +2,36 @@ import { useState } from 'react'
 
 const FAQS = [
   {
-    question: '¿Cómo sé si soy candidato para un procedimiento?',
-    answer: 'Durante la consulta inicial evaluamos tu estado de salud general, tus expectativas y las características anatómicas de la zona a tratar. A partir de eso determinamos si eres candidato ideal y qué técnica se adapta mejor a ti.',
+    question: '¿La cirugía duele?',
+    answer: 'No es dolorosa — es incómoda. La principal molestia es la congestión nasal de los primeros días. La mayoría de pacientes se sorprende positivamente con la recuperación.',
   },
   {
-    question: '¿Cuáles son los riesgos de la cirugía plástica?',
-    answer: 'Como toda cirugía, existen riesgos generales como infección, sangrado o reacciones a la anestesia. Trabajamos con protocolos de seguridad estrictos y te informamos en detalle sobre cada riesgo específico antes de tomar cualquier decisión.',
+    question: '¿Me puedo operar si me he aplicado ácido hialurónico en la nariz?',
+    answer: 'Sí. Lo ideal es disolverlo previamente con hialuronidasa antes de la cirugía. Lo evaluamos en consulta.',
   },
   {
-    question: '¿Cuánto tiempo tarda la recuperación?',
-    answer: 'Depende del procedimiento. Rinoplastia: 1–2 semanas de reposo inicial. Liposucción: 1–3 semanas. Mamoplastia: 1–2 semanas. Te entregamos un protocolo de recuperación detallado y seguimiento post-operatorio personalizado.',
+    question: '¿Usan ultrasonido en la cirugía?',
+    answer: 'Sí. Llevamos más de dos años usando ultrasonido piezoeléctrico (Piezosurgery) para modificar la estructura ósea con mayor precisión y menos trauma.',
   },
   {
-    question: '¿Atienden pacientes de otras ciudades o del exterior?',
-    answer: 'Sí. Atendemos pacientes de toda Colombia y del exterior. Cali es un destino reconocido para turismo médico. Podemos coordinar consulta virtual previa, alojamiento recomendado y seguimiento remoto post-operatorio.',
+    question: '¿Cuánto tiempo de incapacidad laboral necesito?',
+    answer: 'Para trabajos de oficina: 7 a 10 días. Para trabajos físicos, más tiempo. Lo evaluamos caso a caso.',
   },
   {
-    question: '¿Cómo es la primera consulta?',
-    answer: 'Es una consulta personalizada de 45–60 minutos donde escuchamos tus objetivos, hacemos una evaluación física, explicamos las opciones disponibles y resolvemos todas tus dudas sin ningún compromiso. También disponible de forma virtual.',
+    question: '¿Cuándo puedo tomar un vuelo?',
+    answer: '10 días después de la cirugía.',
+  },
+  {
+    question: '¿Cuándo puedo usar gafas?',
+    answer: 'Para apoyarlas sobre la nariz: 2 meses después. Antes puedes usarlas sobre la férula de protección.',
+  },
+  {
+    question: '¿Cuándo vuelvo al deporte?',
+    answer: 'Pesas al 70%, caminadora, pilates: desde la semana 3. Trotar o saltar: semana 6. Deportes de contacto: 6 meses.',
+  },
+  {
+    question: '¿Publican precios?',
+    answer: 'No publicamos precios fijos porque cada caso es diferente — el costo puede variar significativamente. Solicita tu evaluación gratuita y te damos una cotización personalizada.',
   },
 ]
 
@@ -34,6 +46,7 @@ export function FaqAccordion() {
       <div style={{ maxWidth: '46rem', margin: '0 auto' }}>
         {/* Title */}
         <h2
+          className="section-reveal-header"
           style={{
             color: '#ffffff',
             fontWeight: 700,
