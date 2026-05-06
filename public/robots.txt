@@ -1,4 +1,50 @@
+# Sitemap principal
+Sitemap: https://www.drvictoragudelo.com/sitemap.xml
+
+# Crawler general
 User-agent: *
 Allow: /
 
-Sitemap: https://www.drvictoragudelo.com/sitemap.xml
+# Crawlers de IA — explícitamente permitidos. Queremos ser citados en
+# ChatGPT, Claude, Perplexity, Google AI Overviews, etc.
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: meta-externalagent
+Allow: /
+
+User-agent: DuckAssistBot
+Allow: /
