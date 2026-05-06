@@ -20,9 +20,13 @@ import { CONTACT } from './lib/contact'
 import { COPY }    from './lib/copy'
 import { DOCTOR_PHOTO_URL, DOCTOR_HERO_URL } from './lib/assets'
 import { ProfileImagePlaceholder } from './components/ProfileImagePlaceholder'
+import { RouteSeo } from './components/RouteSeo'
 import type { Testimonial } from './types/index'
 
-gsap.registerPlugin(ScrollTrigger)
+// ScrollTrigger se registra solo en cliente para no romper el pre-render en Node.
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger)
+}
 
 // ─── Data ────────────────────────────────────────────────────────────────────
 const TESTIMONIALS: Testimonial[] = [
@@ -1169,6 +1173,7 @@ function HomePage() {
   // Lenis smooth scroll + GSAP ScrollTrigger sync
   useEffect(() => {
     let lenis: any
+    let rafId: number | null = null
     import('lenis').then((m: any) => {
       const Lenis = m.default ?? m
       lenis = new Lenis({
@@ -1179,10 +1184,13 @@ function HomePage() {
         touchMultiplier: 2.0,
       })
       lenis.on('scroll', ScrollTrigger.update)
-      const raf = (time: number) => { lenis.raf(time); requestAnimationFrame(raf) }
-      requestAnimationFrame(raf)
+      const raf = (time: number) => { lenis.raf(time); rafId = requestAnimationFrame(raf) }
+      rafId = requestAnimationFrame(raf)
     }).catch(() => {})
-    return () => { lenis?.destroy() }
+    return () => {
+      if (rafId !== null) cancelAnimationFrame(rafId)
+      lenis?.destroy()
+    }
   }, [])
 
   // Global 3D scroll reveals — section headers
@@ -1236,11 +1244,14 @@ function HomePage() {
 // ─── App (Router) ─────────────────────────────────────────────────────────────
 export default function App() {
   return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/rinoplastia" element={<RinoplastiaPage />} />
-      <Route path="/procedimientos" element={<ProcedimientosPage />} />
-      <Route path="/privacidad" element={<PrivacidadPage />} />
-    </Routes>
+    <>
+      <RouteSeo />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/rinoplastia" element={<RinoplastiaPage />} />
+        <Route path="/procedimientos" element={<ProcedimientosPage />} />
+        <Route path="/privacidad" element={<PrivacidadPage />} />
+      </Routes>
+    </>
   )
 }
