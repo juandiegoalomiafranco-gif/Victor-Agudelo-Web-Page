@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(unzip -l color-palette.zip)",
+      "Bash(npx tsc:*)"
+    ]
+  }
+}

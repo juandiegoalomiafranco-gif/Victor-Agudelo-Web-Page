@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 
 interface Procedure {
   title: string
@@ -60,6 +60,15 @@ const PROCEDURES: Procedure[] = [
 export function ProceduresSlider() {
   const trackRef = useRef<HTMLDivElement>(null)
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null)
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)')
+    setIsMobile(mq.matches)
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [])
 
   return (
     <section
@@ -68,7 +77,7 @@ export function ProceduresSlider() {
       style={{ background: 'var(--color-2)' }}
     >
       {/* Header */}
-      <div className="px-6 md:px-12 mb-10">
+      <div className="px-4 md:px-12 mb-10">
         <div className="flex items-end justify-between gap-6 flex-wrap mb-6">
           <h2
             className="text-3xl md:text-4xl leading-tight max-w-xl"
@@ -97,22 +106,27 @@ export function ProceduresSlider() {
       >
         <div
           ref={trackRef}
+          className={isMobile ? 'procedures-mobile-scroll' : ''}
           style={{
             display: 'flex',
             gap: '16px',
-            width: 'max-content',
-            paddingLeft: '1.5rem',
-            animation: 'proceduresScroll 34s linear infinite',
+            width: isMobile ? undefined : 'max-content',
+            paddingLeft: '1rem',
+            paddingRight: isMobile ? '1rem' : undefined,
+            animation: isMobile ? 'none' : 'proceduresScroll 34s linear infinite',
+            overflowX: isMobile ? 'auto' : undefined,
+            WebkitOverflowScrolling: 'touch',
+            scrollSnapType: isMobile ? 'x mandatory' : undefined,
           }}
         >
-          {[...PROCEDURES, ...PROCEDURES].map((proc, i) => {
+          {(isMobile ? PROCEDURES : [...PROCEDURES, ...PROCEDURES]).map((proc, i) => {
             const activeKey = i % PROCEDURES.length
-            const isActive = hoveredIdx === activeKey
+            const isActive = isMobile ? true : hoveredIdx === activeKey
             return (
               <div
                 key={i}
                 className={`slide-card${isActive ? ' is-active-card' : ''}`}
-                style={{ width: 'clamp(240px, 28vw, 320px)', flexShrink: 0 }}
+                style={{ width: isMobile ? 'clamp(260px, 72vw, 320px)' : 'clamp(240px, 28vw, 320px)', flexShrink: 0, scrollSnapAlign: isMobile ? 'center' : undefined }}
                 onMouseEnter={() => setHoveredIdx(activeKey)}
                 onMouseLeave={() => setHoveredIdx(null)}
               >
@@ -143,7 +157,7 @@ export function ProceduresSlider() {
                     className="text-[10px] uppercase tracking-[0.18em] mb-2"
                     style={{ color: 'var(--color-12)', fontWeight: 400 }}
                   >
-                    Module Overview
+                    Detalle del procedimiento
                   </p>
                   <p
                     className="text-sm leading-relaxed mb-4"

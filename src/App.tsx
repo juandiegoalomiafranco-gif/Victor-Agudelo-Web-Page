@@ -4,57 +4,67 @@ import { AnimatePresence, motion } from 'motion/react'
 import {
   Phone, Mail, MapPin, Instagram, Facebook,
   Menu, X, Star, Calendar, MessageSquare,
-  ChevronLeft, ChevronRight, VolumeX, Play,
+  ChevronLeft, ChevronRight,
 } from 'lucide-react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
-import { ProceduresSlider } from './components/ProceduresSlider'
+import { ProceduresScroll } from './components/ProceduresScroll'
 import { FaqAccordion }    from './components/FaqAccordion'
+import { StepsStagger }   from './components/ui/steps-stagger'
+import { HeroStats }      from './components/HeroStats'
 import { RinoplastiaPage }    from './pages/RinoplastiaPage'
 import { ProcedimientosPage } from './pages/ProcedimientosPage'
+import { PrivacidadPage }     from './pages/PrivacidadPage'
+import { CONTACT } from './lib/contact'
+import { COPY }    from './lib/copy'
+import { DOCTOR_PHOTO_URL, DOCTOR_HERO_URL } from './lib/assets'
+import { ProfileImagePlaceholder } from './components/ProfileImagePlaceholder'
+import type { Testimonial } from './types/index'
 
 gsap.registerPlugin(ScrollTrigger)
 
-// ─── Types ───────────────────────────────────────────────────────────────────
-interface Procedure { id: string; title: string; tag: string; desc: string; img: string }
-interface Differentiator { id: string; label: string; headline: string; body: string; img: string }
-interface Testimonial { id: string; name: string; procedure: string; text: string; initials: string }
-
 // ─── Data ────────────────────────────────────────────────────────────────────
-const PROCEDURES: Procedure[] = [
-  { id: 'rino-estetica',  title: 'Rinoplastia Estética',                             tag: 'Cirugía Estrella',      desc: 'Modificamos forma, tamaño y proporciones para que el resultado armonice con tu rostro. Técnica Estructural con ultrasonido piezoeléctrico.', img: '' },
-  { id: 'rino-afro',      title: 'Rinoplastia Afrolatina',                           tag: 'Especializada',         desc: 'Técnica para narices con características afrolatinas, preservando la identidad y logrando resultados naturales.', img: '' },
-  { id: 'rino-sec',       title: 'Rinoplastia Secundaria',                           tag: 'Alta Complejidad',      desc: 'Para pacientes que tuvieron una cirugía previa y no quedaron satisfechos. Corrección de deformidades, asimetrías o problemas funcionales.', img: '' },
-  { id: 'mento',          title: 'Mentoplastia',                                     tag: 'Perfil Facial',         desc: 'Modificación del mentón para mejorar el perfil facial. Frecuentemente combinada con rinoplastia.', img: '' },
-  { id: 'oto',            title: 'Otoplastia',                                       tag: 'Orejas',                desc: 'Corrección de la forma o posición de las orejas. Alta satisfacción y resultados definitivos.', img: '' },
-  { id: 'blfaro',         title: 'Blefaroplastia',                                   tag: 'Mirada',                desc: 'Cirugía de párpados para rejuvenecer la mirada y eliminar bolsas con aspecto natural.', img: '' },
-  { id: 'papada',         title: 'Reducción de Papada con Láser',                    tag: 'Sin Cirugía',           desc: 'Contorno facial con tecnología láser. Sin cirugía, mínima recuperación.', img: '' },
-  { id: 'invasivos',      title: 'Toxina Botulínica · Ácido Hialurónico · Láser CO2', tag: 'Mínimamente Invasivos', desc: 'Tratamientos de rejuvenecimiento sin cirugía para complementar resultados de procedimientos más complejos.', img: '' },
-]
-
-const DIFFERENTIATORS: Differentiator[] = [
-  { id: 'ultra', label: 'Técnica Ultrasónica Piezotome®', headline: 'Precisión que el bisturí tradicional no puede alcanzar.', body: 'Desde hace más de dos años incorporamos ultrasonido piezoeléctrico en rinoplastia. Modifica la estructura ósea con mayor control: menos trauma, recuperación más rápida, resultados más predecibles.', img: 'https://images.unsplash.com/photo-1530026405186-ed1f139313f3?w=900&q=80' },
-  { id: 'exp',   label: '20 Años en Rinoplastia',          headline: 'Más de 200 casos documentados — solo en nariz.',           body: '20 años dedicados a que cada paciente quede con la nariz que siempre quiso. Miembro SCCPFR y ACORL desde 2004. Reseñas verificadas en RealSelf.com.',                img: 'https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?w=900&q=80' },
-  { id: 'nat',   label: 'Naturalidad ante todo',           headline: 'El objetivo es que no se note que estuviste operada.',      body: 'No trabajamos con moldes. Cada nariz se diseña para el rostro de esa persona. Mostramos simulaciones y comparamos con casos reales similares antes de cualquier decisión.',  img: 'https://images.unsplash.com/photo-1571772996211-2f02c9727629?w=900&q=80' },
-  { id: 'acomp', label: 'Acompañamiento Personal',         headline: 'El Dr. Agudelo está presente en cada etapa — nunca lo delega.', body: 'Desde la primera consulta hasta el último control postoperatorio. El doctor hace el seguimiento personal. No hay asistentes que reemplacen ese acompañamiento.', img: 'https://images.unsplash.com/photo-1631815589968-fdb09a223b1e?w=900&q=80' },
-]
-
 const TESTIMONIALS: Testimonial[] = [
-  { id: '1', name: 'Paciente, Cali', procedure: 'Rinoplastia', initials: 'P1', text: 'Consulté con otros dos médicos antes y en ninguno me dedicaron tiempo real. Con el Dr. Agudelo fue completamente diferente — me escuchó, me mostró casos similares y fui a la cirugía con expectativas claras. El resultado es exactamente lo que quería: natural.' },
-  { id: '2', name: 'Paciente, Cali', procedure: 'Rinoplastia', initials: 'P2', text: 'Lo que más me sorprendió fue el seguimiento postoperatorio. El doctor me llamaba personalmente para saber cómo estaba. Nunca sentí que me dejaron sola después de la cirugía.' },
-  { id: '3', name: 'Paciente, Cali', procedure: 'Rinoplastia', initials: 'P3', text: 'Tenía mucho miedo de quedar con la nariz muy levantada. Desde la primera consulta el doctor fue claro: "El objetivo es que no se note que estuviste operada." Y así quedé.' },
+  { id: '1', name: 'Paciente, Cali', procedure: 'Rinoplastia', initials: 'P1', verifiedSource: 'realself', text: 'Consulté con otros dos médicos antes y en ninguno me dedicaron tiempo real. Con el Dr. Agudelo fue completamente diferente — me escuchó, me mostró casos similares y fui a la cirugía con expectativas claras. El resultado es exactamente lo que quería: natural.' },
+  { id: '2', name: 'Paciente, Cali', procedure: 'Rinoplastia', initials: 'P2', verifiedSource: 'realself', text: 'Lo que más me sorprendió fue el seguimiento postoperatorio. El doctor me llamaba personalmente para saber cómo estaba. Nunca sentí que me dejaron sola después de la cirugía.' },
+  { id: '3', name: 'Paciente, Cali', procedure: 'Rinoplastia', initials: 'P3', verifiedSource: 'realself', text: 'Tenía mucho miedo de quedar con la nariz muy levantada. Desde la primera consulta el doctor fue claro: "El objetivo es que no se note que estuviste operada." Y así quedé.' },
+  { id: '4', name: 'Paciente, Cali', procedure: 'Rinoplastia Secundaria', initials: 'P4', verifiedSource: 'realself', text: 'Venía de una cirugía previa que no me dejó satisfecha. Busqué al Dr. Agudelo porque encontré sus casos en RealSelf y eran los más naturales que había visto. Hoy, un año después, no puedo estar más feliz con el resultado.' },
 ]
 
 // ─── Navbar ──────────────────────────────────────────────────────────────────
 const Navbar = () => {
-  const [open, setOpen]       = useState(false)
+  const [open, setOpen]         = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [darkSection, setDarkSection] = useState(true) // true = dark bg underneath
 
   useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 60)
-    window.addEventListener('scroll', fn, { passive: true })
-    return () => window.removeEventListener('scroll', fn)
+    const onScroll = () => {
+      const y = window.scrollY
+      setScrolled(y > 60)
+
+      // Determine if the section underneath is dark or light
+      // Dark sections: hero (0–200vh), booking (#1A1A1A bg), footer
+      // Light sections: differentiators (#fff), testimonials (#f5f5f0), steps, etc.
+      const hero = document.getElementById('inicio') ?? document.querySelector('.narrative-section')
+      const heroBottom = hero ? (hero as HTMLElement).offsetTop + (hero as HTMLElement).offsetHeight : window.innerHeight * 2
+      const diferenciadores = document.getElementById('diferenciadores')
+      const difTop = diferenciadores ? (diferenciadores as HTMLElement).offsetTop : heroBottom
+      const agendar = document.getElementById('agendar')
+      const agendarTop = agendar ? (agendar as HTMLElement).offsetTop : Infinity
+
+      const mid = y + 40 // sample point slightly below header
+      if (mid < difTop) {
+        setDarkSection(true)
+      } else if (mid >= agendarTop) {
+        setDarkSection(true)
+      } else {
+        setDarkSection(false)
+      }
+    }
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
   const links = [
@@ -63,201 +73,212 @@ const Navbar = () => {
     { label: 'TESTIMONIOS',    href: '#testimonios',    isPage: false },
   ]
 
+  /* ─── derived style tokens ─────────────────────────────────────── */
+  // Phase A: hero (not scrolled) — pure transparent, white text
+  // Phase B: scrolled + dark section — dark glass pill
+  // Phase C: scrolled + light section — white glass pill (reference image style)
+
+  const phase: 'hero' | 'dark-glass' | 'light-glass' =
+    !scrolled ? 'hero' : darkSection ? 'dark-glass' : 'light-glass'
+
+  const pillBg =
+    phase === 'hero'        ? 'transparent' :
+    phase === 'dark-glass'  ? 'rgba(20,20,20,0.55)' :
+                              'rgba(255,255,255,0.72)'
+
+  const pillBorder =
+    phase === 'hero'        ? 'none' :
+    phase === 'dark-glass'  ? '1px solid rgba(255,255,255,0.10)' :
+                              '1px solid rgba(0,0,0,0.08)'
+
+  const pillShadow =
+    phase === 'hero'        ? 'none' :
+    phase === 'dark-glass'  ? '0 4px 28px rgba(0,0,0,0.35)' :
+                              '0 2px 24px rgba(0,0,0,0.10)'
+
+  const logoColor =
+    (phase === 'hero' || phase === 'dark-glass') ? '#ffffff' : '#1e293b'
+
+  const logoBg =
+    (phase === 'hero' || phase === 'dark-glass') ? 'rgba(255,255,255,0.18)' : '#242424'
+
+  const linkColor =
+    (phase === 'hero' || phase === 'dark-glass') ? 'rgba(255,255,255,0.78)' : '#475569'
+
+  const linkHoverColor =
+    (phase === 'hero' || phase === 'dark-glass') ? '#ffffff' : '#0f172a'
+
+  const ctaBg = '#2D4A3E'
+  const ctaHoverBg = '#1F3329'
+  const ctaBorder = '1px solid transparent'
+
+  const hamburgerColor =
+    (phase === 'hero' || phase === 'dark-glass') ? '#ffffff' : '#242424'
+
+  const backdropBlur = phase !== 'hero' ? 'blur(22px) saturate(1.5)' : 'none'
+
+  /* ─── render ───────────────────────────────────────────────────── */
   return (
     <>
       <header
         className="fixed inset-x-0 top-0 z-50"
-        style={{ padding: '1rem 0' }}
+        style={{
+          padding: '0.75rem 0',
+          transition: 'padding 0.45s ease',
+        }}
       >
         <div
-          className="max-w-5xl mx-auto px-4"
+          className="max-w-6xl mx-auto px-4 md:px-6"
           style={{
-            opacity: scrolled ? 1 : 0,
-            transform: scrolled ? 'translateY(0)' : 'translateY(-8px)',
-            transition: 'opacity 0.4s ease, transform 0.4s ease',
-            pointerEvents: scrolled ? 'auto' : 'none',
+            transform: scrolled ? 'translateY(0)' : 'translateY(0)',
           }}
         >
           <nav
             style={{
-              background: 'rgba(255,255,255,0.95)',
-              backdropFilter: 'blur(16px)',
-              border: '1px solid rgba(0,0,0,0.08)',
+              background: pillBg,
+              backdropFilter: backdropBlur,
+              WebkitBackdropFilter: backdropBlur,
+              border: pillBorder,
               borderRadius: '100px',
-              padding: '0.5rem 0.5rem 0.5rem 1.25rem',
+              padding: scrolled ? '0.45rem 0.45rem 0.45rem 1.25rem' : '0.5rem 0.5rem 0.5rem 0',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              boxShadow: '0 2px 20px rgba(0,0,0,0.06)',
+              boxShadow: pillShadow,
+              transition: [
+                'background 0.55s cubic-bezier(0.4,0,0.2,1)',
+                'border-color 0.55s cubic-bezier(0.4,0,0.2,1)',
+                'box-shadow 0.55s cubic-bezier(0.4,0,0.2,1)',
+                'backdrop-filter 0.55s cubic-bezier(0.4,0,0.2,1)',
+                'padding 0.45s ease',
+              ].join(', '),
             }}
           >
-            {/* Logo */}
+            {/* ── Logo ── */}
             <a
               href="#inicio"
-              style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+              style={{
+                textDecoration: 'none',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.55rem',
+                flexShrink: 0,
+              }}
             >
               <div
                 style={{
-                  width: '28px',
-                  height: '28px',
+                  width: '30px',
+                  height: '30px',
                   borderRadius: '50%',
-                  background: '#242424',
+                  background: logoBg,
+                  border: phase !== 'light-glass' ? '1px solid rgba(255,255,255,0.22)' : 'none',
                   color: '#fff',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  fontSize: '0.75rem',
+                  fontSize: '0.78rem',
                   fontWeight: 700,
+                  flexShrink: 0,
+                  transition: 'background 0.55s ease, border-color 0.55s ease',
                 }}
               >
                 A
               </div>
-              <span style={{ color: '#1e293b', fontWeight: 600, fontSize: '0.95rem', letterSpacing: '-0.01em' }}>
+              <span
+                style={{
+                  color: logoColor,
+                  fontWeight: 600,
+                  fontSize: '0.95rem',
+                  letterSpacing: '-0.01em',
+                  transition: 'color 0.55s ease',
+                }}
+              >
                 Dr. Agudelo
               </span>
             </a>
 
-            {/* Desktop links */}
+            {/* ── Desktop links ── */}
             <ul className="hidden md:flex items-center" style={{ gap: '2rem' }}>
-              {links.map(l => (
-                <li key={l.href}>
-                  {l.isPage ? (
-                    <Link
-                      to={l.href}
-                      style={{
-                        textDecoration: 'none',
-                        fontSize: '0.8rem',
-                        fontWeight: 500,
-                        letterSpacing: '0.08em',
-                        color: '#475569',
-                        transition: 'color 0.2s ease',
-                      }}
-                      onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = '#0f172a' }}
-                      onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = '#475569' }}
-                    >
-                      {l.label}
-                    </Link>
-                  ) : (
-                    <a
-                      href={l.href}
-                      style={{
-                        textDecoration: 'none',
-                        fontSize: '0.8rem',
-                        fontWeight: 500,
-                        letterSpacing: '0.08em',
-                        color: '#475569',
-                        transition: 'color 0.2s ease',
-                      }}
-                      onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = '#0f172a' }}
-                      onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = '#475569' }}
-                    >
-                      {l.label}
-                    </a>
-                  )}
-                </li>
-              ))}
+              {links.map(l => {
+                const sharedStyle: React.CSSProperties = {
+                  textDecoration: 'none',
+                  fontSize: '0.78rem',
+                  fontWeight: 500,
+                  letterSpacing: '0.09em',
+                  color: linkColor,
+                  transition: 'color 0.25s ease',
+                }
+                return (
+                  <li key={l.href}>
+                    {l.isPage ? (
+                      <Link
+                        to={l.href}
+                        style={sharedStyle}
+                        onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = linkHoverColor }}
+                        onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = linkColor }}
+                      >
+                        {l.label}
+                      </Link>
+                    ) : (
+                      <a
+                        href={l.href}
+                        style={sharedStyle}
+                        onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = linkHoverColor }}
+                        onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = linkColor }}
+                      >
+                        {l.label}
+                      </a>
+                    )}
+                  </li>
+                )
+              })}
             </ul>
 
-            {/* CTA */}
+            {/* ── CTA button ── */}
             <a
               href="#agendar"
               className="hidden md:flex items-center gap-2"
               style={{
                 textDecoration: 'none',
-                background: '#2d5016',
+                background: ctaBg,
+                border: ctaBorder,
                 color: '#fff',
                 borderRadius: '100px',
                 padding: '0.6rem 1.25rem',
-                fontSize: '0.8rem',
+                fontSize: '0.78rem',
                 fontWeight: 600,
                 letterSpacing: '0.04em',
-                transition: 'background 0.2s ease',
+                transition: 'background 0.3s ease, border-color 0.3s ease',
+                whiteSpace: 'nowrap',
+                flexShrink: 0,
               }}
-              onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = '#1f3a0e' }}
-              onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = '#2d5016' }}
+              onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = ctaHoverBg }}
+              onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = ctaBg }}
             >
               <Calendar className="w-3.5 h-3.5" />
-              PEDIR CITA
+              {COPY.ctaSecondary}
             </a>
 
-            {/* Mobile hamburger */}
+            {/* ── Mobile hamburger ── */}
             <button
               onClick={() => setOpen(!open)}
               className="md:hidden p-2"
-              style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#242424' }}
+              style={{
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                color: hamburgerColor,
+                transition: 'color 0.4s ease',
+              }}
               aria-label="Menú"
             >
               {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </nav>
         </div>
-
-        {/* Transparent navbar for hero */}
-        <div
-          className="max-w-7xl mx-auto px-6"
-          style={{
-            position: 'absolute',
-            inset: '1rem 0 auto 0',
-            margin: '0 auto',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            opacity: scrolled ? 0 : 1,
-            pointerEvents: scrolled ? 'none' : 'auto',
-            transition: 'opacity 0.4s ease',
-          }}
-        >
-          <a href="#inicio" style={{ textDecoration: 'none', color: '#fff', fontWeight: 700, fontSize: '1.1rem', letterSpacing: '-0.02em' }}>
-            Dr. Agudelo
-          </a>
-          <ul className="hidden md:flex items-center gap-7">
-            {links.map(l => (
-              <li key={l.href}>
-                {l.isPage ? (
-                  <Link to={l.href} style={{ textDecoration: 'none', fontSize: '0.8rem', fontWeight: 500, letterSpacing: '0.08em', color: 'rgba(255,255,255,0.8)', transition: 'color 0.2s ease' }}
-                    onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = '#fff' }}
-                    onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = 'rgba(255,255,255,0.8)' }}
-                  >{l.label}</Link>
-                ) : (
-                  <a href={l.href} style={{ textDecoration: 'none', fontSize: '0.8rem', fontWeight: 500, letterSpacing: '0.08em', color: 'rgba(255,255,255,0.8)', transition: 'color 0.2s ease' }}
-                    onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = '#fff' }}
-                    onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = 'rgba(255,255,255,0.8)' }}
-                  >{l.label}</a>
-                )}
-              </li>
-            ))}
-          </ul>
-          <a
-            href="#agendar"
-            className="hidden md:inline-flex items-center gap-2"
-            style={{
-              textDecoration: 'none',
-              background: 'rgba(255,255,255,0.12)',
-              backdropFilter: 'blur(8px)',
-              border: '1px solid rgba(255,255,255,0.2)',
-              color: '#fff',
-              borderRadius: '100px',
-              padding: '0.6rem 1.25rem',
-              fontSize: '0.8rem',
-              fontWeight: 500,
-              letterSpacing: '0.04em',
-            }}
-          >
-            <Calendar className="w-3.5 h-3.5" />
-            PEDIR CITA
-          </a>
-          <button
-            onClick={() => setOpen(!open)}
-            className="md:hidden p-2"
-            style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#fff' }}
-            aria-label="Menú"
-          >
-            {open ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
-        </div>
       </header>
 
-      {/* Mobile overlay */}
+      {/* ── Mobile overlay ── */}
       <AnimatePresence>
         {open && (
           <motion.div
@@ -289,7 +310,7 @@ const Navbar = () => {
                 className="mt-8 flex items-center justify-center gap-2 text-sm"
                 style={{ background: '#2d5016', color: '#fff', fontWeight: 600, borderRadius: '100px', padding: '1rem', textDecoration: 'none' }}
               >
-                <Calendar className="w-4 h-4" /> PEDIR CITA
+                <Calendar className="w-4 h-4" /> {COPY.ctaSecondary}
               </a>
             </div>
           </motion.div>
@@ -299,10 +320,8 @@ const Navbar = () => {
   )
 }
 
-// ─── Sticky Hero con Clip-Path Scroll Shrink ─────────────────────────────────
+// ─── Hero ─────────────────────────────────────────────────────────────────────
 const StickyNarrativeSection = () => {
-  const outerRef       = useRef<HTMLDivElement>(null)
-  const frameRef       = useRef<HTMLDivElement>(null)
   const heroOverlayRef = useRef<HTMLDivElement>(null)
 
   // ── Hero entry: animates headline/subtitle into view on mount ──
@@ -317,73 +336,15 @@ const StickyNarrativeSection = () => {
     return () => { tl.kill() }
   }, [])
 
-  useEffect(() => {
-    let ctx: any
-
-    Promise.all([
-      import('gsap').then((m: any) => m.default ?? m.gsap ?? m),
-      import('gsap/ScrollTrigger').then((m: any) => m.ScrollTrigger),
-    ]).then(([gsap, ScrollTrigger]: any[]) => {
-      gsap.registerPlugin(ScrollTrigger)
-
-      ctx = gsap.context(() => {
-
-        // ── Estado inicial explícito ──
-        gsap.set(heroOverlayRef.current, { transformOrigin: 'center center', opacity: 1, scale: 1 })
-
-        // ── Salida hero: scale-up + fade ──
-        gsap.to(heroOverlayRef.current, {
-          opacity: 0,
-          scale: 1.09,
-          ease: 'none',
-          overwrite: 'auto',
-          scrollTrigger: {
-            trigger: outerRef.current,
-            start: 'top top',
-            end: '30% top',
-            scrub: 0.8,
-            onEnterBack: () => {
-              gsap.set(heroOverlayRef.current, { opacity: 1, scale: 1 })
-            },
-          },
-        })
-
-        // ── Clip-path shrink ──
-        ScrollTrigger.create({
-          trigger: outerRef.current,
-          start: 'top top',
-          end: '80% bottom',
-          scrub: 1.2,
-          onUpdate: (self: any) => {
-            const p = self.progress
-            const inset  = p * 44
-            const radius = p * 28
-            if (frameRef.current) {
-              frameRef.current.style.clipPath = `inset(${inset}px round ${radius}px)`
-            }
-          },
-        })
-
-      }, outerRef)
-    }).catch(() => {})
-
-    return () => ctx?.revert()
-  }, [])
-
   return (
-    <div ref={outerRef} className="narrative-section relative" style={{ height: '200vh' }}>
-
-      {/* Frame con clip-path */}
-      <div
-        ref={frameRef}
-        className="sticky top-0 h-screen w-screen overflow-hidden"
-        style={{ clipPath: 'inset(0px round 0px)' }}
-      >
+    <section id="inicio" className="relative h-screen mobile-dvh w-full overflow-hidden">
         <img
-          src="https://images.unsplash.com/photo-1551190822-a9333d879b1f?w=1920&q=85"
-          alt="Quirófano Dr. Víctor Agudelo"
-          className="absolute inset-0 w-full h-full object-cover object-center"
-          style={{ background: '#0a0a0a' }}
+          src={DOCTOR_HERO_URL}
+          alt="Dr. Víctor Manuel Agudelo durante una valoración"
+          fetchPriority="high"
+          decoding="async"
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ background: '#0a0a0a', objectPosition: 'center 35%' }}
           onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
         />
         {/* Gradient overlay */}
@@ -395,62 +356,43 @@ const StickyNarrativeSection = () => {
         <div
           ref={heroOverlayRef}
           className="absolute inset-0 flex flex-col items-center justify-center text-center"
-          style={{ zIndex: 20, padding: '0 1.5rem', transformOrigin: 'center center', willChange: 'transform, opacity' }}
+          style={{ zIndex: 20, padding: '0 1.25rem', transformOrigin: 'center center', willChange: 'transform, opacity' }}
         >
-          <p data-hero-anim style={{
-            color: 'rgba(201,168,76,0.85)',
-            fontSize: '0.7rem',
-            fontWeight: 600,
-            letterSpacing: '0.22em',
-            textTransform: 'uppercase',
-            marginBottom: '1.25rem',
-          }}>
-            Rinoplastia · Cali · Colombia
-          </p>
           <h1
             data-hero-anim
             style={{
-              fontSize: 'clamp(2.8rem, 5.5vw, 5.5rem)',
+              fontSize: 'clamp(2rem, 6vw, 6rem)',
               fontWeight: 600,
-              lineHeight: 1.1,
+              lineHeight: 1.08,
               letterSpacing: '-0.03em',
-              maxWidth: '620px',
+              maxWidth: '820px',
               color: '#ffffff',
               fontFamily: 'var(--font-serif)',
+              textAlign: 'center',
+              transform: 'translateZ(0)',
+              backfaceVisibility: 'hidden',
             }}
           >
-            Una nariz que se ve tuya,<br />
-            <span style={{ fontWeight: 400, opacity: 0.75 }}>no operada.</span>
+            Una nariz que se ve tuya, no operada.
           </h1>
           <p data-hero-anim style={{
-            color: 'rgba(255,255,255,0.82)',
-            fontSize: 'clamp(1rem, 1.75vw, 1.2rem)',
-            marginTop: '1.5rem',
-            maxWidth: '460px',
-            lineHeight: 1.65,
+            color: 'rgba(255,255,255,0.72)',
+            fontSize: 'clamp(0.875rem, 1.5vw, 1.1rem)',
+            marginTop: '1.25rem',
+            maxWidth: '480px',
+            lineHeight: 1.7,
             fontWeight: 400,
+            textAlign: 'center',
+            padding: '0 0.5rem',
           }}>
-            Más de 20 años diseñando narices naturales en Cali.<br />
-            Cada resultado se construye para tu rostro — no para un molde.
-          </p>
-          <p data-hero-anim style={{
-            color: 'rgba(201,168,76,0.9)',
-            fontSize: '0.825rem',
-            fontWeight: 400,
-            marginTop: '1.75rem',
-            letterSpacing: '0.01em',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.6rem',
-          }}>
-            <span style={{ display: 'inline-block', width: '1.5rem', height: '1px', background: 'rgba(201,168,76,0.55)', flexShrink: 0 }} />
-            Resultados naturales, contigo en cada momento del proceso.
+            Más de 20 años en rinoplastia. Diseño personalizado, técnica
+            ultrasónica y acompañamiento postoperatorio del propio Dr. Agudelo.
           </p>
           <div data-hero-anim style={{ display: 'flex', gap: '0.75rem', marginTop: '1.75rem', flexWrap: 'wrap', justifyContent: 'center' }}>
             <a
               href="#agendar"
               style={{
-                background: '#C9A84C',
+                background: '#2D4A3E',
                 color: '#fff',
                 borderRadius: '100px',
                 padding: '0.75rem 1.5rem',
@@ -461,7 +403,7 @@ const StickyNarrativeSection = () => {
                 whiteSpace: 'nowrap',
               }}
             >
-              Solicita tu evaluación gratuita
+              {COPY.ctaPrimary}
             </a>
             <a
               href="#testimonios"
@@ -480,8 +422,7 @@ const StickyNarrativeSection = () => {
             </a>
           </div>
         </div>
-      </div>
-    </div>
+    </section>
   )
 }
 
@@ -490,29 +431,29 @@ const StickyNarrativeSection = () => {
 const DifferentiatorsSection = () => {
   const pillars = [
     {
-      stat: '20 años',
-      label: 'Solo en cirugía nasal',
-      desc: 'Especialización exclusiva en rinoplastia desde 2004. Miembro SCCPFR y ACORL.',
+      stat: 'Desde 2004',
+      label: 'Dedicación exclusiva a rinoplastia',
+      desc: 'Especialización exclusiva en cirugía nasal. Miembro SCCPFR y ACORL.',
     },
     {
-      stat: '200+',
-      label: 'Casos documentados',
-      desc: 'Antes de decidir, verás casos reales con características similares a las tuyas.',
+      stat: '1.500+',
+      label: 'Cirugías realizadas',
+      desc: 'Más de 200 rinoplastias documentadas. Antes de decidir, verás casos reales con características similares a las tuyas.',
     },
     {
-      stat: 'Piezosurgery',
+      stat: 'Rinoplastia Ultrasónica',
       label: 'Técnica disponible en Cali desde 2022',
       desc: 'Ultrasonido piezoeléctrico para mayor precisión ósea y recuperación más predecible.',
     },
     {
-      stat: 'Presente',
-      label: 'De la consulta al último control',
-      desc: 'El Dr. Agudelo hace el seguimiento personal en cada etapa — nunca lo delega.',
+      stat: '5 controles',
+      label: 'Postoperatorios incluidos',
+      desc: 'El Dr. Agudelo hace el seguimiento personal en cada etapa: a los 7 días, 15 días, 1 mes, 3 meses y 6 meses. Nunca lo delega.',
     },
   ]
 
   return (
-    <section id="diferenciadores" style={{ background: '#fff', padding: '6rem 1.5rem' }}>
+    <section id="diferenciadores" style={{ background: '#fff', padding: 'clamp(3rem, 8vw, 6rem) clamp(1rem, 3vw, 1.5rem)' }}>
       <div style={{ maxWidth: '68rem', margin: '0 auto' }}>
         <div className="diff-title section-reveal-header" style={{ marginBottom: '4rem' }}>
           <p style={{ fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#94a3b8', marginBottom: '1rem' }}>
@@ -523,7 +464,7 @@ const DifferentiatorsSection = () => {
           </h2>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '2.5rem' }}>
+        <div className="diff-pillars-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: 'clamp(1.25rem, 2.5vw, 2rem)' }}>
           {pillars.map((p, i) => (
             <motion.div
               key={i}
@@ -545,6 +486,21 @@ const DifferentiatorsSection = () => {
               </p>
             </motion.div>
           ))}
+        </div>
+
+        {/* CTA inline */}
+        <div style={{ marginTop: 'clamp(3rem, 6vw, 4.5rem)', textAlign: 'center' }}>
+          <p style={{ fontSize: '0.95rem', color: '#475569', marginBottom: '1.25rem', maxWidth: '36rem', marginLeft: 'auto', marginRight: 'auto' }}>
+            Cada caso parte de tu anatomía, no de un molde. Empieza por una valoración sin costo.
+          </p>
+          <a href="#agendar" style={{
+            display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+            background: '#2D4A3E', color: '#fff', borderRadius: '100px',
+            padding: '0.85rem 1.75rem', fontSize: '0.875rem', fontWeight: 600,
+            textDecoration: 'none', letterSpacing: '0.01em',
+          }}>
+            <Calendar className="w-4 h-4" /> Solicita tu evaluación gratuita
+          </a>
         </div>
       </div>
     </section>
@@ -583,8 +539,8 @@ const TestimonialsSection = () => {
   }, [idx])
 
   return (
-    <section id="testimonios" className="py-28" style={{ background: '#f5f5f0' }}>
-      <div className="max-w-7xl mx-auto px-6">
+    <section id="testimonios" className="py-14 md:py-28" style={{ background: '#f5f5f0' }}>
+      <div className="max-w-7xl mx-auto px-4 md:px-6">
         {/* Header */}
         <div className="text-center mb-14">
           <p className="text-xs uppercase tracking-[0.2em] mb-4" style={{ color: '#94a3b8', fontWeight: 400 }}>
@@ -598,86 +554,71 @@ const TestimonialsSection = () => {
           </h2>
         </div>
 
-        {/* Video-style cards slider */}
+        {/* Text cards */}
         <div
           ref={scrollRef}
-          className="flex gap-4 overflow-x-auto no-scrollbar pb-4"
+          className="flex gap-4 md:gap-5 overflow-x-auto no-scrollbar pb-4"
           style={{ scrollSnapType: 'x mandatory' }}
         >
           {TESTIMONIALS.map((t, i) => (
             <div
               key={t.id}
               onClick={() => setIdx(i)}
-              className="flex-shrink-0 relative"
+              className="flex-shrink-0"
               style={{
-                width: 'clamp(200px, 28vw, 280px)',
-                aspectRatio: '9/14',
+                width: 'clamp(280px, 78vw, 340px)',
                 borderRadius: '20px',
-                overflow: 'hidden',
+                padding: '1.75rem',
                 cursor: 'pointer',
                 scrollSnapAlign: 'center',
                 opacity: i === idx ? 1 : 0.45,
-                transition: 'opacity 0.4s ease',
-                background: '#1e1e24',
+                transform: i === idx ? 'scale(1)' : 'scale(0.97)',
+                transition: 'opacity 0.4s ease, transform 0.4s ease',
+                background: '#ffffff',
+                boxShadow: i === idx ? '0 8px 32px rgba(0,0,0,0.1)' : '0 2px 8px rgba(0,0,0,0.05)',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '1rem',
               }}
             >
-              {/* Mute icon */}
-              <div style={{
-                position: 'absolute', top: '0.75rem', left: '0.75rem', zIndex: 10,
-                background: 'rgba(0,0,0,0.5)', borderRadius: '50%',
-                width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center',
-              }}>
-                <VolumeX className="w-3.5 h-3.5" style={{ color: '#fff' }} />
-              </div>
+              {/* Quote mark */}
+              <p style={{ fontFamily: 'var(--font-serif)', fontSize: '3rem', color: '#2D4A3E', lineHeight: 1, marginBottom: '-0.5rem' }}>"</p>
 
-              {/* Center play + initials */}
-              <div style={{
-                position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column',
-                alignItems: 'center', justifyContent: 'center', gap: '0.75rem',
-              }}>
-                <div style={{
-                  width: '56px', height: '56px', borderRadius: '50%',
-                  background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(6px)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: '1.1rem', fontWeight: 700, color: '#fff', letterSpacing: '0.02em',
-                }}>
-                  {t.initials}
-                </div>
-                <div style={{
-                  width: '40px', height: '40px', borderRadius: '50%',
-                  background: 'rgba(255,255,255,0.18)', display: 'flex',
-                  alignItems: 'center', justifyContent: 'center',
-                }}>
-                  <Play className="w-4 h-4" style={{ color: '#fff', marginLeft: '2px' }} />
-                </div>
-              </div>
+              {/* Text */}
+              <p style={{ fontSize: '0.9rem', color: '#374151', lineHeight: 1.75, flex: 1 }}>{t.text}</p>
 
-              {/* Bottom chip */}
-              <div style={{
-                position: 'absolute', bottom: '0.75rem', left: '0.75rem', right: '0.75rem', zIndex: 10,
-                background: 'rgba(255,255,255,0.95)', borderRadius: '14px',
-                padding: '0.5rem 0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem',
-              }}>
-                <div style={{
-                  width: '28px', height: '28px', borderRadius: '50%', background: '#242424',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: '0.55rem', fontWeight: 700, color: '#fff', flexShrink: 0,
+              {/* Footer */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: '1rem', borderTop: '1px solid rgba(0,0,0,0.07)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
+                  <div style={{
+                    width: '36px', height: '36px', borderRadius: '50%',
+                    background: '#2D4A3E', display: 'flex', alignItems: 'center',
+                    justifyContent: 'center', fontSize: '0.6rem', fontWeight: 700,
+                    color: '#fff', flexShrink: 0,
+                  }}>
+                    {t.initials}
+                  </div>
+                  <div>
+                    <p style={{ fontSize: '0.8rem', fontWeight: 600, color: '#1A1A1A', lineHeight: 1.2 }}>{t.name}</p>
+                    <p style={{ fontSize: '0.7rem', color: '#94a3b8', fontWeight: 400 }}>{t.procedure}</p>
+                  </div>
+                </div>
+                <span style={{
+                  fontSize: '0.62rem', fontWeight: 600, color: '#2D4A3E',
+                  background: 'rgba(45,74,62,0.08)', borderRadius: '100px',
+                  padding: '0.25rem 0.6rem', letterSpacing: '0.03em',
                 }}>
-                  {t.initials}
-                </div>
-                <div style={{ overflow: 'hidden' }}>
-                  <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#242424', lineHeight: 1.2 }}>{t.name}</p>
-                  <p style={{ fontSize: '0.625rem', color: '#94a3b8', fontWeight: 400 }}>{t.procedure}</p>
-                </div>
+                  ✓ {t.verifiedSource === 'google' ? 'Google' : 'RealSelf'}
+                </span>
               </div>
             </div>
           ))}
         </div>
 
         {/* Progress bar */}
-        <div className="flex items-center gap-6 mt-6">
+        <div className="flex items-center gap-3 md:gap-6 mt-6">
           <button onClick={() => setIdx(i => (i - 1 + TESTIMONIALS.length) % TESTIMONIALS.length)}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#242424', display: 'flex' }}>
+            style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#242424', display: 'flex', padding: '8px', minWidth: '44px', minHeight: '44px', alignItems: 'center', justifyContent: 'center' }}>
             <ChevronLeft className="w-5 h-5" />
           </button>
           <div className="flex-1 flex items-center gap-4">
@@ -694,12 +635,27 @@ const TestimonialsSection = () => {
             ))}
           </div>
           <button onClick={() => setIdx(i => (i + 1) % TESTIMONIALS.length)}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#242424', display: 'flex' }}>
+            style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#242424', display: 'flex', padding: '8px', minWidth: '44px', minHeight: '44px', alignItems: 'center', justifyContent: 'center' }}>
             <ChevronRight className="w-5 h-5" />
           </button>
           <span className="text-sm tabular-nums whitespace-nowrap" style={{ color: '#94a3b8', fontWeight: 400 }}>
             {String(idx + 1).padStart(2, '0')} / {String(TESTIMONIALS.length).padStart(2, '0')}
           </span>
+        </div>
+
+        {/* CTA inline */}
+        <div style={{ marginTop: 'clamp(2.5rem, 5vw, 4rem)', textAlign: 'center' }}>
+          <p style={{ fontSize: '0.9rem', color: '#64748b', marginBottom: '1.25rem' }}>
+            ¿Lista para que tu caso sea el siguiente?
+          </p>
+          <a href="#agendar" style={{
+            display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+            background: '#1A1A1A', color: '#fff', borderRadius: '100px',
+            padding: '0.85rem 1.75rem', fontSize: '0.875rem', fontWeight: 600,
+            textDecoration: 'none',
+          }}>
+            <Calendar className="w-4 h-4" /> Solicita tu evaluación gratuita
+          </a>
         </div>
       </div>
     </section>
@@ -708,14 +664,24 @@ const TestimonialsSection = () => {
 
 // ─── Booking Section ─────────────────────────────────────────────────────────
 const BookingSection = () => {
-  const [form, setForm] = useState({ name: '', phone: '', email: '', message: '' })
+  const [form, setForm] = useState({ name: '', phone: '', email: '', procedimiento: '', message: '' })
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+  const [touched, setTouched] = useState<Record<string, boolean>>({})
 
-  const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+  const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
     setForm(f => ({ ...f, [k]: e.target.value }))
 
+  const markTouched = (k: string) => () => setTouched(t => ({ ...t, [k]: true }))
+
+  const errors = {
+    name: !form.name,
+    email: !form.email,
+    phone: !form.phone,
+  }
+
   const handleSubmit = async () => {
-    if (!form.name || !form.email || !form.phone) return
+    setTouched({ name: true, email: true, phone: true })
+    if (errors.name || errors.email || errors.phone) return
     setStatus('loading')
     try {
       const res = await fetch('https://n8n.srv1559791.hstgr.cloud/webhook/agudelo-lead-capture', {
@@ -725,6 +691,7 @@ const BookingSection = () => {
           nombre: form.name,
           correo: form.email,
           telefono: form.phone,
+          procedimiento: form.procedimiento,
           mensaje: form.message,
         }),
       })
@@ -749,8 +716,8 @@ const BookingSection = () => {
   }
 
   return (
-    <section id="agendar" className="py-28" style={{ background: 'var(--color-1)' }}>
-      <div className="max-w-3xl mx-auto px-6">
+    <section id="agendar" className="py-14 md:py-28" style={{ background: 'var(--color-1)' }}>
+      <div className="max-w-3xl mx-auto px-4 md:px-6">
         <div className="text-center mb-14">
           <p className="text-xs uppercase tracking-[0.2em] mb-3" style={{ color: 'var(--color-9)', fontWeight: 600 }}>
             Contacto
@@ -759,13 +726,13 @@ const BookingSection = () => {
             Da el primer paso —<br />
             <span style={{ fontWeight: 400, color: 'var(--color-5)' }}>sin compromiso.</span>
           </h2>
-          <p className="text-sm" style={{ color: 'var(--color-12)', fontWeight: 400 }}>
-            Envíanos tus fotos o agenda una consulta virtual.<br />
-            El Dr. Agudelo revisa tu caso personalmente.
+          <p className="text-sm" style={{ color: 'rgba(255,255,255,0.65)', fontWeight: 400 }}>
+            Déjanos tus datos para una evaluación inicial.<br />
+            El Dr. Agudelo revisa cada caso personalmente.
           </p>
         </div>
 
-        <div className="p-8" style={{ background: 'rgba(255,255,255,0.04)', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.08)' }}>
+        <div className="p-5 md:p-8" style={{ background: 'rgba(255,255,255,0.04)', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.08)' }}>
           <AnimatePresence mode="wait">
             {status === 'success' ? (
               <motion.div
@@ -776,7 +743,7 @@ const BookingSection = () => {
               >
                 <div style={{
                   width: '52px', height: '52px', borderRadius: '50%',
-                  background: '#C9A84C', display: 'flex', alignItems: 'center',
+                  background: '#2D4A3E', display: 'flex', alignItems: 'center',
                   justifyContent: 'center', margin: '0 auto 1.25rem',
                 }}>
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -795,32 +762,63 @@ const BookingSection = () => {
                 <div className="grid sm:grid-cols-2 gap-5">
                   <div>
                     <label className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--color-5)', fontWeight: 400 }}>Nombre completo *</label>
-                    <input type="text" placeholder="Ej. Ana García" value={form.name} onChange={set('name')} style={inputCls} />
+                    <input type="text" placeholder="Ej. Ana García" value={form.name} onChange={set('name')} onBlur={markTouched('name')}
+                      aria-invalid={touched.name && errors.name}
+                      style={{ ...inputCls, borderColor: touched.name && errors.name ? 'rgba(248,113,113,0.6)' : 'rgba(255,255,255,0.12)' }} />
                   </div>
                   <div>
                     <label className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--color-5)', fontWeight: 400 }}>Correo electrónico *</label>
-                    <input type="email" placeholder="ana@correo.com" value={form.email} onChange={set('email')} style={inputCls} />
+                    <input type="email" placeholder="ana@correo.com" value={form.email} onChange={set('email')} onBlur={markTouched('email')}
+                      aria-invalid={touched.email && errors.email}
+                      style={{ ...inputCls, borderColor: touched.email && errors.email ? 'rgba(248,113,113,0.6)' : 'rgba(255,255,255,0.12)' }} />
                   </div>
                 </div>
                 <div>
                   <label className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--color-5)', fontWeight: 400 }}>Teléfono / WhatsApp *</label>
-                  <input type="tel" placeholder="+57 300 000 0000" value={form.phone} onChange={set('phone')} style={inputCls} />
+                  <input type="tel" placeholder="+57 300 000 0000" value={form.phone} onChange={set('phone')} onBlur={markTouched('phone')}
+                    aria-invalid={touched.phone && errors.phone}
+                    style={{ ...inputCls, borderColor: touched.phone && errors.phone ? 'rgba(248,113,113,0.6)' : 'rgba(255,255,255,0.12)' }} />
+                </div>
+                <div>
+                  <label className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--color-5)', fontWeight: 400 }}>Procedimiento de interés</label>
+                  <select value={form.procedimiento} onChange={set('procedimiento')}
+                    style={{ ...inputCls, appearance: 'none', backgroundImage: 'url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'12\' height=\'8\' viewBox=\'0 0 12 8\' fill=\'none\'><path d=\'M1 1L6 6L11 1\' stroke=\'%23ffffff80\' stroke-width=\'1.5\' stroke-linecap=\'round\'/></svg>")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 1rem center', paddingRight: '2.5rem' }}>
+                    <option value="" style={{ background: '#1A1A1A' }}>Selecciona una opción</option>
+                    <option value="Rinoplastia Estética" style={{ background: '#1A1A1A' }}>Rinoplastia Estética</option>
+                    <option value="Rinoplastia Afrolatina" style={{ background: '#1A1A1A' }}>Rinoplastia Afrolatina</option>
+                    <option value="Rinoplastia Secundaria" style={{ background: '#1A1A1A' }}>Rinoplastia Secundaria</option>
+                    <option value="Mentoplastia" style={{ background: '#1A1A1A' }}>Mentoplastia</option>
+                    <option value="Otoplastia" style={{ background: '#1A1A1A' }}>Otoplastia</option>
+                    <option value="Blefaroplastia" style={{ background: '#1A1A1A' }}>Blefaroplastia</option>
+                    <option value="Reducción de Papada" style={{ background: '#1A1A1A' }}>Reducción de Papada</option>
+                    <option value="No Quirúrgicos" style={{ background: '#1A1A1A' }}>No Quirúrgicos · Toxina · Ácido</option>
+                    <option value="No estoy seguro" style={{ background: '#1A1A1A' }}>Aún no estoy segura</option>
+                  </select>
                 </div>
                 <div>
                   <label className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--color-5)', fontWeight: 400 }}>Mensaje (opcional)</label>
                   <textarea rows={3} placeholder="Cuéntanos brevemente tu caso..." value={form.message} onChange={set('message')} style={{ ...inputCls, resize: 'none' }} />
                 </div>
+                <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.78rem', lineHeight: 1.55 }}>
+                  ¿Quieres enviar fotos? Tras recibir tu solicitud te escribimos por WhatsApp para coordinar el envío seguro de imágenes.
+                </p>
                 {status === 'error' && (
-                  <p style={{ color: '#f87171', fontSize: '0.8rem', textAlign: 'center' }}>
-                    Hubo un problema al enviar. Intenta de nuevo o escríbenos por WhatsApp.
-                  </p>
+                  <div style={{ background: 'rgba(248,113,113,0.08)', border: '1px solid rgba(248,113,113,0.25)', borderRadius: '12px', padding: '0.75rem 1rem', textAlign: 'center' }}>
+                    <p style={{ color: '#fca5a5', fontSize: '0.82rem', marginBottom: '0.5rem' }}>
+                      Hubo un problema al enviar. Intenta de nuevo o escríbenos directamente.
+                    </p>
+                    <a href={CONTACT.whatsapp} target="_blank" rel="noopener noreferrer"
+                      style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', color: '#25D366', fontSize: '0.82rem', fontWeight: 600, textDecoration: 'none' }}>
+                      <MessageSquare className="w-4 h-4" /> Abrir WhatsApp
+                    </a>
+                  </div>
                 )}
                 <button
                   onClick={handleSubmit}
                   disabled={status === 'loading'}
                   className="flex items-center justify-center gap-2 w-full py-4 mt-2 text-sm transition-all"
                   style={{
-                    background: '#C9A84C',
+                    background: '#2D4A3E',
                     color: '#fff',
                     borderRadius: '100px',
                     fontWeight: 600,
@@ -829,7 +827,7 @@ const BookingSection = () => {
                     opacity: status === 'loading' ? 0.7 : 1,
                   }}
                 >
-                  {status === 'loading' ? 'Enviando…' : <><Calendar className="w-4 h-4" /> Solicitar evaluación gratuita</>}
+                  {status === 'loading' ? 'Enviando…' : <><Calendar className="w-4 h-4" /> {COPY.ctaPrimary}</>}
                 </button>
               </motion.div>
             )}
@@ -844,28 +842,38 @@ const BookingSection = () => {
 const Footer = () => (
   <footer style={{ background: 'var(--color-1)' }}>
     <div className="max-w-7xl mx-auto px-6 pt-20 pb-10">
-      <div className="grid md:grid-cols-4 gap-12 mb-16">
+      <div className="grid md:grid-cols-4 gap-8 md:gap-12 mb-12 md:mb-16">
         <div>
           <p style={{ color: '#ffffff', fontWeight: 700, fontSize: '1.1rem', letterSpacing: '-0.02em', marginBottom: '1rem' }}>Dr. Agudelo</p>
           <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.5)', fontWeight: 400, maxWidth: '18rem' }}>
-            Especialista en rinoplastia natural en Cali. Más de 20 años de experiencia. Resultados que se ven tuyos, no operados.
+            Especialista en rinoplastia natural en Cali. Dedicación exclusiva a rinoplastia desde 2004. Resultados que se ven tuyos, no operados.
           </p>
           <div className="flex gap-4 mt-6">
-            <a href="https://instagram.com/doctorvictoragudelo" target="_blank" rel="noopener noreferrer" aria-label="Instagram" style={{ color: 'rgba(255,255,255,0.5)' }}><Instagram className="w-5 h-5" /></a>
-            <a href="https://facebook.com/dr.victor.agudelo" target="_blank" rel="noopener noreferrer" aria-label="Facebook" style={{ color: 'rgba(255,255,255,0.5)' }}><Facebook className="w-5 h-5" /></a>
-            <a href="https://wa.me/573023234594" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" style={{ color: 'rgba(255,255,255,0.5)' }}><MessageSquare className="w-5 h-5" /></a>
+            <a href={CONTACT.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram" style={{ color: 'rgba(255,255,255,0.5)' }}><Instagram className="w-5 h-5" /></a>
+            <a href={CONTACT.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook" style={{ color: 'rgba(255,255,255,0.5)' }}><Facebook className="w-5 h-5" /></a>
+            <a href={CONTACT.whatsapp} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" style={{ color: 'rgba(255,255,255,0.5)' }}><MessageSquare className="w-5 h-5" /></a>
           </div>
         </div>
         <div>
           <p className="text-xs uppercase tracking-widest mb-5" style={{ color: 'rgba(255,255,255,0.35)', fontWeight: 600 }}>Navegación</p>
           <ul className="flex flex-col gap-3">
-            {['Inicio', 'Procedimientos', 'La Clínica', 'Testimonios', 'Contacto'].map(l => (
-              <li key={l}>
-                <a href={`#${l.toLowerCase().replace(/\s/g, '')}`} className="text-sm transition-colors"
-                  style={{ color: 'rgba(255,255,255,0.55)', fontWeight: 400, textDecoration: 'none' }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = '#ffffff' }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = 'rgba(255,255,255,0.55)' }}
-                >{l}</a>
+            {[
+              { label: 'Inicio',          href: '/',             isRoute: true },
+              { label: 'Rinoplastia',     href: '/rinoplastia',  isRoute: true },
+              { label: 'Procedimientos',  href: '/procedimientos', isRoute: true },
+              { label: 'Sobre el doctor', href: '/#doctor',      isRoute: false },
+              { label: 'Testimonios',     href: '/#testimonios', isRoute: false },
+              { label: 'Contacto',        href: '/#agendar',     isRoute: false },
+            ].map(({ label, href, isRoute }) => (
+              <li key={label}>
+                {isRoute
+                  ? <Link to={href} className="text-sm transition-colors"
+                      style={{ color: 'rgba(255,255,255,0.55)', fontWeight: 400, textDecoration: 'none' }}
+                    >{label}</Link>
+                  : <a href={href} className="text-sm transition-colors"
+                      style={{ color: 'rgba(255,255,255,0.55)', fontWeight: 400, textDecoration: 'none' }}
+                    >{label}</a>
+                }
               </li>
             ))}
           </ul>
@@ -874,15 +882,15 @@ const Footer = () => (
           <p className="text-xs uppercase tracking-widest mb-5" style={{ color: 'rgba(255,255,255,0.35)', fontWeight: 600 }}>Ubicación</p>
           <div className="flex gap-3">
             <MapPin className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'rgba(255,255,255,0.4)' }} />
-            <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.5)', fontWeight: 400 }}>Avenida 4 Norte 14-38, Consultorio 302<br />Cali · Clínica de Otorrinolaringología<br />y Cirugía Plástica</p>
+            <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.5)', fontWeight: 400, wordBreak: 'break-word' }}>Avenida 4 Norte 14-38, Consultorio 302<br />Cali · Clínica de Otorrinolaringología<br />y Cirugía Plástica</p>
           </div>
         </div>
         <div>
           <p className="text-xs uppercase tracking-widest mb-5" style={{ color: 'rgba(255,255,255,0.35)', fontWeight: 600 }}>Contacto</p>
           <ul className="flex flex-col gap-3">
-            <li><a href="https://wa.me/573023234594?text=Hola%2C+me+gustar%C3%ADa+solicitar+una+evaluaci%C3%B3n+gratuita+con+el+Dr.+Agudelo." target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm" style={{ color: 'rgba(255,255,255,0.5)', fontWeight: 400, textDecoration: 'none' }}><MessageSquare className="w-4 h-4 shrink-0" style={{ color: 'rgba(255,255,255,0.4)' }} />302 323 4594</a></li>
-            <li><a href="mailto:contacto@drvictoragudelo.com" className="flex items-center gap-2 text-sm" style={{ color: 'rgba(255,255,255,0.5)', fontWeight: 400, textDecoration: 'none' }}><Mail className="w-4 h-4 shrink-0" style={{ color: 'rgba(255,255,255,0.4)' }} />contacto@drvictoragudelo.com</a></li>
-            <li><a href="tel:+573023234594" className="flex items-center gap-2 text-sm" style={{ color: 'rgba(255,255,255,0.5)', fontWeight: 400, textDecoration: 'none' }}><Phone className="w-4 h-4 shrink-0" style={{ color: 'rgba(255,255,255,0.4)' }} />302 323 4594</a></li>
+            <li><a href={CONTACT.whatsapp} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm" style={{ color: 'rgba(255,255,255,0.5)', fontWeight: 400, textDecoration: 'none' }}><MessageSquare className="w-4 h-4 shrink-0" style={{ color: 'rgba(255,255,255,0.4)' }} />{CONTACT.phoneDisplay}</a></li>
+            <li><a href={`mailto:${CONTACT.email}`} className="flex items-center gap-2 text-sm" style={{ color: 'rgba(255,255,255,0.5)', fontWeight: 400, textDecoration: 'none' }}><Mail className="w-4 h-4 shrink-0" style={{ color: 'rgba(255,255,255,0.4)' }} />{CONTACT.email}</a></li>
+            <li><a href={`tel:${CONTACT.phone}`} className="flex items-center gap-2 text-sm" style={{ color: 'rgba(255,255,255,0.5)', fontWeight: 400, textDecoration: 'none' }}><Phone className="w-4 h-4 shrink-0" style={{ color: 'rgba(255,255,255,0.4)' }} />{CONTACT.phoneDisplay}</a></li>
           </ul>
         </div>
       </div>
@@ -903,33 +911,28 @@ const Footer = () => (
 
 // ─── Floating Buttons ─────────────────────────────────────────────────────────
 const WhatsAppButton = () => (
-  <a href="https://wa.me/573023234594?text=Hola%2C+me+gustar%C3%ADa+solicitar+una+evaluaci%C3%B3n+gratuita+con+el+Dr.+Agudelo." target="_blank" rel="noopener noreferrer" aria-label="Contactar por WhatsApp"
-    className="hidden md:flex fixed bottom-8 right-8 z-50 items-center justify-center w-14 h-14 transition-transform duration-200 hover:scale-110"
-    style={{ borderRadius: '50%', background: '#25D366', boxShadow: '0 4px 20px rgba(0,0,0,0.3)' }}
+  <a href={CONTACT.whatsapp} target="_blank" rel="noopener noreferrer" aria-label="Contactar por WhatsApp"
+    className="fixed right-4 md:right-8 bottom-6 md:bottom-8 z-50 flex items-center justify-center transition-transform duration-200 hover:scale-110"
+    style={{
+      borderRadius: '50%',
+      background: '#25D366',
+      boxShadow: '0 6px 24px rgba(37,211,102,0.45), 0 4px 20px rgba(0,0,0,0.25)',
+      width: '56px',
+      height: '56px',
+    }}
   ><MessageSquare className="w-6 h-6" style={{ color: '#fff' }} /></a>
-)
-
-const StickyMobileCTA = () => (
-  <div className="md:hidden fixed bottom-0 inset-x-0 z-50 p-4"
-    style={{ background: 'rgba(36,36,36,0.97)', backdropFilter: 'blur(16px)', borderTop: '1px solid rgba(255,255,255,0.06)' }}
-  >
-    <a href="#agendar" className="flex items-center justify-center gap-2 w-full py-3.5 text-sm"
-      style={{ background: '#C9A84C', color: '#fff', borderRadius: '100px', fontWeight: 600, textDecoration: 'none' }}
-    ><Calendar className="w-4 h-4" /> Solicita tu evaluación gratuita</a>
-  </div>
 )
 
 // ─── About Doctor ────────────────────────────────────────────────────────────
 const AboutDoctorSection = () => (
-  <section id="doctor" style={{ background: '#FAF7F2', padding: '7rem 1.5rem' }}>
+  <section id="doctor" style={{ background: '#FAF7F2', padding: 'clamp(3.5rem, 8vw, 7rem) clamp(1rem, 3vw, 1.5rem)' }}>
     <div style={{ maxWidth: '64rem', margin: '0 auto' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '4rem', alignItems: 'start' }}>
-        {/* Photo placeholder */}
-        <div style={{ borderRadius: '20px', overflow: 'hidden', aspectRatio: '3/4', background: '#E8E2DA', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '320px' }}>
-          <p style={{ color: '#94a3b8', fontSize: '0.85rem', textAlign: 'center', padding: '2rem', lineHeight: 1.6 }}>
-            Foto del Dr. Agudelo<br />— pendiente de entrega
-          </p>
-        </div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))', gap: 'clamp(2rem, 5vw, 4rem)', alignItems: 'start' }}>
+        {/* Photo */}
+        {DOCTOR_PHOTO_URL
+          ? <img src={DOCTOR_PHOTO_URL} alt="Dr. Víctor Manuel Agudelo" style={{ borderRadius: '20px', width: '100%', aspectRatio: '3/4', objectFit: 'cover', maxHeight: '500px', objectPosition: 'top center' }} />
+          : <ProfileImagePlaceholder />
+        }
         {/* Bio */}
         <div>
           <p style={{ fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#94a3b8', marginBottom: '0.75rem' }}>
@@ -943,7 +946,7 @@ const AboutDoctorSection = () => (
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.9rem', marginBottom: '2rem' }}>
             <p style={{ color: '#475569', fontSize: '0.95rem', lineHeight: 1.75 }}>
-              Llevo más de 20 años dedicado a un solo objetivo: que cada paciente quede con la nariz que siempre quiso — que se vea natural, que respire bien, y que sea completamente suya.
+              Llevo dos décadas dedicado a un solo objetivo: que cada paciente quede con la nariz que siempre quiso — que se vea natural, que respire bien, y que sea completamente suya.
             </p>
             <p style={{ color: '#475569', fontSize: '0.95rem', lineHeight: 1.75 }}>
               Creo en la honestidad clínica. No prometo lo que no puedo cumplir. Antes de cualquier decisión, reviso tu caso en detalle, mostramos simulaciones y comparamos con resultados reales de pacientes con características similares.
@@ -957,13 +960,32 @@ const AboutDoctorSection = () => (
             {[
               'Miembro SCCPFR desde 2004',
               'Miembro ACORL desde 2004',
-              '200+ casos documentados',
+              '1500+ casos documentados',
               'Reseñas verificadas en RealSelf.com',
             ].map(badge => (
               <span key={badge} style={{ background: '#F0EDE8', border: '1px solid #D4CFC9', borderRadius: '100px', padding: '0.375rem 0.875rem', fontSize: '0.78rem', fontWeight: 500, color: '#2D4A3E' }}>
                 {badge}
               </span>
             ))}
+          </div>
+
+          {/* Inline CTA + WhatsApp */}
+          <div style={{ marginTop: '2.25rem', display: 'flex', gap: '0.75rem', flexWrap: 'wrap', alignItems: 'center' }}>
+            <a href="#agendar" style={{
+              display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+              background: '#2D4A3E', color: '#fff', borderRadius: '100px',
+              padding: '0.85rem 1.5rem', fontSize: '0.875rem', fontWeight: 600,
+              textDecoration: 'none',
+            }}>
+              <Calendar className="w-4 h-4" /> Conoce tu caso con el Dr. Agudelo
+            </a>
+            <a href="#agendar" style={{
+              display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+              color: '#2D4A3E', fontSize: '0.875rem', fontWeight: 600,
+              textDecoration: 'none', padding: '0.85rem 0.5rem',
+            }}>
+              <Calendar className="w-4 h-4" /> Pedir evaluación gratuita
+            </a>
           </div>
         </div>
       </div>
@@ -973,7 +995,7 @@ const AboutDoctorSection = () => (
 
 // ─── Surgery Types ────────────────────────────────────────────────────────────
 const SurgeryTypesSection = () => (
-  <section style={{ background: '#FAF7F2', padding: '6rem 1.5rem', borderTop: '1px solid rgba(0,0,0,0.06)' }}>
+  <section style={{ background: '#FAF7F2', padding: 'clamp(3rem, 8vw, 6rem) clamp(1rem, 3vw, 1.5rem)', borderTop: '1px solid rgba(0,0,0,0.06)' }}>
     <div style={{ maxWidth: '68rem', margin: '0 auto' }}>
       <p style={{ fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#94a3b8', marginBottom: '1rem' }}>
         Procedimientos
@@ -985,8 +1007,8 @@ const SurgeryTypesSection = () => (
         Cada cirugía se diseña para una necesidad específica. Conoce los tipos de procedimientos y encuentra el que corresponde a tu caso.
       </p>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
-        <div style={{ background: '#fff', borderRadius: '20px', padding: '2rem', border: '1px solid rgba(0,0,0,0.07)', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))', gap: '1.5rem' }}>
+        <div style={{ background: '#fff', borderRadius: '20px', padding: 'clamp(1.25rem, 4vw, 2rem)', border: '1px solid rgba(0,0,0,0.07)', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#2D4A3E', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <span style={{ color: '#fff', fontSize: '1rem', fontWeight: 700 }}>◈</span>
           </div>
@@ -1009,7 +1031,7 @@ const SurgeryTypesSection = () => (
           </Link>
         </div>
 
-        <div style={{ background: '#fff', borderRadius: '20px', padding: '2rem', border: '1px solid rgba(0,0,0,0.07)', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <div style={{ background: '#fff', borderRadius: '20px', padding: 'clamp(1.25rem, 4vw, 2rem)', border: '1px solid rgba(0,0,0,0.07)', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#1A1A1A', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <span style={{ color: '#fff', fontSize: '1rem', fontWeight: 700 }}>◆</span>
           </div>
@@ -1032,131 +1054,110 @@ const SurgeryTypesSection = () => (
           </Link>
         </div>
       </div>
+
+      <div style={{ marginTop: 'clamp(2.5rem, 5vw, 3.5rem)', textAlign: 'center' }}>
+        <a href="#agendar" style={{
+          display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+          background: '#2D4A3E', color: '#fff', borderRadius: '100px',
+          padding: '0.85rem 1.75rem', fontSize: '0.875rem', fontWeight: 600,
+          textDecoration: 'none', letterSpacing: '0.01em',
+        }}>
+          <Calendar className="w-4 h-4" /> Pedir evaluación gratuita
+        </a>
+      </div>
     </div>
   </section>
 )
 
 // ─── Process Section ─────────────────────────────────────────────────────────
-const ProcessSection = () => {
-  const steps = [
-    { n: '01', title: 'Evaluación gratuita',       desc: 'Envías tus fotos (frente y perfil, sin flash) y recibimos tu caso. Sin costo. Sin compromiso.' },
-    { n: '02', title: 'Consulta personalizada',    desc: 'Virtual ($250.000 COP) o presencial ($250.000 COP). Revisamos tu caso, mostramos simulaciones y comparamos con resultados similares. Si decides operarte, la presencial posterior no tiene costo adicional.' },
-    { n: '03', title: 'Planificación quirúrgica',  desc: 'Diseñamos el plan específico para tu nariz y tu rostro. Expectativas reales, no promesas imposibles.' },
-    { n: '04', title: 'El día de la cirugía',      desc: 'El Dr. Agudelo estará presente en todo momento. La rinoplastia toma aproximadamente 4 horas bajo anestesia general.' },
-    { n: '05', title: 'Postoperatorio acompañado', desc: 'A los 15 días: retiro de cintas y puntos. El doctor hace seguimiento personal en cada control — nunca lo delega. El 90% del resultado se ve a los 3-4 meses; el resultado final llega entre 12-18 meses.' },
-  ]
+const PROCESS_STEPS = [
+  { number: '01', title: 'Envío de fotos sin costo',  featured: false, description: 'Envías fotos de frente y perfil. Evaluamos tu caso y te respondemos si eres candidata, sin costo y sin compromiso.' },
+  { number: '02', title: 'Consulta personalizada',    featured: false, description: 'Consulta con el Dr. Agudelo por $250.000 COP (virtual o presencial). Revisamos tu caso, hacemos simulación y entregamos cotización. Si decides operarte, las siguientes consultas no tienen costo adicional.' },
+  { number: '03', title: 'Planificación quirúrgica',  featured: true,  description: 'Diseñamos el plan específico para tu nariz y tu rostro. Expectativas reales, sin promesas imposibles.' },
+  { number: '04', title: 'El día de la cirugía',      featured: false, description: 'El Dr. Agudelo presente en todo momento. La rinoplastia dura aproximadamente 4 horas bajo anestesia general.' },
+  { number: '05', title: 'Postoperatorio acompañado', featured: false, description: 'Cinco controles incluidos: 7 días, 15 días, 1 mes, 3 meses y 6 meses. A los 15 días se retiran cintas y puntos. El Dr. Agudelo hace cada seguimiento personalmente, nunca lo delega. El resultado final llega entre los 12 y 18 meses.' },
+]
 
-  const sectionRef    = useRef<HTMLDivElement>(null)
-  const containerRef  = useRef<HTMLDivElement>(null)
-  const lineRef       = useRef<HTMLDivElement>(null)
-  const stepRefs      = useRef<(HTMLDivElement | null)[]>([])
-  const numberRefs    = useRef<(HTMLDivElement | null)[]>([])
+const PROCESS_EASE: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94]
 
+function useScrollInView(ref: React.RefObject<HTMLElement | null>, margin = '-10% 0px') {
+  const [inView, setInView] = useState(false)
   useEffect(() => {
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (prefersReduced) return
-
-    const ctx = gsap.context(() => {
-      // ── Timeline line grows as user scrolls through the section ──
-      if (lineRef.current && containerRef.current) {
-        gsap.to(lineRef.current, {
-          scaleY: 1,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: 'top 72%',
-            end: 'bottom 55%',
-            scrub: 1.4,
-          },
-        })
-      }
-
-      // ── Per-step animations ──
-      stepRefs.current.forEach((el, i) => {
-        if (!el) return
-        const numEl = numberRefs.current[i]
-
-        // Entrance: slide from above + fade
-        gsap.fromTo(el,
-          { y: -36, opacity: 0 },
-          {
-            y: 0, opacity: 1, duration: 0.55, ease: 'power2.out',
-            scrollTrigger: { trigger: el, start: 'top 82%', toggleActions: 'play none none none' },
-          }
-        )
-
-        // Number bounce: scale 0.6 → 1 with overshoot
-        if (numEl) {
-          gsap.fromTo(numEl,
-            { scale: 0.6 },
-            {
-              scale: 1, duration: 0.5, ease: 'back.out(1.7)',
-              scrollTrigger: { trigger: el, start: 'top 82%', toggleActions: 'play none none none' },
-            }
-          )
-        }
-
-        // Active step highlight while in viewport
-        ScrollTrigger.create({
-          trigger: el,
-          start: 'top 62%',
-          end: 'bottom 48%',
-          onEnter:      () => el.classList.add('step-active'),
-          onLeave:      () => el.classList.remove('step-active'),
-          onEnterBack:  () => el.classList.add('step-active'),
-          onLeaveBack:  () => el.classList.remove('step-active'),
-        })
-      })
-    }, sectionRef)
-
-    return () => ctx.revert()
+    const el = ref.current
+    if (!el) return
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setInView(true); obs.disconnect() } },
+      { rootMargin: margin }
+    )
+    obs.observe(el)
+    return () => obs.disconnect()
   }, [])
+  return inView
+}
+
+const ProcessSection = () => {
+  const headerRef    = useRef<HTMLDivElement>(null)
+  const headerInView = useScrollInView(headerRef)
+  const reduced = typeof window !== 'undefined'
+    ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    : false
+  const dur = reduced ? 0.01 : 0.7
 
   return (
-    <section ref={sectionRef} style={{ background: '#FAF7F2', padding: '6rem 1.5rem' }}>
-      <div style={{ maxWidth: '52rem', margin: '0 auto' }}>
-        <p style={{ fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#94a3b8', marginBottom: '1rem' }}>
-          El proceso
-        </p>
-        <h2 className="section-reveal-header" style={{ color: '#1A1A1A', fontWeight: 700, fontSize: 'clamp(2rem, 4vw, 3rem)', letterSpacing: '-0.03em', lineHeight: 1.05, marginBottom: '3.5rem' }}>
-          Tu camino, paso a paso
-        </h2>
+    <section style={{ position: 'relative', background: '#FAF7F2', overflow: 'hidden', padding: 'clamp(4rem, 10vw, 8rem) clamp(1rem, 3vw, 1.5rem)' }}>
 
-        {/* Steps container with timeline line */}
-        <div ref={containerRef} style={{ display: 'flex', flexDirection: 'column', gap: '2rem', position: 'relative' }}>
-          {/* Animated vertical line */}
-          <div ref={lineRef} className="timeline-line" />
+      {/* Background blobs */}
+      <div aria-hidden="true" style={{ pointerEvents: 'none', position: 'absolute', inset: 0, zIndex: 0 }}>
+        <div style={{ position: 'absolute', top: '-8%', left: '-6%', width: '520px', height: '520px', borderRadius: '50%', background: 'rgba(45,74,62,0.07)', filter: 'blur(100px)' }} />
+        <div style={{ position: 'absolute', bottom: '-8%', right: '-6%', width: '600px', height: '600px', borderRadius: '50%', background: 'rgba(45,74,62,0.05)', filter: 'blur(120px)' }} />
+      </div>
 
-          {steps.map((step, i) => (
-            <div
-              key={step.n}
-              ref={el => { stepRefs.current[i] = el }}
-              className="process-step"
-              style={{ display: 'grid', gridTemplateColumns: '3rem 1fr', gap: '1.25rem', alignItems: 'start' }}
-            >
-              <div
-                ref={el => { numberRefs.current[i] = el }}
-                className="step-number-circle"
-                style={{ width: '3rem', height: '3rem', borderRadius: '50%', background: '#2D4A3E', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: '0.8rem', flexShrink: 0 }}
-              >
-                {step.n}
-              </div>
-              <div>
-                <h3 style={{ color: '#1A1A1A', fontWeight: 600, fontSize: '1.05rem', marginBottom: '0.4rem', fontFamily: 'var(--font-sans)' }}>{step.title}</h3>
-                <p style={{ color: '#64748b', fontSize: '0.9rem', lineHeight: 1.7 }}>{step.desc}</p>
-              </div>
-            </div>
-          ))}
-        </div>
+      <div style={{ position: 'relative', zIndex: 1, maxWidth: '68rem', margin: '0 auto' }}>
 
-        <div style={{ marginTop: '3rem', paddingTop: '2rem', borderTop: '1px solid rgba(0,0,0,0.08)' }}>
-          <a
-            href="#agendar"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: '#C9A84C', color: '#fff', borderRadius: '100px', padding: '0.75rem 1.75rem', fontSize: '0.9rem', fontWeight: 600, textDecoration: 'none' }}
+        {/* Header */}
+        <div ref={headerRef} style={{ textAlign: 'center', marginBottom: '1rem' }}>
+          <motion.p
+            style={{ fontFamily: 'var(--font-sans)', fontSize: '0.7rem', fontWeight: 400, letterSpacing: '0.35em', textTransform: 'uppercase', color: 'rgba(45,74,62,0.7)', marginBottom: '1rem' }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={headerInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: dur, ease: PROCESS_EASE, delay: reduced ? 0 : 0 }}
           >
-            Solicita tu evaluación gratuita →
-          </a>
+            De principio a fin
+          </motion.p>
+
+          <motion.h2
+            className="section-reveal-header"
+            style={{ color: '#1A1A1A', fontWeight: 700, fontSize: 'clamp(2.5rem, 5vw, 4rem)', letterSpacing: '-0.03em', lineHeight: 1.05, marginBottom: '1.25rem' }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={headerInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: dur, ease: PROCESS_EASE, delay: reduced ? 0 : 0.1 }}
+          >
+            Tu camino, paso a paso
+          </motion.h2>
+
+          <motion.p
+            style={{ fontFamily: 'var(--font-sans)', color: 'rgba(0,0,0,0.45)', fontSize: 'clamp(0.9rem, 1.3vw, 1rem)', lineHeight: 1.7, maxWidth: '44ch', margin: '0 auto 1.75rem' }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={headerInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: dur, ease: PROCESS_EASE, delay: reduced ? 0 : 0.2 }}
+          >
+            Un proceso claro, sin sorpresas. Sabes exactamente qué esperar en cada etapa.
+          </motion.p>
+
+          <motion.a
+            href="#agendar"
+            className="process-cta-link"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', border: '1px solid rgba(45,74,62,0.45)', color: '#2D4A3E', borderRadius: '100px', padding: '0.75rem 1.875rem', fontSize: '0.82rem', fontFamily: 'var(--font-sans)', fontWeight: 500, textDecoration: 'none', letterSpacing: '0.1em', textTransform: 'uppercase' }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={headerInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: dur, ease: PROCESS_EASE, delay: reduced ? 0 : 0.3 }}
+            whileHover={{ backgroundColor: '#2D4A3E', color: '#fff', borderColor: '#2D4A3E' }}
+          >
+            ¿Cómo funciona?
+          </motion.a>
         </div>
+
+        <StepsStagger steps={PROCESS_STEPS} />
       </div>
     </section>
   )
@@ -1171,11 +1172,11 @@ function HomePage() {
     import('lenis').then((m: any) => {
       const Lenis = m.default ?? m
       lenis = new Lenis({
-        duration: 1.6,
+        duration: 1.0,
         easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
         smoothWheel: true,
-        wheelMultiplier: 0.85,
-        touchMultiplier: 1.8,
+        wheelMultiplier: 1.0,
+        touchMultiplier: 2.0,
       })
       lenis.on('scroll', ScrollTrigger.update)
       const raf = (time: number) => { lenis.raf(time); requestAnimationFrame(raf) }
@@ -1192,10 +1193,11 @@ function HomePage() {
       setTimeout(() => {
         document.querySelectorAll('.section-reveal-header').forEach((el) => {
           gsap.fromTo(el,
-            { rotateY: 5, opacity: 0, y: 18 },
+            { opacity: 0, y: 22, z: 0 },
             {
-              rotateY: 0, opacity: 1, y: 0,
+              opacity: 1, y: 0, z: 0,
               duration: 0.65, ease: 'power2.out',
+              clearProps: 'transform',
               scrollTrigger: {
                 trigger: el,
                 start: 'top 87%',
@@ -1212,10 +1214,10 @@ function HomePage() {
   return (
     <div style={{ minHeight: '100vh', background: 'var(--color-1)' }}>
       <Navbar />
-      <main style={{ perspective: '1200px' }}>
+      <main>
         <StickyNarrativeSection />
         <div style={{ position: 'relative', zIndex: 2 }}>
-          <ProceduresSlider />
+          <ProceduresScroll />
           <SurgeryTypesSection />
           <DifferentiatorsSection />
           <AboutDoctorSection />
@@ -1227,7 +1229,6 @@ function HomePage() {
       </main>
       <Footer />
       <WhatsAppButton />
-      <StickyMobileCTA />
     </div>
   )
 }
@@ -1239,6 +1240,7 @@ export default function App() {
       <Route path="/" element={<HomePage />} />
       <Route path="/rinoplastia" element={<RinoplastiaPage />} />
       <Route path="/procedimientos" element={<ProcedimientosPage />} />
+      <Route path="/privacidad" element={<PrivacidadPage />} />
     </Routes>
   )
 }

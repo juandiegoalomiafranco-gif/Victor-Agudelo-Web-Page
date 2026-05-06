@@ -30,6 +30,10 @@ const FAQS = [
     answer: 'Pesas al 70%, caminadora, pilates: desde la semana 3. Trotar o saltar: semana 6. Deportes de contacto: 6 meses.',
   },
   {
+    question: '¿Cuánto cuesta la consulta?',
+    answer: 'La consulta médica con el Dr. Agudelo cuesta $250.000 COP, sea virtual o presencial. La evaluación inicial por fotos es gratuita y sin compromiso. La cotización quirúrgica se entrega solo después de la consulta médica completa.',
+  },
+  {
     question: '¿Publican precios?',
     answer: 'No publicamos precios fijos porque cada caso es diferente — el costo puede variar significativamente. Solicita tu evaluación gratuita y te damos una cotización personalizada.',
   },
@@ -42,7 +46,7 @@ export function FaqAccordion() {
     setOpenIndex(prev => (prev === i ? null : i))
 
   return (
-    <section style={{ background: '#080808', padding: '6rem 1.5rem' }}>
+    <section style={{ background: '#080808', padding: 'clamp(3rem, 8vw, 6rem) clamp(0.75rem, 3vw, 1.5rem)' }}>
       <div style={{ maxWidth: '46rem', margin: '0 auto' }}>
         {/* Title */}
         <h2
@@ -50,7 +54,7 @@ export function FaqAccordion() {
           style={{
             color: '#ffffff',
             fontWeight: 700,
-            fontSize: 'clamp(2.4rem, 5vw, 3.75rem)',
+            fontSize: 'clamp(1.75rem, 7vw, 3.75rem)',
             letterSpacing: '-0.03em',
             textAlign: 'center',
             marginBottom: '4rem',
@@ -79,8 +83,10 @@ export function FaqAccordion() {
                   onClick={() => toggle(i)}
                   aria-label={openIndex === i ? 'Cerrar' : 'Abrir'}
                   style={{
-                    width: '30px',
-                    height: '30px',
+                    width: '36px',
+                    height: '36px',
+                    minWidth: '36px',
+                    minHeight: '36px',
                     borderRadius: '50%',
                     border: '1px solid rgba(255,255,255,0.22)',
                     background: 'transparent',
@@ -110,7 +116,7 @@ export function FaqAccordion() {
                     fontSize: '0.9375rem',
                     fontWeight: 500,
                     cursor: 'pointer',
-                    maxWidth: '82%',
+                    maxWidth: 'min(82%, calc(100vw - 5rem))',
                     lineHeight: 1.5,
                     transition: 'all 0.3s ease',
                     userSelect: 'none',
@@ -162,7 +168,7 @@ export function FaqAccordion() {
                       color: 'rgba(255,255,255,0.78)',
                       fontSize: '0.9rem',
                       lineHeight: 1.72,
-                      maxWidth: '82%',
+                      maxWidth: 'min(82%, calc(100vw - 5rem))',
                     }}
                   >
                     {faq.answer}

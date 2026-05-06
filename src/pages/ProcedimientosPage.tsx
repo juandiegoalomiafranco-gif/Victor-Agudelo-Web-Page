@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { Calendar, ArrowLeft, CheckCircle } from 'lucide-react'
+import { COPY } from '../lib/copy'
 
 const procedimientos = [
   {
@@ -82,8 +83,9 @@ export function ProcedimientosPage() {
         position: 'sticky', top: 0, zIndex: 50,
         background: 'rgba(255,255,255,0.96)', backdropFilter: 'blur(16px)',
         borderBottom: '1px solid rgba(0,0,0,0.07)',
-        padding: '1rem 1.5rem',
+        padding: '0.75rem 1rem',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        gap: '0.5rem',
       }}>
         <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none', color: '#475569', fontSize: '0.875rem', fontWeight: 500 }}>
           <ArrowLeft style={{ width: '16px', height: '16px' }} />
@@ -95,17 +97,17 @@ export function ProcedimientosPage() {
         <a
           href="/#agendar"
           style={{
-            background: '#C9A84C', color: '#fff', borderRadius: '100px',
-            padding: '0.55rem 1.25rem', fontSize: '0.8rem', fontWeight: 600,
-            textDecoration: 'none', letterSpacing: '0.02em',
+            background: '#2D4A3E', color: '#fff', borderRadius: '100px',
+            padding: '0.5rem 0.875rem', fontSize: '0.72rem', fontWeight: 600,
+            textDecoration: 'none', letterSpacing: '0.02em', whiteSpace: 'nowrap',
           }}
         >
-          Pedir cita
+          {COPY.ctaSecondary}
         </a>
       </header>
 
       {/* Hero */}
-      <section style={{ background: '#1A1A1A', padding: '5rem 1.5rem 4rem', textAlign: 'center' }}>
+      <section style={{ background: '#1A1A1A', padding: 'clamp(3rem, 8vw, 5rem) 1.25rem clamp(2.5rem, 6vw, 4rem)', textAlign: 'center' }}>
         <p style={{ fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#94a3b8', marginBottom: '1.25rem' }}>
           Procedimientos faciales
         </p>
@@ -123,12 +125,12 @@ export function ProcedimientosPage() {
         </p>
         <a href="/#agendar" style={{
           display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
-          background: '#C9A84C', color: '#fff', borderRadius: '100px',
+          background: '#2D4A3E', color: '#fff', borderRadius: '100px',
           padding: '0.85rem 2rem', fontSize: '0.9rem', fontWeight: 600,
           textDecoration: 'none',
         }}>
           <Calendar style={{ width: '16px', height: '16px' }} />
-          Solicita tu evaluación gratuita
+          {COPY.ctaPrimary}
         </a>
       </section>
 
@@ -136,7 +138,7 @@ export function ProcedimientosPage() {
       <section style={{ padding: '5rem 1.5rem' }}>
         <div style={{ maxWidth: '60rem', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '4rem' }}>
           {procedimientos.map((proc, i) => (
-            <div key={i} style={{ background: proc.bg, borderRadius: '24px', padding: '2.5rem', border: '1px solid rgba(0,0,0,0.06)' }}>
+            <div key={i} style={{ background: proc.bg, borderRadius: '20px', padding: 'clamp(1.25rem, 5vw, 2.5rem)', border: '1px solid rgba(0,0,0,0.06)' }}>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', alignItems: 'center', marginBottom: '1.25rem' }}>
                 <span style={{
                   background: proc.accent, color: '#fff',
@@ -174,7 +176,7 @@ export function ProcedimientosPage() {
       </section>
 
       {/* Link a rinoplastia */}
-      <section style={{ background: '#F7F5F0', padding: '4rem 1.5rem', textAlign: 'center', borderTop: '1px solid rgba(0,0,0,0.06)' }}>
+      <section style={{ background: '#F7F5F0', padding: 'clamp(2.5rem, 6vw, 4rem) 1.25rem', textAlign: 'center', borderTop: '1px solid rgba(0,0,0,0.06)' }}>
         <p style={{ color: '#64748b', fontSize: '0.95rem', marginBottom: '1.25rem' }}>
           ¿Buscas información sobre rinoplastia?
         </p>
@@ -192,7 +194,7 @@ export function ProcedimientosPage() {
       </section>
 
       {/* CTA final */}
-      <section style={{ background: '#1A1A1A', padding: '5rem 1.5rem', textAlign: 'center' }}>
+      <section style={{ background: '#1A1A1A', padding: 'clamp(3rem, 8vw, 5rem) 1.25rem', textAlign: 'center' }}>
         <p style={{ fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#94a3b8', marginBottom: '1rem' }}>
           Da el primer paso
         </p>
@@ -209,12 +211,12 @@ export function ProcedimientosPage() {
         </p>
         <a href="/#agendar" style={{
           display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
-          background: '#C9A84C', color: '#fff', borderRadius: '100px',
+          background: '#2D4A3E', color: '#fff', borderRadius: '100px',
           padding: '0.85rem 2rem', fontSize: '0.9rem', fontWeight: 600,
           textDecoration: 'none',
         }}>
           <Calendar style={{ width: '16px', height: '16px' }} />
-          Solicitar evaluación gratuita
+          {COPY.ctaPrimary}
         </a>
       </section>
     </div>

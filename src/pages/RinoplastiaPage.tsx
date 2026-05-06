@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Calendar, ArrowLeft, CheckCircle } from 'lucide-react'
+import { CONTACT } from '../lib/contact'
+import { COPY } from '../lib/copy'
 
 const tiposRinoplastia = [
   {
@@ -11,7 +13,7 @@ const tiposRinoplastia = [
       'Técnica Estructural con abordaje abierto',
       'Ultrasonido piezoeléctrico para modificación ósea',
       'Simulación computacional antes de decidir',
-      '200+ casos documentados con resultados naturales',
+      '+200 rinoplastias documentadas con resultado natural',
     ],
     bg: '#F7F5F0',
     accent: '#2D4A3E',
@@ -54,8 +56,9 @@ export function RinoplastiaPage() {
         position: 'sticky', top: 0, zIndex: 50,
         background: 'rgba(255,255,255,0.96)', backdropFilter: 'blur(16px)',
         borderBottom: '1px solid rgba(0,0,0,0.07)',
-        padding: '1rem 1.5rem',
+        padding: '0.75rem 1rem',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        gap: '0.5rem',
       }}>
         <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none', color: '#475569', fontSize: '0.875rem', fontWeight: 500 }}>
           <ArrowLeft style={{ width: '16px', height: '16px' }} />
@@ -67,17 +70,17 @@ export function RinoplastiaPage() {
         <a
           href="/#agendar"
           style={{
-            background: '#C9A84C', color: '#fff', borderRadius: '100px',
-            padding: '0.55rem 1.25rem', fontSize: '0.8rem', fontWeight: 600,
-            textDecoration: 'none', letterSpacing: '0.02em',
+            background: '#2D4A3E', color: '#fff', borderRadius: '100px',
+            padding: '0.5rem 0.875rem', fontSize: '0.72rem', fontWeight: 600,
+            textDecoration: 'none', letterSpacing: '0.02em', whiteSpace: 'nowrap',
           }}
         >
-          Pedir cita
+          {COPY.ctaSecondary}
         </a>
       </header>
 
       {/* Hero */}
-      <section style={{ background: '#1A1A1A', padding: '5rem 1.5rem 4rem', textAlign: 'center' }}>
+      <section style={{ background: '#1A1A1A', padding: 'clamp(3rem, 8vw, 5rem) 1.25rem clamp(2.5rem, 6vw, 4rem)', textAlign: 'center' }}>
         <p style={{ fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#94a3b8', marginBottom: '1.25rem' }}>
           Tipos de rinoplastia
         </p>
@@ -90,17 +93,17 @@ export function RinoplastiaPage() {
           Rinoplastia Natural en Cali
         </h1>
         <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: 'clamp(0.95rem, 1.5vw, 1.05rem)', lineHeight: 1.7, maxWidth: '520px', margin: '0 auto 2.5rem' }}>
-          Más de 20 años diseñando narices que no se notan operadas.
+          Dos décadas diseñando narices que no se notan operadas.
           Cada resultado se construye para tu rostro — no para un molde.
         </p>
         <a href="/#agendar" style={{
           display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
-          background: '#C9A84C', color: '#fff', borderRadius: '100px',
+          background: '#2D4A3E', color: '#fff', borderRadius: '100px',
           padding: '0.85rem 2rem', fontSize: '0.9rem', fontWeight: 600,
           textDecoration: 'none',
         }}>
           <Calendar style={{ width: '16px', height: '16px' }} />
-          Solicita tu evaluación gratuita
+          {COPY.ctaPrimary}
         </a>
       </section>
 
@@ -108,7 +111,7 @@ export function RinoplastiaPage() {
       <section style={{ padding: '5rem 1.5rem' }}>
         <div style={{ maxWidth: '60rem', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '4rem' }}>
           {tiposRinoplastia.map((tipo, i) => (
-            <div key={i} style={{ background: tipo.bg, borderRadius: '24px', padding: '2.5rem', border: '1px solid rgba(0,0,0,0.06)' }}>
+            <div key={i} style={{ background: tipo.bg, borderRadius: '20px', padding: 'clamp(1.25rem, 5vw, 2.5rem)', border: '1px solid rgba(0,0,0,0.06)' }}>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', alignItems: 'center', marginBottom: '1.25rem' }}>
                 <span style={{
                   background: tipo.accent, color: '#fff',
@@ -146,7 +149,7 @@ export function RinoplastiaPage() {
       </section>
 
       {/* Técnica Ultrasónica */}
-      <section style={{ background: '#F7F5F0', padding: '5rem 1.5rem', borderTop: '1px solid rgba(0,0,0,0.06)' }}>
+      <section style={{ background: '#F7F5F0', padding: 'clamp(3rem, 8vw, 5rem) 1.25rem', borderTop: '1px solid rgba(0,0,0,0.06)' }}>
         <div style={{ maxWidth: '52rem', margin: '0 auto' }}>
           <span style={{
             background: '#E8EDE8', border: '1px solid #C5D3C5',
@@ -177,7 +180,7 @@ export function RinoplastiaPage() {
       </section>
 
       {/* FAQ Rinoplastia */}
-      <section style={{ background: '#fff', padding: '5rem 1.5rem' }}>
+      <section style={{ background: '#fff', padding: 'clamp(3rem, 8vw, 5rem) 1.25rem' }}>
         <div style={{ maxWidth: '52rem', margin: '0 auto' }}>
           <p style={{ fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#94a3b8', marginBottom: '1rem' }}>
             Preguntas frecuentes
@@ -212,7 +215,7 @@ export function RinoplastiaPage() {
       </section>
 
       {/* CTA final */}
-      <section style={{ background: '#1A1A1A', padding: '5rem 1.5rem', textAlign: 'center' }}>
+      <section style={{ background: '#1A1A1A', padding: 'clamp(3rem, 8vw, 5rem) 1.25rem', textAlign: 'center' }}>
         <p style={{ fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#94a3b8', marginBottom: '1rem' }}>
           Da el primer paso
         </p>
@@ -230,12 +233,12 @@ export function RinoplastiaPage() {
         </p>
         <a href="/#agendar" style={{
           display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
-          background: '#C9A84C', color: '#fff', borderRadius: '100px',
+          background: '#2D4A3E', color: '#fff', borderRadius: '100px',
           padding: '0.85rem 2rem', fontSize: '0.9rem', fontWeight: 600,
           textDecoration: 'none',
         }}>
           <Calendar style={{ width: '16px', height: '16px' }} />
-          Solicitar evaluación gratuita
+          {COPY.ctaPrimary}
         </a>
       </section>
     </div>

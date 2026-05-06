@@ -8,9 +8,7 @@ interface StatBlock {
 }
 
 const STATS: StatBlock[] = [
-  { label: 'Años de experiencia',        target: 20,  dots: 2 },
-  { label: 'Casos documentados',         target: 200, suffix: '+', dots: 2 },
-  { label: 'Satisfacción de pacientes',  target: 98,  suffix: '%', dots: 3 },
+  { label: 'Años de experiencia', target: 20, dots: 2 },
 ]
 
 export function HeroStats() {

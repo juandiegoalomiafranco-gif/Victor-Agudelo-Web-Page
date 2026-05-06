@@ -1,5 +1,5 @@
-@import "tailwindcss";
 @import url('https://api.fontshare.com/v2/css?f[]=lay-grotesk@400,500,600,700,900&display=swap');
+@import "tailwindcss";
 
 @theme {
   --font-sans: "DM Sans", "Lay Grotesk", ui-sans-serif, system-ui, sans-serif;
@@ -236,7 +236,34 @@
   user-select: none;
 }
 
-/* ── Process Timeline ───────────────────────────────── */
+/* ── Differentiators pillars grid — responsive ─────── */
+@media (max-width: 991px) {
+  .diff-pillars-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+@media (max-width: 599px) {
+  .diff-pillars-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ── Process CTA — keyboard focus ring ───────────────── */
+.process-cta-link:focus-visible {
+  outline: 2px solid #2D4A3E;
+  outline-offset: 3px;
+}
+
+/* ── Steps Stagger — desktop 2-col layout ───────────── */
+@media (min-width: 768px) {
+  .md-step-row {
+    grid-template-columns: 3fr 7fr !important;
+    gap: 2.5rem !important;
+    align-items: baseline;
+  }
+}
+
+/* ── Process Timeline (legacy, kept for safety) ─────── */
 .timeline-line {
   position: absolute;
   left: 23.5px; /* center of 3rem (48px) circle */
@@ -264,7 +291,9 @@
 
 /* ── Section reveal header (3D fade-in) ─────────────── */
 .section-reveal-header {
-  will-change: transform, opacity;
+  will-change: opacity, transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 /* Accesibilidad — reducir movimiento */
@@ -276,6 +305,97 @@
   }
   .timeline-line {
     transform: scaleY(1) !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MOBILE RESPONSIVENESS (≤ 767px)
+   All rules scoped to mobile — desktop is untouched.
+   ═══════════════════════════════════════════════════════════ */
+
+@media (max-width: 767px) {
+  /* Fix 100vh issues on mobile browsers (iOS Safari address bar) */
+  .h-screen,
+  .mobile-dvh {
+    height: 100dvh !important;
+  }
+
+  /* Testimonials heading — override extreme sizes at ≤479/≤767 */
+  .testimonials-h2 {
+    font-size: clamp(1.75rem, 7.5vw, 2.4rem) !important;
+    line-height: 1.15 !important;
+    max-width: 100% !important;
+  }
+
+  /* Hero H1 — tame the ≤479/≤767 overrides */
+  .hero-h1 {
+    font-size: clamp(2rem, 9vw, 3.2rem) !important;
+    line-height: 1.1 !important;
+  }
+
+  /* Footer brand overflow prevention */
+  .footer-brand {
+    font-size: clamp(2.5rem, 14vw, 4.5rem) !important;
+    overflow: hidden;
+    word-break: break-all;
+  }
+
+  /* Steps stagger — reduce vertical padding */
+  [data-step-row] {
+    padding: 2.25rem 0 !important;
+  }
+
+  /* Process step number — slightly smaller on mobile */
+  [data-step-row] [data-step-reveal]:first-child {
+    font-size: clamp(3.5rem, 12vw, 5rem) !important;
+  }
+
+  /* Section reveal — GPU layer stays consistent on mobile */
+  .section-reveal-header {
+    transform: translateZ(0);
+  }
+
+  /* Procedures carousel — touch-friendly on mobile */
+  .procedures-mobile-scroll {
+    animation: none !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  .procedures-mobile-scroll > * {
+    scroll-snap-align: center;
+  }
+
+  /* Slide cards — all visible on mobile (no opacity trick) */
+  .slide-card {
+    opacity: 1 !important;
+    transform: scale(1) !important;
+  }
+  .slide-card .module_box {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    pointer-events: auto !important;
+  }
+
+  /* Touch-friendly tap targets */
+  footer a,
+  footer button {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+}
+
+/* Smaller mobile devices (≤ 479px) */
+@media (max-width: 479px) {
+  .testimonials-h2 {
+    font-size: clamp(1.5rem, 7vw, 2rem) !important;
+  }
+
+  .hero-h1 {
+    font-size: clamp(1.8rem, 8.5vw, 2.8rem) !important;
   }
 }
 
