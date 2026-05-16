@@ -15,6 +15,7 @@ import { StepsStagger }   from './components/ui/steps-stagger'
 import { HeroStats }      from './components/HeroStats'
 import { RinoplastiaPage }    from './pages/RinoplastiaPage'
 import { ProcedimientosPage } from './pages/ProcedimientosPage'
+import { TestimoniosPage }    from './pages/TestimoniosPage'
 import { PrivacidadPage }     from './pages/PrivacidadPage'
 import { CONTACT } from './lib/contact'
 import { COPY }    from './lib/copy'
@@ -74,7 +75,7 @@ const Navbar = () => {
   const links = [
     { label: 'RINOPLASTIA',    href: '/rinoplastia',    isPage: true },
     { label: 'PROCEDIMIENTOS', href: '/procedimientos', isPage: true },
-    { label: 'TESTIMONIOS',    href: '#testimonios',    isPage: false },
+    { label: 'TESTIMONIOS',    href: '/testimonios',    isPage: true },
   ]
 
   /* ─── derived style tokens ─────────────────────────────────────── */
@@ -101,7 +102,7 @@ const Navbar = () => {
                               '0 2px 24px rgba(0,0,0,0.10)'
 
   const logoColor =
-    (phase === 'hero' || phase === 'dark-glass') ? '#ffffff' : '#1e293b'
+    (phase === 'hero' || phase === 'dark-glass') ? '#ffffff' : '#0a0a0a'
 
   const logoBg =
     (phase === 'hero' || phase === 'dark-glass') ? 'rgba(255,255,255,0.18)' : '#242424'
@@ -192,7 +193,7 @@ const Navbar = () => {
                 style={{
                   color: logoColor,
                   fontWeight: 600,
-                  fontSize: '0.95rem',
+                  fontSize: '1.15rem',
                   letterSpacing: '-0.01em',
                   transition: 'color 0.55s ease',
                 }}
@@ -298,7 +299,7 @@ const Navbar = () => {
                 {[
                   { label: 'Rinoplastia', href: '/rinoplastia', isPage: true },
                   { label: 'Procedimientos', href: '/procedimientos', isPage: true },
-                  { label: 'Testimonios', href: '#testimonios', isPage: false },
+                  { label: 'Testimonios', href: '/testimonios', isPage: true },
                   { label: 'Contacto', href: '#agendar', isPage: false },
                 ].map(l => l.isPage ? (
                   <Link key={l.href} to={l.href} onClick={() => setOpen(false)}
@@ -433,79 +434,101 @@ const StickyNarrativeSection = () => {
 
 // ─── Differentiators ─────────────────────────────────────────────────────────
 const DifferentiatorsSection = () => {
+  const sectionRef   = useRef<HTMLElement>(null)
+  const photoWrapRef = useRef<HTMLDivElement>(null)
+
   const pillars = [
     {
-      stat: 'Desde 2004',
-      label: 'Dedicación exclusiva a rinoplastia',
-      desc: 'Especialización exclusiva en cirugía nasal. Miembro SCCPFR y ACORL.',
+      title: '20+ Años dedicado a la nariz',
+      desc: 'Especialización exclusiva en cirugía nasal desde 2004. Miembro activo de SCCPFR y ACORL.',
     },
     {
-      stat: '1.500+',
-      label: 'Cirugías realizadas',
-      desc: 'Más de 200 rinoplastias documentadas. Antes de decidir, verás casos reales con características similares a las tuyas.',
+      title: '1.500+ Cirugías realizadas',
+      desc: 'Más de 200 rinoplastias documentadas. Antes de decidir, verás casos reales con narices similares a la tuya.',
     },
     {
-      stat: 'Rinoplastia Ultrasónica',
-      label: 'Técnica disponible en Cali desde 2022',
-      desc: 'Ultrasonido piezoeléctrico para mayor precisión ósea y recuperación más predecible.',
+      title: 'Pionero en rinoplastia ultrasónica',
+      desc: 'Ultrasonido piezoeléctrico para mayor precisión ósea y recuperación más predecible. Técnica disponible en Cali desde 2022.',
     },
     {
-      stat: '5 controles',
-      label: 'Postoperatorios incluidos',
-      desc: 'El Dr. Agudelo hace el seguimiento personal en cada etapa: a los 7 días, 15 días, 1 mes, 3 meses y 6 meses. Nunca lo delega.',
+      title: '5 Controles postoperatorios',
+      desc: 'Seguimiento personal a los 7 días, 15 días, 1, 3 y 6 meses. Siempre con el Dr. Agudelo, nunca delegado.',
+    },
+    {
+      title: 'Doble formación: ORL + Cirugía facial',
+      desc: 'Otorrinolaringólogo y Cirujano Plástico Facial certificado. Una nariz operada no es solo estética: también es función respiratoria. Su doble especialidad garantiza ambas, no solo cómo se ve.',
+    },
+    {
+      title: 'Atención sin delegaciones',
+      desc: 'De la primera consulta al último control, siempre te atiende el Dr. Agudelo. Ningún paciente pasa por residentes o asistentes.',
     },
   ]
 
+  useLayoutEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      if (photoWrapRef.current) gsap.set(photoWrapRef.current, { yPercent: 0 })
+      return
+    }
+
+    const section = sectionRef.current
+    const wrap    = photoWrapRef.current
+    if (!section || !wrap) return
+
+    const mm = gsap.matchMedia()
+    mm.add('(min-width: 992px)', () => {
+      gsap.set(wrap, { yPercent: 100 })
+      gsap.to(wrap, {
+        yPercent: 0,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: section,
+          start: 'top top',
+          end: '+=120%',
+          pin: true,
+          scrub: 0.6,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+        },
+      })
+      return () => { gsap.set(wrap, { clearProps: 'transform' }) }
+    })
+    mm.add('(max-width: 991px)', () => {
+      gsap.set(wrap, { clearProps: 'transform' })
+    })
+
+    return () => mm.revert()
+  }, [])
+
   return (
-    <section id="diferenciadores" style={{ background: '#fff', padding: 'clamp(3rem, 8vw, 6rem) clamp(1rem, 3vw, 1.5rem)' }}>
-      <div style={{ maxWidth: '68rem', margin: '0 auto' }}>
-        <div className="diff-title section-reveal-header" style={{ marginBottom: '4rem' }}>
-          <p style={{ fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#94a3b8', marginBottom: '1rem' }}>
-            Por qué el Dr. Agudelo
-          </p>
-          <h2 style={{ color: '#1A1A1A', fontWeight: 700, fontSize: 'clamp(2.4rem, 4vw, 3.5rem)', letterSpacing: '-0.03em', lineHeight: 1.05 }}>
-            La clave detrás de cada resultado natural.
-          </h2>
+    <section id="diferenciadores" ref={sectionRef} className="diff-section">
+      <div className="diff-photo-col">
+        <div ref={photoWrapRef} className="diff-photo-wrap" aria-hidden="true">
+          <img
+            src={DOCTOR_PHOTO_URL}
+            alt=""
+            className="diff-photo"
+            loading="lazy"
+            decoding="async"
+          />
         </div>
-
-        <div className="diff-pillars-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: 'clamp(1.25rem, 2.5vw, 2rem)' }}>
-          {pillars.map((p, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, x: i % 2 === 0 ? -60 : 60 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              whileHover={{ y: -6, boxShadow: '0 16px 40px rgba(0,0,0,0.09)' }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 0.55, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
-              style={{ borderTop: '1px solid rgba(0,0,0,0.1)', paddingTop: '1.75rem', borderRadius: '8px', cursor: 'default' }}
-            >
-              <p style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(1.8rem, 2.8vw, 2.4rem)', fontWeight: 600, color: '#1A1A1A', lineHeight: 1, marginBottom: '0.5rem', letterSpacing: '-0.02em' }}>
-                {p.stat}
-              </p>
-              <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#2D4A3E', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '0.75rem' }}>
-                {p.label}
-              </p>
-              <p style={{ fontSize: '0.875rem', color: '#64748b', lineHeight: 1.65 }}>
-                {p.desc}
-              </p>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* CTA inline */}
-        <div style={{ marginTop: 'clamp(3rem, 6vw, 4.5rem)', textAlign: 'center' }}>
-          <p style={{ fontSize: '0.95rem', color: '#475569', marginBottom: '1.25rem', maxWidth: '36rem', marginLeft: 'auto', marginRight: 'auto' }}>
-            Cada caso parte de tu anatomía, no de un molde. Empieza por una valoración sin costo.
-          </p>
-          <a href="#agendar" style={{
-            display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
-            background: '#2D4A3E', color: '#fff', borderRadius: '100px',
-            padding: '0.85rem 1.75rem', fontSize: '0.875rem', fontWeight: 600,
-            textDecoration: 'none', letterSpacing: '0.01em',
-          }}>
+        <div className="diff-overlay-text">
+          <p className="diff-eyebrow">Por qué el Dr. Agudelo</p>
+          <h2 className="diff-title">La clave detrás de cada resultado natural.</h2>
+          <a href="#agendar" className="diff-cta">
             <Calendar className="w-4 h-4" /> Solicita tu evaluación gratuita
           </a>
         </div>
+      </div>
+
+      <div className="diff-right">
+        <ul className="diff-grid">
+          {pillars.map((p, i) => (
+            <li key={i} className="diff-item">
+              <h3 className="diff-card-title">{p.title}</h3>
+              <p className="diff-card-desc">{p.desc}</p>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   )
@@ -652,14 +675,14 @@ const TestimonialsSection = () => {
           <p style={{ fontSize: '0.9rem', color: '#64748b', marginBottom: '1.25rem' }}>
             ¿Lista para que tu caso sea el siguiente?
           </p>
-          <a href="#agendar" style={{
+          <Link to="/testimonios" style={{
             display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
             background: '#1A1A1A', color: '#fff', borderRadius: '100px',
             padding: '0.85rem 1.75rem', fontSize: '0.875rem', fontWeight: 600,
             textDecoration: 'none',
           }}>
-            <Calendar className="w-4 h-4" /> Solicita tu evaluación gratuita
-          </a>
+            Ver todos los testimonios <ChevronRight className="w-4 h-4" />
+          </Link>
         </div>
       </div>
     </section>
@@ -1250,6 +1273,7 @@ export default function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/rinoplastia" element={<RinoplastiaPage />} />
         <Route path="/procedimientos" element={<ProcedimientosPage />} />
+        <Route path="/testimonios" element={<TestimoniosPage />} />
         <Route path="/privacidad" element={<PrivacidadPage />} />
       </Routes>
     </>

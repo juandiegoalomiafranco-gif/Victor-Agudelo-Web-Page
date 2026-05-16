@@ -382,16 +382,6 @@ function ProcedureCard({ proc, isActive, isMobile }: { proc: Procedure; isActive
         }}
       />
       
-      {/* Dark overlay for readability */}
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          background: 'linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.65) 100%)',
-          pointerEvents: 'none',
-        }}
-      />
-
       {/* Content over image */}
       <div 
         style={{ 
