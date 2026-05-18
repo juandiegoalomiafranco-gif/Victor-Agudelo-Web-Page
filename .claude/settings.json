@@ -13,7 +13,8 @@
       "Bash(git add *)",
       "Bash(git commit -m ' *)",
       "Bash(git checkout *)",
-      "Bash(git merge *)"
+      "Bash(git merge *)",
+      "Bash(git push *)"
     ],
     "additionalDirectories": [
       "/Users/juandiegoalomiafranco/Desktop/DEV/dr-victor-agudelo/src",
