@@ -1,11 +1,20 @@
 import { CONTACT } from './contact'
+import { PROCEDIMIENTOS } from './procedimientos'
+import { FAQ_SCHEMA_ENTRIES } from './faqs'
 
 // SEO source of truth: por ruta. Consumido por RouteSeo.tsx en cliente y por
 // el script de pre-render en build (src/entry-prerender.tsx).
 
 export const SITE_URL = 'https://www.drvictoragudelo.com'
 export const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.jpg`
-export const ROUTES_TO_PRERENDER = ['/', '/rinoplastia', '/procedimientos', '/privacidad'] as const
+export const ROUTES_TO_PRERENDER = [
+  '/',
+  '/rinoplastia',
+  '/procedimientos',
+  '/preguntas-frecuentes',
+  '/privacidad',
+  ...PROCEDIMIENTOS.map(p => p.path),
+] as const
 
 export type SeoData = {
   title: string
@@ -107,6 +116,16 @@ const procedure = (name: string, description: string, bodyLocation: string) => (
   areaServed: { '@type': 'City', name: 'Cali', addressCountry: 'CO' },
 })
 
+const faqPage = (faqs: { q: string; a: string }[]) => ({
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map(({ q, a }) => ({
+    '@type': 'Question',
+    name: q,
+    acceptedAnswer: { '@type': 'Answer', text: a },
+  })),
+})
+
 const ROUTES: Record<string, SeoData> = {
   '/': {
     title: 'Dr. Víctor Agudelo — Rinoplastia Natural en Cali | Cirujano Especialista',
@@ -189,6 +208,24 @@ const ROUTES: Record<string, SeoData> = {
     ],
   },
 
+  '/preguntas-frecuentes': {
+    title: 'Preguntas Frecuentes sobre Rinoplastia en Cali | Dr. Víctor Agudelo',
+    description:
+      'Resolvemos las dudas más comunes sobre rinoplastia y cirugía facial: costos, consulta, cirugía, recuperación, resultados y riesgos. Respuestas honestas del Dr. Víctor Agudelo en Cali.',
+    canonical: `${SITE_URL}/preguntas-frecuentes`,
+    ogTitle: 'Preguntas frecuentes — Rinoplastia y cirugía facial | Dr. Agudelo',
+    ogDescription:
+      'Las preguntas que más nos hacen los pacientes, respondidas en detalle y con honestidad clínica.',
+    ogImage: DEFAULT_OG_IMAGE,
+    jsonLd: [
+      breadcrumb([
+        { name: 'Inicio', url: `${SITE_URL}/` },
+        { name: 'Preguntas frecuentes', url: `${SITE_URL}/preguntas-frecuentes` },
+      ]),
+      faqPage(FAQ_SCHEMA_ENTRIES),
+    ],
+  },
+
   '/privacidad': {
     title: 'Política de Privacidad | Dr. Víctor Agudelo',
     description:
@@ -203,6 +240,28 @@ const ROUTES: Record<string, SeoData> = {
       ]),
     ],
   },
+
+  // ─── Páginas individuales por procedimiento (generadas desde procedimientos.ts) ──
+  ...Object.fromEntries(
+    PROCEDIMIENTOS.map(p => [
+      p.path,
+      {
+        title: p.seo.title,
+        description: p.seo.description,
+        canonical: `${SITE_URL}${p.path}`,
+        ogImage: DEFAULT_OG_IMAGE,
+        jsonLd: [
+          breadcrumb([
+            { name: 'Inicio',      url: `${SITE_URL}/` },
+            { name: 'Rinoplastia', url: `${SITE_URL}/rinoplastia` },
+            { name: p.nombre,      url: `${SITE_URL}${p.path}` },
+          ]),
+          procedure(p.nombre, p.seo.procedureDescription, p.seo.bodyLocation),
+          faqPage(p.faqs),
+        ],
+      } satisfies SeoData,
+    ]),
+  ),
 }
 
 const buildElements = (seo: SeoData): HeadElement[] => {

@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom'
-import { Calendar, ArrowLeft, CheckCircle } from 'lucide-react'
+import { Calendar, ArrowLeft, CheckCircle, ChevronRight } from 'lucide-react'
 import { CONTACT } from '../lib/contact'
 import { COPY } from '../lib/copy'
+import { PROCEDIMIENTOS } from '../lib/procedimientos'
 
 const tiposRinoplastia = [
   {
@@ -145,6 +146,73 @@ export function RinoplastiaPage() {
               </ul>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* Cada procedimiento, paso a paso (hub → spokes) */}
+      <section style={{ background: '#fff', padding: 'clamp(3rem, 8vw, 5rem) 1.25rem', borderTop: '1px solid rgba(0,0,0,0.06)' }}>
+        <div style={{ maxWidth: '68rem', margin: '0 auto' }}>
+          <p style={{ fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#94a3b8', marginBottom: '1rem' }}>
+            Páginas por procedimiento
+          </p>
+          <h2 style={{
+            fontFamily: 'var(--font-serif, Cormorant Garamond, Georgia, serif)',
+            fontSize: 'clamp(1.8rem, 3.5vw, 2.6rem)', fontWeight: 600,
+            color: '#1A1A1A', letterSpacing: '-0.025em', lineHeight: 1.1,
+            marginBottom: '0.75rem', maxWidth: '40rem',
+          }}>
+            Cada procedimiento, paso a paso
+          </h2>
+          <p style={{ color: '#64748b', fontSize: '1rem', lineHeight: 1.7, maxWidth: '42rem', marginBottom: '2.5rem' }}>
+            Conoce en detalle cada tipo de cirugía: en qué consiste, para quién es, cómo se hace y qué esperar de la recuperación.
+          </p>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(260px, 100%), 1fr))', gap: '1rem' }}>
+            {PROCEDIMIENTOS.map(p => (
+              <Link
+                key={p.slug}
+                to={p.path}
+                style={{
+                  display: 'flex', flexDirection: 'column',
+                  background: '#F7F5F0', borderRadius: '18px',
+                  padding: '1.75rem 1.5rem',
+                  border: '1px solid rgba(0,0,0,0.06)',
+                  textDecoration: 'none',
+                  transition: 'border-color 0.25s ease, transform 0.25s ease, background 0.25s ease',
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.borderColor = '#2D4A3E'
+                  e.currentTarget.style.transform = 'translateY(-2px)'
+                  e.currentTarget.style.background = '#fff'
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.borderColor = 'rgba(0,0,0,0.06)'
+                  e.currentTarget.style.transform = 'translateY(0)'
+                  e.currentTarget.style.background = '#F7F5F0'
+                }}
+              >
+                <span style={{ fontSize: '0.68rem', fontWeight: 600, letterSpacing: '0.16em', textTransform: 'uppercase', color: '#2D4A3E', marginBottom: '0.75rem' }}>
+                  {p.eyebrow}
+                </span>
+                <h3 style={{
+                  fontFamily: 'var(--font-serif, Cormorant Garamond, Georgia, serif)',
+                  fontSize: '1.45rem', fontWeight: 600, color: '#1A1A1A',
+                  letterSpacing: '-0.02em', lineHeight: 1.15, margin: '0 0 0.6rem',
+                }}>
+                  {p.nombre}
+                </h3>
+                <p style={{ color: '#475569', fontSize: '0.875rem', lineHeight: 1.6, margin: '0 0 1.5rem' }}>
+                  {p.tagline}
+                </p>
+                <span style={{
+                  marginTop: 'auto', display: 'inline-flex', alignItems: 'center', gap: '0.375rem',
+                  color: '#2D4A3E', fontSize: '0.85rem', fontWeight: 600,
+                }}>
+                  Conocer más <ChevronRight style={{ width: 14, height: 14 }} />
+                </span>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 

@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Encuesta — Información para la página "Sobre el Dr. Agudelo"</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #1A1A1A;
+    --green: #2D4A3E;
+    --gold: #C9A84C;
+    --cream: #FAF7F2;
+    --muted: #6b7280;
+    --line: rgba(0,0,0,0.10);
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'DM Sans', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--cream); color: var(--ink);
+    font-family: var(--sans); line-height: 1.6; -webkit-font-smoothing: antialiased;
+  }
+  .progress-wrap {
+    position: sticky; top: 0; z-index: 50; height: 5px;
+    background: rgba(0,0,0,0.06);
+  }
+  .progress-bar { height: 100%; width: 0%; background: var(--gold); transition: width .25s ease; }
+
+  header {
+    background: var(--ink); color: #fff; padding: clamp(2.5rem,7vw,4.5rem) 1.25rem;
+    text-align: center; position: relative; overflow: hidden;
+  }
+  header::after {
+    content:''; position:absolute; top:-30%; right:-10%; width:55%; max-width:600px; aspect-ratio:1;
+    background: radial-gradient(circle, rgba(201,168,76,0.20) 0%, rgba(201,168,76,0) 65%); pointer-events:none;
+  }
+  header .kicker { color: var(--gold); font-size:.72rem; font-weight:600; letter-spacing:.22em; text-transform:uppercase; margin:0 0 1rem; }
+  header h1 { font-family: var(--serif); font-weight:500; font-size: clamp(2rem,5vw,3.4rem); line-height:1.08; margin:0 auto 1rem; max-width:760px; }
+  header h1 em { color: var(--gold); font-style: italic; }
+  header p { color: rgba(255,255,255,.72); max-width:620px; margin:0 auto; font-size:1rem; }
+
+  main { max-width: 820px; margin: 0 auto; padding: clamp(1.5rem,4vw,3rem) 1.25rem 5rem; }
+
+  .intro {
+    background:#fff; border:1px solid var(--line); border-left:4px solid var(--gold);
+    border-radius:14px; padding:1.25rem 1.4rem; margin-bottom:2.5rem; font-size:.95rem; color:#374151;
+  }
+  .intro strong { color: var(--green); }
+
+  section.card {
+    background:#fff; border:1px solid var(--line); border-radius:18px;
+    padding: clamp(1.4rem,3vw,2.2rem); margin-bottom:1.75rem;
+    box-shadow: 0 6px 24px -18px rgba(0,0,0,.25);
+  }
+  .sec-head { display:flex; align-items:center; gap:.85rem; margin-bottom:.4rem; }
+  .sec-num {
+    flex-shrink:0; width:38px; height:38px; border-radius:10px; background:var(--green); color:#fff;
+    display:inline-flex; align-items:center; justify-content:center; font-family:var(--serif); font-size:1.25rem; font-weight:600;
+  }
+  .sec-head h2 { font-family:var(--serif); font-weight:600; font-size: clamp(1.45rem,2.6vw,1.9rem); margin:0; letter-spacing:-.01em; }
+  .sec-desc { color:var(--muted); font-size:.9rem; margin:.1rem 0 1.5rem; }
+
+  label { display:block; font-weight:600; font-size:.85rem; margin:1.1rem 0 .4rem; color:var(--ink); }
+  label .hint { display:block; font-weight:400; font-size:.78rem; color:var(--muted); margin-top:.15rem; }
+  .req { color:#b45309; font-weight:700; }
+
+  input[type=text], input[type=email], input[type=tel], input[type=number], textarea, select {
+    width:100%; padding:.7rem .85rem; border:1px solid var(--line); border-radius:10px;
+    font-family:var(--sans); font-size:.95rem; color:var(--ink); background:#fff; transition: border-color .2s, box-shadow .2s;
+  }
+  input:focus, textarea:focus, select:focus {
+    outline:none; border-color:var(--green); box-shadow:0 0 0 3px rgba(45,74,62,.12);
+  }
+  textarea { resize: vertical; min-height: 90px; }
+
+  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:0 1rem; }
+  @media (max-width:640px){ .grid2{ grid-template-columns:1fr; } }
+
+  /* Repeatable item blocks */
+  .repeat-item {
+    border:1px dashed var(--line); border-radius:12px; padding:1rem 1.1rem 1.2rem; margin-top:1rem; position:relative; background:#fcfbf9;
+  }
+  .repeat-item .rm {
+    position:absolute; top:.6rem; right:.6rem; border:none; background:rgba(0,0,0,.05); color:#9ca3af;
+    width:26px; height:26px; border-radius:7px; cursor:pointer; font-size:1rem; line-height:1; transition:background .2s,color .2s;
+  }
+  .repeat-item .rm:hover { background:#fee2e2; color:#b91c1c; }
+  .add-btn {
+    margin-top:1rem; display:inline-flex; align-items:center; gap:.5rem; cursor:pointer;
+    background:transparent; border:1px solid var(--green); color:var(--green);
+    padding:.55rem 1.1rem; border-radius:100px; font-family:var(--sans); font-weight:600; font-size:.85rem; transition: background .2s,color .2s;
+  }
+  .add-btn:hover { background:var(--green); color:#fff; }
+  .add-btn svg { width:15px; height:15px; }
+
+  /* checkbox group */
+  .chk-group { display:flex; flex-wrap:wrap; gap:.55rem; margin-top:.5rem; }
+  .chk {
+    display:inline-flex; align-items:center; gap:.5rem; border:1px solid var(--line);
+    padding:.5rem .85rem; border-radius:100px; font-size:.85rem; cursor:pointer; user-select:none; transition: border-color .2s, background .2s;
+  }
+  .chk:hover { border-color: var(--green); }
+  .chk input { accent-color: var(--green); width:15px; height:15px; cursor:pointer; }
+
+  /* Footer actions */
+  .actions { text-align:center; margin-top:2.5rem; }
+  .btn-primary {
+    display:inline-flex; align-items:center; gap:.55rem; background:var(--gold); color:var(--ink);
+    border:none; padding:1rem 2rem; border-radius:100px; font-family:var(--sans); font-weight:700; font-size:.95rem;
+    cursor:pointer; letter-spacing:.02em; transition: transform .15s ease, box-shadow .2s ease;
+    box-shadow:0 10px 30px -12px rgba(201,168,76,.6);
+  }
+  .btn-primary:hover { transform: translateY(-2px); }
+  .btn-primary svg { width:18px; height:18px; }
+
+  .output-wrap { margin-top:2rem; display:none; }
+  .output-wrap.show { display:block; animation: fade .4s ease; }
+  @keyframes fade { from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;} }
+  #output { width:100%; min-height:280px; font-family:ui-monospace,Menlo,monospace; font-size:.82rem; line-height:1.5; }
+  .out-buttons { display:flex; flex-wrap:wrap; gap:.6rem; justify-content:center; margin-top:1rem; }
+  .btn-ghost {
+    display:inline-flex; align-items:center; gap:.5rem; background:#fff; border:1px solid var(--line); color:var(--ink);
+    padding:.7rem 1.3rem; border-radius:100px; font-family:var(--sans); font-weight:600; font-size:.85rem; cursor:pointer; text-decoration:none; transition: border-color .2s, background .2s;
+  }
+  .btn-ghost:hover { border-color: var(--green); background:#fafafa; }
+  .btn-ghost.wa { background:#25D366; color:#fff; border-color:#25D366; }
+  .btn-ghost svg { width:16px; height:16px; }
+  .copied { color: var(--green); font-weight:600; font-size:.85rem; margin-top:.6rem; min-height:1.2em; }
+  footer.note { text-align:center; color:var(--muted); font-size:.8rem; margin-top:3rem; }
+</style>
+</head>
+<body>
+
+<div class="progress-wrap"><div class="progress-bar" id="progress"></div></div>
+
+<header>
+  <p class="kicker">Información para la página web · drvictoragudelo.com</p>
+  <h1>Cuéntanos sobre <em>usted, Dr. Agudelo</em></h1>
+  <p>Esta breve encuesta nos permite construir su página "Sobre el doctor" con información real y verificada. Toda la información ayuda a transmitir confianza a los pacientes y a posicionar mejor en Google. Responda solo lo que aplique.</p>
+</header>
+
+<main>
+  <div class="intro">
+    <strong>Importante:</strong> nada de esta página se inventará. Lo que escriba aquí es lo que aparecerá publicado, así que entre más exacto y completo, mejor. Los campos marcados con <span class="req">*</span> son los mínimos indispensables. Puede agregar varios elementos con el botón "+ Agregar" donde aplique. Al final, pulse "Generar mis respuestas" y envíelas.
+  </div>
+
+  <form id="surveyForm">
+
+    <!-- 0. Datos básicos -->
+    <section class="card">
+      <div class="sec-head"><span class="sec-num">0</span><h2>Datos básicos</h2></div>
+      <p class="sec-desc">Cómo quiere que aparezca su nombre en la página.</p>
+      <label>Nombre completo como debe figurar <span class="req">*</span>
+        <span class="hint">Ej.: Dr. Víctor Manuel Agudelo</span></label>
+      <input type="text" name="nombre" data-req placeholder="Dr. Víctor Manuel Agudelo" />
+      <div class="grid2">
+        <div>
+          <label>Especialidad principal (titular) <span class="req">*</span></label>
+          <input type="text" name="titular" placeholder="Cirujano Plástico Facial · Rinoplastia" />
+        </div>
+        <div>
+          <label>Ciudad / país donde ejerce</label>
+          <input type="text" name="ciudad" placeholder="Cali, Colombia" />
+        </div>
+      </div>
+    </section>
+
+    <!-- 1. Formación académica -->
+    <section class="card">
+      <div class="sec-head"><span class="sec-num">1</span><h2>Formación académica</h2></div>
+      <p class="sec-desc">Dónde y cuándo estudió. Esto es clave para la confianza médica y para Google.</p>
+
+      <label>Pregrado en Medicina — Universidad y ciudad <span class="req">*</span></label>
+      <input type="text" name="med_uni" placeholder="Ej.: Universidad del Valle, Cali" />
+      <label>Año de grado de Medicina</label>
+      <input type="text" name="med_anio" placeholder="Ej.: 1998" />
+
+      <label style="margin-top:1.6rem;">Especializaciones / subespecializaciones <span class="req">*</span>
+        <span class="hint">Agregue una por una: nombre del título, universidad/institución y año.</span></label>
+      <div id="esp_list"></div>
+      <button type="button" class="add-btn" data-add="esp">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>
+        Agregar especialización
+      </button>
+
+      <label style="margin-top:1.8rem;">Fellowships / cursos / entrenamientos relevantes
+        <span class="hint">Especialmente en rinoplastia (p. ej. rinoplastia ultrasónica / piezoeléctrica), en Colombia o el exterior.</span></label>
+      <div id="curso_list"></div>
+      <button type="button" class="add-btn" data-add="curso">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>
+        Agregar curso / fellowship
+      </button>
+    </section>
+
+    <!-- 2. Registros y membresías -->
+    <section class="card">
+      <div class="sec-head"><span class="sec-num">2</span><h2>Registros y membresías</h2></div>
+      <p class="sec-desc">Lo que más respalda su autoridad médica ante pacientes y buscadores.</p>
+
+      <label>Número de registro médico (ReTHUS / registro profesional) <span class="req">*</span></label>
+      <input type="text" name="registro" placeholder="Ej.: RM 12345 / ReTHUS ..." />
+
+      <label style="margin-top:1.4rem;">¿A qué sociedades / asociaciones médicas pertenece?
+        <span class="hint">Marque las que apliquen. Puede agregar otras abajo.</span></label>
+      <div class="chk-group">
+        <label class="chk"><input type="checkbox" name="soc" value="Sociedad Colombiana de Cirugía Plástica (SCCP)"> Sociedad Colombiana de Cirugía Plástica (SCCP)</label>
+        <label class="chk"><input type="checkbox" name="soc" value="Asociación Colombiana de Otorrinolaringología (ACORL)"> Asociación Colombiana de Otorrinolaringología (ACORL)</label>
+        <label class="chk"><input type="checkbox" name="soc" value="ISAPS"> ISAPS (Internacional)</label>
+        <label class="chk"><input type="checkbox" name="soc" value="FILACP"> FILACP</label>
+      </div>
+
+      <label style="margin-top:1.4rem;">Otras sociedades / número de afiliación / año de ingreso
+        <span class="hint">Agregue cada una con el número o año si lo tiene.</span></label>
+      <div id="soc_list"></div>
+      <button type="button" class="add-btn" data-add="soc">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>
+        Agregar membresía
+      </button>
+
+      <label style="margin-top:1.8rem;">Certificaciones / diplomados destacados</label>
+      <div id="cert_list"></div>
+      <button type="button" class="add-btn" data-add="cert">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>
+        Agregar certificación
+      </button>
+    </section>
+
+    <!-- 3. Experiencia -->
+    <section class="card">
+      <div class="sec-head"><span class="sec-num">3</span><h2>Experiencia profesional</h2></div>
+      <p class="sec-desc">Cifras reales (las usaremos tal cual; no estimaremos por usted).</p>
+      <div class="grid2">
+        <div>
+          <label>Años de experiencia ejerciendo <span class="req">*</span></label>
+          <input type="text" name="anios_exp" placeholder="Ej.: 22 años" />
+        </div>
+        <div>
+          <label>N.º aproximado de rinoplastias / cirugías realizadas</label>
+          <input type="text" name="num_cirugias" placeholder="Ej.: más de 800" />
+        </div>
+      </div>
+
+      <label style="margin-top:1.4rem;">Hospitales / clínicas donde opera actualmente</label>
+      <div id="hosp_list"></div>
+      <button type="button" class="add-btn" data-add="hosp">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>
+        Agregar hospital / clínica
+      </button>
+
+      <label style="margin-top:1.8rem;">Docencia, conferencias o publicaciones (si aplica)
+        <span class="hint">¿Ha sido profesor, ponente en congresos, o ha publicado artículos? Cuéntenos.</span></label>
+      <textarea name="docencia" placeholder="Ej.: Docente de la cátedra de... / Ponente en el Congreso Nacional de Cirugía Plástica 2023..."></textarea>
+    </section>
+
+    <!-- 4. Filosofía -->
+    <section class="card">
+      <div class="sec-head"><span class="sec-num">4</span><h2>Su filosofía y enfoque</h2></div>
+      <p class="sec-desc">En sus propias palabras. Esto le da autenticidad a la página.</p>
+
+      <label>¿Por qué se dedicó a la cirugía facial / rinoplastia?</label>
+      <textarea name="por_que" placeholder="Lo que lo motivó, su historia..."></textarea>
+
+      <label>¿Cuál es su enfoque o filosofía al operar? <span class="req">*</span>
+        <span class="hint">Ej.: naturalidad sobre todo, acompañamiento personal, honestidad clínica...</span></label>
+      <textarea name="filosofia" data-req placeholder="Describa cómo aborda cada caso y qué busca en los resultados."></textarea>
+
+      <label>¿Qué lo diferencia de otros cirujanos?</label>
+      <textarea name="diferencia" placeholder="Lo que considera que lo hace distinto."></textarea>
+
+      <label>Una frase suya que quiera destacar en la página (cita textual)</label>
+      <input type="text" name="frase" placeholder='Ej.: "El objetivo es que no se note que estuviste operada."' />
+    </section>
+
+    <!-- 5. Datos prácticos -->
+    <section class="card">
+      <div class="sec-head"><span class="sec-num">5</span><h2>Datos prácticos</h2></div>
+      <p class="sec-desc">Información adicional útil para los pacientes.</p>
+
+      <label>Idiomas que habla</label>
+      <input type="text" name="idiomas" placeholder="Ej.: Español, Inglés" />
+
+      <label>¿Atiende pacientes internacionales / de otras ciudades?</label>
+      <select name="internacional">
+        <option value="">— Seleccione —</option>
+        <option>Sí, recibo pacientes nacionales e internacionales</option>
+        <option>Solo pacientes nacionales</option>
+        <option>Solo locales (Cali / Valle del Cauca)</option>
+      </select>
+
+      <label style="margin-top:1.4rem;">Premios o reconocimientos (si aplica)</label>
+      <div id="premio_list"></div>
+      <button type="button" class="add-btn" data-add="premio">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>
+        Agregar reconocimiento
+      </button>
+
+      <label style="margin-top:1.8rem;">Perfiles verificables para enlazar
+        <span class="hint">RealSelf, Doctoralia, Google, etc. Pegue los enlaces.</span></label>
+      <textarea name="perfiles" placeholder="Ej.: RealSelf: ... / Doctoralia: ... / Google: ..."></textarea>
+    </section>
+
+    <!-- 6. Material visual -->
+    <section class="card">
+      <div class="sec-head"><span class="sec-num">6</span><h2>Material visual</h2></div>
+      <p class="sec-desc">La página necesita una buena foto del doctor.</p>
+      <label>¿Tiene fotos profesionales para usar? <span class="req">*</span></label>
+      <select name="fotos">
+        <option value="">— Seleccione —</option>
+        <option>Sí, tengo fotos profesionales nuevas para enviar</option>
+        <option>Usar las que ya están en la web (/photos)</option>
+        <option>Necesito tomarme fotos nuevas</option>
+      </select>
+      <label style="margin-top:1.2rem;">Notas sobre las fotos
+        <span class="hint">Ej.: "prefiero la foto en bata blanca", o cómo me las hará llegar.</span></label>
+      <textarea name="fotos_nota" placeholder="Comentarios sobre el material visual."></textarea>
+    </section>
+
+    <div class="actions">
+      <button type="button" class="btn-primary" id="generate">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Generar mis respuestas
+      </button>
+    </div>
+
+    <div class="output-wrap" id="outputWrap">
+      <label>Sus respuestas (cópielas y envíelas):</label>
+      <textarea id="output" readonly></textarea>
+      <div class="out-buttons">
+        <button type="button" class="btn-ghost" id="copyBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Copiar todo
+        </button>
+        <a class="btn-ghost wa" id="waBtn" href="#" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163a11.867 11.867 0 0 1-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.82 11.82 0 0 1 8.413 3.488 11.82 11.82 0 0 1 3.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 0 1-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 0 0 1.51 5.26l-.999 3.648 3.978-1.039z"/></svg>
+          Enviar por WhatsApp
+        </a>
+        <button type="button" class="btn-ghost" id="downloadBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+          Descargar .txt
+        </button>
+      </div>
+      <p class="copied" id="copiedMsg"></p>
+    </div>
+  </form>
+
+  <footer class="note">Encuesta interna · Información para la página "Sobre el Dr. Agudelo" · drvictoragudelo.com</footer>
+</main>
+
+<script>
+  // ---- Plantillas de campos repetibles ----
+  const templates = {
+    esp:   { fields:[['titulo','Título de la especialización','Ej.: Especialista en Otorrinolaringología'],['uni','Universidad / institución','Ej.: Universidad del Valle'],['anio','Año','Ej.: 2003']] },
+    curso: { fields:[['nombre','Curso / fellowship','Ej.: Fellowship en Rinoplastia Ultrasónica'],['lugar','Lugar / institución','Ej.: Barcelona, España'],['anio','Año','Ej.: 2015']] },
+    soc:   { fields:[['nombre','Sociedad / asociación','Ej.: Sociedad Colombiana de Cirugía Plástica'],['num','N.º de afiliación / año','Ej.: Miembro desde 2005']] },
+    cert:  { fields:[['nombre','Certificación / diplomado','Ej.: Diplomado en Cirugía Estética Facial'],['anio','Año / entidad','Ej.: 2018']] },
+    hosp:  { fields:[['nombre','Hospital / clínica','Ej.: Clínica Imbanaco'],['ciudad','Ciudad','Ej.: Cali']] },
+    premio:{ fields:[['nombre','Premio / reconocimiento','Ej.: Reconocimiento a la excelencia médica'],['anio','Año / entidad','Ej.: 2021']] },
+  };
+  const labels = { esp:'Especialización', curso:'Curso / fellowship', soc:'Membresía', cert:'Certificación', hosp:'Hospital / clínica', premio:'Reconocimiento' };
+
+  function addItem(type){
+    const list = document.getElementById(type + '_list');
+    const idx = list.children.length + 1;
+    const item = document.createElement('div');
+    item.className = 'repeat-item';
+    item.dataset.type = type;
+    let html = '<button type="button" class="rm" title="Quitar" aria-label="Quitar">&times;</button>';
+    html += '<strong style="font-size:.8rem;color:var(--green);">' + labels[type] + ' ' + idx + '</strong>';
+    templates[type].fields.forEach(f=>{
+      html += '<label style="margin-top:.7rem;">' + f[1] + '</label>';
+      html += '<input type="text" data-key="'+f[0]+'" placeholder="'+f[2]+'" />';
+    });
+    item.innerHTML = html;
+    item.querySelector('.rm').addEventListener('click', ()=>{ item.remove(); renumber(type); updateProgress(); });
+    item.querySelectorAll('input').forEach(i=>i.addEventListener('input', updateProgress));
+    list.appendChild(item);
+    updateProgress();
+  }
+  function renumber(type){
+    const list = document.getElementById(type+'_list');
+    [...list.children].forEach((c,i)=>{ c.querySelector('strong').textContent = labels[type]+' '+(i+1); });
+  }
+  document.querySelectorAll('[data-add]').forEach(btn=>{
+    btn.addEventListener('click', ()=>addItem(btn.dataset.add));
+  });
+  // Empezar con un bloque visible en las secciones clave
+  ['esp','soc'].forEach(addItem);
+
+  // ---- Barra de progreso (basada en campos con contenido) ----
+  function updateProgress(){
+    const all = document.querySelectorAll('#surveyForm input[type=text], #surveyForm input[type=email], #surveyForm input[type=tel], #surveyForm textarea, #surveyForm select');
+    let filled = 0;
+    all.forEach(el=>{ if(el.value.trim()!=='') filled++; });
+    const pct = Math.min(100, Math.round((filled / Math.max(all.length*0.55,1))*100));
+    document.getElementById('progress').style.width = pct + '%';
+  }
+  document.getElementById('surveyForm').addEventListener('input', updateProgress);
+
+  // ---- Generar texto ----
+  function val(name){ const el=document.querySelector('[name="'+name+'"]'); return el ? el.value.trim() : ''; }
+  function line(label,v){ return v ? (label+': '+v+'\n') : ''; }
+
+  function collectRepeat(type){
+    const list = document.getElementById(type+'_list');
+    const out = [];
+    [...list.children].forEach(item=>{
+      const parts = [];
+      item.querySelectorAll('input').forEach(inp=>{ if(inp.value.trim()) parts.push(inp.value.trim()); });
+      if(parts.length) out.push('  • ' + parts.join(' — '));
+    });
+    return out.join('\n');
+  }
+
+  function buildText(){
+    let t = '';
+    t += '====== INFORMACIÓN PARA LA PÁGINA "SOBRE EL DR. AGUDELO" ======\n\n';
+
+    t += '— DATOS BÁSICOS —\n';
+    t += line('Nombre', val('nombre'));
+    t += line('Especialidad (titular)', val('titular'));
+    t += line('Ciudad/país', val('ciudad'));
+
+    t += '\n— FORMACIÓN ACADÉMICA —\n';
+    t += line('Medicina (universidad)', val('med_uni'));
+    t += line('Año de grado', val('med_anio'));
+    const esp = collectRepeat('esp'); if(esp) t += 'Especializaciones:\n'+esp+'\n';
+    const cur = collectRepeat('curso'); if(cur) t += 'Cursos / fellowships:\n'+cur+'\n';
+
+    t += '\n— REGISTROS Y MEMBRESÍAS —\n';
+    t += line('Registro médico', val('registro'));
+    const socsChecked = [...document.querySelectorAll('input[name="soc"]:checked')].map(c=>c.value);
+    if(socsChecked.length) t += 'Sociedades (marcadas): '+socsChecked.join(' · ')+'\n';
+    const socExtra = collectRepeat('soc'); if(socExtra) t += 'Otras membresías:\n'+socExtra+'\n';
+    const cert = collectRepeat('cert'); if(cert) t += 'Certificaciones:\n'+cert+'\n';
+
+    t += '\n— EXPERIENCIA —\n';
+    t += line('Años de experiencia', val('anios_exp'));
+    t += line('N.º de cirugías/rinoplastias', val('num_cirugias'));
+    const hosp = collectRepeat('hosp'); if(hosp) t += 'Hospitales/clínicas:\n'+hosp+'\n';
+    t += line('Docencia/publicaciones', val('docencia'));
+
+    t += '\n— FILOSOFÍA Y ENFOQUE —\n';
+    t += line('Por qué se dedicó a esto', val('por_que'));
+    t += line('Filosofía / enfoque', val('filosofia'));
+    t += line('Qué lo diferencia', val('diferencia'));
+    t += line('Frase destacada', val('frase'));
+
+    t += '\n— DATOS PRÁCTICOS —\n';
+    t += line('Idiomas', val('idiomas'));
+    t += line('Pacientes internacionales', val('internacional'));
+    const prem = collectRepeat('premio'); if(prem) t += 'Reconocimientos:\n'+prem+'\n';
+    t += line('Perfiles para enlazar', val('perfiles'));
+
+    t += '\n— MATERIAL VISUAL —\n';
+    t += line('Fotos', val('fotos'));
+    t += line('Notas sobre fotos', val('fotos_nota'));
+
+    t += '\n====== FIN ======';
+    return t;
+  }
+
+  document.getElementById('generate').addEventListener('click', ()=>{
+    // validación mínima
+    const faltan = [];
+    document.querySelectorAll('[data-req]').forEach(el=>{ if(!el.value.trim()) faltan.push(el); });
+    if(faltan.length){
+      faltan[0].scrollIntoView({behavior:'smooth', block:'center'});
+      faltan[0].focus();
+      faltan.forEach(el=>{ el.style.borderColor='#b45309'; });
+      document.getElementById('copiedMsg').textContent='';
+      alert('Por favor complete los campos marcados con * antes de generar.');
+      return;
+    }
+    const text = buildText();
+    document.getElementById('output').value = text;
+    const wrap = document.getElementById('outputWrap');
+    wrap.classList.add('show');
+    // WhatsApp link
+    document.getElementById('waBtn').href = 'https://wa.me/?text=' + encodeURIComponent(text);
+    wrap.scrollIntoView({behavior:'smooth', block:'start'});
+  });
+
+  document.getElementById('copyBtn').addEventListener('click', ()=>{
+    const ta = document.getElementById('output'); ta.select();
+    navigator.clipboard.writeText(ta.value).then(()=>{
+      document.getElementById('copiedMsg').textContent = '✓ Copiado. Ya puede pegarlo donde quiera.';
+    }).catch(()=>{ document.execCommand('copy'); document.getElementById('copiedMsg').textContent='✓ Copiado.'; });
+  });
+
+  document.getElementById('downloadBtn').addEventListener('click', ()=>{
+    const blob = new Blob([document.getElementById('output').value], {type:'text/plain;charset=utf-8'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'Respuestas-Dr-Agudelo.txt';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+
+  updateProgress();
+</script>
+</body>
+</html>
