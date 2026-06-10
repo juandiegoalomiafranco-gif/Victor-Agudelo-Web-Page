@@ -1,7 +1,7 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
-import {defineConfig, loadEnv, type Plugin} from 'vite';
+import {defineConfig, type Plugin} from 'vite';
 import {vitePrerenderPlugin} from 'vite-prerender-plugin';
 import {ROUTES_TO_PRERENDER} from './src/lib/seo';
 
@@ -31,8 +31,7 @@ const stripPrerenderArtifacts = (): Plugin => ({
   },
 });
 
-export default defineConfig(({mode}) => {
-  const env = loadEnv(mode, '.', '');
+export default defineConfig(() => {
   return {
     plugins: [
       react(),
@@ -44,9 +43,6 @@ export default defineConfig(({mode}) => {
       }),
       stripPrerenderArtifacts(),
     ],
-    define: {
-      'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
-    },
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),
