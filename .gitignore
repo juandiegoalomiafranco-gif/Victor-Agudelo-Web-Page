@@ -6,3 +6,13 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# Recursos y herramientas locales que no deben ir al repo
+Anti gravity Skills/
+Fotos/
+*.code-workspace
+*.pdf
+*.zip
+*.RW2
+Encuesta-Sobre-el-Doctor.html
+metadata.json

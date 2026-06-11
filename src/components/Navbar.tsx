@@ -283,6 +283,7 @@ export function Navbar({ ctaVariant = 'evaluacion', darkSectionIds }: NavbarProp
                 transition: 'color 0.4s ease',
               }}
               aria-label="Menú"
+              aria-expanded={open}
             >
               {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
