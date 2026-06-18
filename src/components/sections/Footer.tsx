@@ -28,7 +28,6 @@ export const Footer = () => (
               ...PROCEDIMIENTOS.map(p => ({ label: `· ${p.nombre}`, href: p.path, isRoute: true as const })),
               { label: 'Procedimientos',  href: '/procedimientos', isRoute: true },
               { label: 'Preguntas frecuentes', href: '/preguntas-frecuentes', isRoute: true },
-              { label: 'Sobre el doctor', href: '/#doctor',      isRoute: false },
               { label: 'Testimonios',     href: '/#testimonios', isRoute: false },
               { label: 'Contacto',        href: '/#agendar',     isRoute: false },
             ].map(({ label, href, isRoute }) => (

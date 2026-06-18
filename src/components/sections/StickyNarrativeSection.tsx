@@ -1,110 +1,88 @@
-import { useLayoutEffect, useRef } from 'react'
-import gsap from 'gsap'
+import { useEffect, useState } from 'react'
 
-import { COPY } from '../../lib/copy'
-import { DOCTOR_HERO_URL } from '../../lib/assets'
+// Hero replicado 1:1 de rejuv-health.com (estructura + animación sticky pura).
+// Copies adaptados a Dr. Víctor Agudelo. Columnas con color placeholder
+// hasta tener las fotos reales.
+
+const FLOATING_TITLES = [
+  'Dr. Víctor Agudelo',
+  'Cali, Colombia',
+  'Cirugía Plástica Facial y Rinoplastia',
+] as const
+
+// Placeholders de color para las 3 columnas (reemplazar por <img>/<video> luego)
+const COLUMN_PLACEHOLDERS = [
+  { bg: '#2D4A3E', label: 'Retrato' },
+  { bg: '#3D5249', label: 'Consulta' },
+  { bg: '#243730', label: 'Resultados' },
+] as const
 
 export const StickyNarrativeSection = () => {
-  const heroOverlayRef = useRef<HTMLDivElement>(null)
+  const [ready, setReady] = useState(false)
 
-  // ── Hero entry: animates headline/subtitle into view on mount ──
-  useLayoutEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    if (!heroOverlayRef.current) return
-    const children = heroOverlayRef.current.querySelectorAll('[data-hero-anim]')
-    if (!children.length) return
-    gsap.set(children, { y: 28, opacity: 0 })
-    const tl = gsap.timeline({ delay: 0.35 })
-    tl.to(children, { y: 0, opacity: 1, duration: 0.72, stagger: 0.11, ease: 'power3.out' })
-    return () => { tl.kill() }
+  // Entrada del headline: line1 entra desde -40px, line2 desde +40px (1s ease-in-out),
+  // igual que rejuv. Espera a que las fuentes carguen para evitar FOUT.
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setReady(true)
+      return
+    }
+    let cancelled = false
+    const start = () => {
+      requestAnimationFrame(() =>
+        requestAnimationFrame(() => { if (!cancelled) setReady(true) })
+      )
+    }
+    if (document.fonts?.ready) document.fonts.ready.then(start)
+    else start()
+    return () => { cancelled = true }
   }, [])
 
   return (
-    <section id="inicio" className="relative h-screen mobile-dvh w-full overflow-hidden">
-        <img
-          src={DOCTOR_HERO_URL}
-          alt="Dr. Víctor Manuel Agudelo durante una valoración"
-          fetchPriority="high"
-          decoding="async"
-          className="absolute inset-0 w-full h-full object-cover"
-          style={{ background: '#0a0a0a', objectPosition: 'center 35%' }}
-          onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
-        />
-        {/* Gradient overlay */}
-        <div className="absolute inset-0" style={{
-          background: 'linear-gradient(to bottom, rgba(4,8,16,0.62) 0%, rgba(4,8,16,0.52) 45%, rgba(4,8,16,0.75) 100%)',
-        }} />
-
-        {/* ── Hero: frase única, 100% sólida desde el inicio ── */}
-        <div
-          ref={heroOverlayRef}
-          className="absolute inset-0 flex flex-col items-center justify-center text-center"
-          style={{ zIndex: 20, padding: '0 1.25rem', transformOrigin: 'center center', willChange: 'transform, opacity' }}
-        >
-          <h1
-            data-hero-anim
-            style={{
-              fontSize: 'clamp(2rem, 6vw, 6rem)',
-              fontWeight: 600,
-              lineHeight: 1.08,
-              letterSpacing: '-0.03em',
-              maxWidth: '820px',
-              color: '#ffffff',
-              fontFamily: 'var(--font-serif)',
-              textAlign: 'center',
-              transform: 'translateZ(0)',
-              backfaceVisibility: 'hidden',
-            }}
-          >
-            Una nariz que se ve tuya, no operada.
-          </h1>
-          <p data-hero-anim style={{
-            color: 'rgba(255,255,255,0.72)',
-            fontSize: 'clamp(0.875rem, 1.5vw, 1.1rem)',
-            marginTop: '1.25rem',
-            maxWidth: '480px',
-            lineHeight: 1.7,
-            fontWeight: 400,
-            textAlign: 'center',
-            padding: '0 0.5rem',
-          }}>
-            Más de 20 años en rinoplastia. Diseño personalizado, técnica
-            ultrasónica y acompañamiento postoperatorio del propio Dr. Agudelo.
-          </p>
-          <div data-hero-anim style={{ display: 'flex', gap: '0.75rem', marginTop: '1.75rem', flexWrap: 'wrap', justifyContent: 'center' }}>
-            <a
-              href="#agendar"
-              style={{
-                background: '#2D4A3E',
-                color: '#fff',
-                borderRadius: '100px',
-                padding: '0.75rem 1.5rem',
-                fontSize: '0.875rem',
-                fontWeight: 600,
-                textDecoration: 'none',
-                letterSpacing: '0.01em',
-                whiteSpace: 'nowrap',
-              }}
-            >
-              {COPY.ctaPrimary}
-            </a>
-            <a
-              href="#testimonios"
-              style={{
-                color: 'rgba(255,255,255,0.85)',
-                fontSize: '0.875rem',
-                fontWeight: 500,
-                textDecoration: 'none',
-                display: 'flex',
-                alignItems: 'center',
-                padding: '0.75rem 0.5rem',
-                whiteSpace: 'nowrap',
-              }}
-            >
-              Ver casos reales →
-            </a>
+    <section
+      id="inicio"
+      className={`vha-hero${ready ? ' is-ready' : ''}`}
+    >
+      {/* ── Banner: intro copy + headline en 2 líneas ── */}
+      <div className="vha-hero__banner">
+        <div className="vha-hero__row">
+          <div className="vha-hero__inner">
+            <p className="vha-hero__intro">
+              El Dr. Víctor Agudelo ha redefinido la cirugía facial con un enfoque
+              en la <span className="vha-hero__bold">armonía y proporción natural</span> del
+              rostro, uniendo precisión quirúrgica y una visión estética
+              personalizada para cada paciente.
+            </p>
+            <div className="vha-hero__content">
+              <p>
+                <span className="line1">Cirugía diseñada para</span>
+                <span className="line2">tu armonía facial</span>
+              </p>
+            </div>
           </div>
         </div>
+      </div>
+
+      {/* ── Títulos flotantes (sticky abajo, por encima de las columnas) ── */}
+      <h1 className="vha-hero__titles">
+        {FLOATING_TITLES.map((t) => (
+          <span key={t} className="vha-hero__title">{t}</span>
+        ))}
+      </h1>
+
+      {/* ── Columnas que suben escalonadas + bloque blanco que crece ── */}
+      <div className="vha-hero__columns">
+        <div className="vha-hero__cols">
+          {COLUMN_PLACEHOLDERS.map((c) => (
+            <div className="vha-hero__col" key={c.label}>
+              <div className="vha-hero__media" style={{ background: c.bg }}>
+                <span className="vha-hero__media-label">{c.label}</span>
+              </div>
+            </div>
+          ))}
+          <div className="vha-hero__bg" />
+        </div>
+      </div>
     </section>
   )
 }

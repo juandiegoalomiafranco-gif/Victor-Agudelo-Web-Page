@@ -70,6 +70,7 @@ export function Navbar({ ctaVariant = 'evaluacion', darkSectionIds }: NavbarProp
   }, [darkSectionIds])
 
   const links = [
+    { label: 'SOBRE EL DOCTOR', href: '/sobre-el-dr-agudelo', isPage: true },
     { label: 'RINOPLASTIA',    href: '/rinoplastia',    isPage: true },
     { label: 'PROCEDIMIENTOS', href: '/procedimientos', isPage: true },
     { label: 'TESTIMONIOS',    href: '/testimonios',    isPage: true },
@@ -305,6 +306,7 @@ export function Navbar({ ctaVariant = 'evaluacion', darkSectionIds }: NavbarProp
             <div className="flex-1 flex flex-col px-8 pt-28 pb-12 overflow-y-auto">
               <nav className="flex flex-col gap-6 mb-auto">
                 {[
+                  { label: 'Sobre el doctor', href: '/sobre-el-dr-agudelo', isPage: true },
                   { label: 'Rinoplastia', href: '/rinoplastia', isPage: true },
                   { label: 'Procedimientos', href: '/procedimientos', isPage: true },
                   { label: 'Testimonios', href: '/testimonios', isPage: true },

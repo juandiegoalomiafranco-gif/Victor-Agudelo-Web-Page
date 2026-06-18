@@ -127,7 +127,7 @@ export function ProceduresScroll() {
         <div style={{ padding: '0 1.5rem', marginBottom: '3rem', textAlign: 'left' }}>
           <h2
             style={{
-              fontFamily: 'var(--font-serif)',
+              fontFamily: 'var(--font-sans)',
               fontSize: 'clamp(2.5rem, 8vw, 3.2rem)',
               fontWeight: 500,
               color: '#1A1A1A',
@@ -145,7 +145,6 @@ export function ProceduresScroll() {
             <a
               href="#procedimientos"
               style={{
-                flex: 1,
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -153,7 +152,8 @@ export function ProceduresScroll() {
                 border: '1px solid #1A1A1A',
                 color: '#1A1A1A',
                 borderRadius: '100px',
-                padding: '0.75rem 0.5rem',
+                padding: '0.75rem 1.5rem',
+                fontFamily: 'var(--font-sans)',
                 fontSize: '0.68rem',
                 fontWeight: 600,
                 textDecoration: 'none',
@@ -163,28 +163,6 @@ export function ProceduresScroll() {
               }}
             >
               VER PROCEDIMIENTOS
-            </a>
-            <a
-              href="#agendar"
-              style={{
-                flex: 1,
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '0.3rem',
-                background: '#2D4A3E',
-                color: '#fff',
-                borderRadius: '100px',
-                padding: '0.75rem 0.5rem',
-                fontSize: '0.68rem',
-                fontWeight: 600,
-                textDecoration: 'none',
-                letterSpacing: '0.04em',
-                whiteSpace: 'nowrap',
-                textAlign: 'center',
-              }}
-            >
-              EVALUACIÓN GRATUITA
             </a>
           </div>
         </div>
@@ -233,7 +211,7 @@ export function ProceduresScroll() {
           <div style={{ width: '100%', maxWidth: '28rem', display: 'flex', flexDirection: 'column' }}>
             <h2
               style={{
-                fontFamily: 'var(--font-serif)',
+                fontFamily: 'var(--font-sans)',
                 fontSize: 'clamp(3rem, 4vw, 4.2rem)',
                 fontWeight: 500,
                 color: '#1A1A1A',
@@ -268,7 +246,8 @@ export function ProceduresScroll() {
                   border: '1px solid #1A1A1A',
                   color: '#1A1A1A',
                   borderRadius: '100px',
-                  padding: '0.875rem 1.25rem',
+                  padding: '0.875rem 1.75rem',
+                  fontFamily: 'var(--font-sans)',
                   fontSize: '0.78rem',
                   fontWeight: 600,
                   textDecoration: 'none',
@@ -288,33 +267,6 @@ export function ProceduresScroll() {
                 }}
               >
                 VER PROCEDIMIENTOS
-              </a>
-              <a
-                href="#agendar"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '0.4rem',
-                  background: '#2D4A3E',
-                  color: '#fff',
-                  borderRadius: '100px',
-                  padding: '0.875rem 1.25rem',
-                  fontSize: '0.78rem',
-                  fontWeight: 600,
-                  textDecoration: 'none',
-                  letterSpacing: '0.06em',
-                  whiteSpace: 'nowrap',
-                  transition: 'background 0.3s ease',
-                }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLAnchorElement).style.background = '#1F3329'
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLAnchorElement).style.background = '#2D4A3E'
-                }}
-              >
-                EVALUACIÓN GRATUITA
               </a>
             </div>
           </div>
@@ -397,7 +349,7 @@ function ProcedureCard({ proc, isActive, isMobile }: { proc: Procedure; isActive
         <div style={{ marginTop: isMobile ? 'auto' : '0' }}>
           <h3
             style={{
-              fontFamily: 'var(--font-serif)',
+              fontFamily: 'var(--font-sans)',
               fontSize: 'clamp(2rem, 3.5vw, 3rem)',
               fontWeight: 400,
               color: '#ffffff',
@@ -426,6 +378,7 @@ function ProcedureCard({ proc, isActive, isMobile }: { proc: Procedure; isActive
               display: 'inline-flex',
               alignItems: 'center',
               color: '#fff',
+              fontFamily: 'var(--font-sans)',
               fontSize: '0.8rem',
               fontWeight: 600,
               textDecoration: 'none',

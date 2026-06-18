@@ -12,6 +12,7 @@ export const ROUTES_TO_PRERENDER = [
   '/rinoplastia',
   '/procedimientos',
   '/preguntas-frecuentes',
+  '/sobre-el-dr-agudelo',
   '/privacidad',
   ...PROCEDIMIENTOS.map(p => p.path),
 ] as const
@@ -223,6 +224,57 @@ const ROUTES: Record<string, SeoData> = {
         { name: 'Preguntas frecuentes', url: `${SITE_URL}/preguntas-frecuentes` },
       ]),
       faqPage(FAQ_SCHEMA_ENTRIES),
+    ],
+  },
+
+  '/sobre-el-dr-agudelo': {
+    title: 'Sobre el Dr. Víctor Agudelo — Cirujano de Rinoplastia en Cali',
+    description:
+      'Conoce al Dr. Víctor Manuel Agudelo: otorrinolaringólogo y cirujano plástico facial con 22 años de experiencia y más de 1.800 cirugías. Formación, filosofía y enfoque de rinoplastia natural en Cali.',
+    canonical: `${SITE_URL}/sobre-el-dr-agudelo`,
+    ogTitle: 'Sobre el Dr. Víctor Agudelo — Especialista en Rinoplastia',
+    ogDescription:
+      'Otorrinolaringólogo y cirujano plástico facial con 22 años de experiencia. Rinoplastia natural en Cali.',
+    ogImage: DEFAULT_OG_IMAGE,
+    jsonLd: [
+      breadcrumb([
+        { name: 'Inicio', url: `${SITE_URL}/` },
+        { name: 'Sobre el Dr. Agudelo', url: `${SITE_URL}/sobre-el-dr-agudelo` },
+      ]),
+      {
+        '@context': 'https://schema.org',
+        '@type': 'Physician',
+        name: 'Dr. Víctor Manuel Agudelo',
+        jobTitle: 'Otorrinolaringólogo y Cirujano Plástico Facial',
+        url: `${SITE_URL}/sobre-el-dr-agudelo`,
+        image: DEFAULT_OG_IMAGE,
+        medicalSpecialty: [
+          'Otorrinolaringología',
+          'Cirugía Plástica Facial',
+          'Rinoplastia',
+        ],
+        alumniOf: [
+          { '@type': 'EducationalOrganization', name: 'Universidad del Valle' },
+          { '@type': 'EducationalOrganization', name: 'Universidad San Martín' },
+        ],
+        memberOf: [
+          { '@type': 'Organization', name: 'Asociación Colombiana de Otorrinolaringología (ACORL)' },
+          { '@type': 'Organization', name: 'Sociedad Colombiana de Cirugía Plástica Facial y Rinología (SCCPFR)' },
+        ],
+        knowsLanguage: ['es', 'en'],
+        worksFor: {
+          '@type': 'MedicalBusiness',
+          name: 'Clínica de Otorrinolaringología y Cirugía Plástica',
+          address: { '@type': 'PostalAddress', addressLocality: 'Cali', addressCountry: 'CO' },
+        },
+        sameAs: [
+          'https://www.realself.com/dr/victor-manuel-agudelo-cali-colombia',
+          'https://cirugiaplasticafacial.org/directorio-medico/victor-manuel-agudelo-ramos/',
+          'https://acorl.org.co/directorio-otorrino/interno/8-VICTOR-MANUEL-AGUDELO-RAMOS',
+          'https://www.instagram.com/doctorvictoragudelo/',
+          'https://www.tiktok.com/@dr.victor.agudelo',
+        ],
+      },
     ],
   },
 

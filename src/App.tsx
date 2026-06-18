@@ -12,7 +12,6 @@ import { StickyNarrativeSection } from './components/sections/StickyNarrativeSec
 import { DifferentiatorsSection } from './components/sections/DifferentiatorsSection'
 import { TestimonialsSection } from './components/sections/TestimonialsSection'
 import { BookingSection } from './components/sections/BookingSection'
-import { AboutDoctorSection } from './components/sections/AboutDoctorSection'
 import { SurgeryTypesSection } from './components/sections/SurgeryTypesSection'
 import { ProcessSection } from './components/sections/ProcessSection'
 import { Footer, WhatsAppButton } from './components/sections/Footer'
@@ -23,6 +22,7 @@ import { ProcedimientosPage } from './pages/ProcedimientosPage'
 import { TestimoniosPage } from './pages/TestimoniosPage'
 import { PreguntasFrecuentesPage } from './pages/PreguntasFrecuentesPage'
 import { PrivacidadPage } from './pages/PrivacidadPage'
+import { SobreElDrPage } from './pages/SobreElDrPage'
 
 // ScrollTrigger se registra solo en cliente para no romper el pre-render en Node.
 if (typeof window !== 'undefined') {
@@ -89,7 +89,6 @@ function HomePage() {
           <ProceduresScroll />
           <SurgeryTypesSection />
           <DifferentiatorsSection />
-          <AboutDoctorSection />
           <TestimonialsSection />
           <ProcessSection />
           <FaqAccordion />
@@ -114,6 +113,7 @@ export default function App() {
         <Route path="/procedimientos" element={<ProcedimientosPage />} />
         <Route path="/testimonios" element={<TestimoniosPage />} />
         <Route path="/preguntas-frecuentes" element={<PreguntasFrecuentesPage />} />
+        <Route path="/sobre-el-dr-agudelo" element={<SobreElDrPage />} />
         <Route path="/privacidad" element={<PrivacidadPage />} />
       </Routes>
     </>

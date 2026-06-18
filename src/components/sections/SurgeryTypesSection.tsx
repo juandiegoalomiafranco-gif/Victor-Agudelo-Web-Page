@@ -1,77 +1,159 @@
+import { useLayoutEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { Calendar } from 'lucide-react'
+import gsap from 'gsap'
 
-export const SurgeryTypesSection = () => (
-  <section style={{ background: '#FAF7F2', padding: 'clamp(3rem, 8vw, 6rem) clamp(1rem, 3vw, 1.5rem)', borderTop: '1px solid rgba(0,0,0,0.06)' }}>
-    <div style={{ maxWidth: '68rem', margin: '0 auto' }}>
-      <p style={{ fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#94a3b8', marginBottom: '1rem' }}>
-        Procedimientos
-      </p>
-      <h2 className="section-reveal-header" style={{ color: '#1A1A1A', fontWeight: 700, fontSize: 'clamp(2rem, 4vw, 3rem)', letterSpacing: '-0.03em', lineHeight: 1.05, marginBottom: '0.75rem' }}>
-        Más de un procedimiento.<br />Una sola decisión.
-      </h2>
-      <p style={{ color: '#64748b', fontSize: '1rem', lineHeight: 1.7, maxWidth: '44rem', marginBottom: '3rem' }}>
-        Cada cirugía se diseña para una necesidad específica. Conoce los tipos de procedimientos y encuentra el que corresponde a tu caso.
-      </p>
+// Pills de procedimientos (abajo, ancho completo). Cada uno enlaza a su página.
+const PROCEDURE_PILLS = [
+  { label: 'Rinoplastia Estética', href: '/rinoplastia' },
+  { label: 'Rinoplastia Afrolatina', href: '/rinoplastia' },
+  { label: 'Rinoplastia Secundaria', href: '/rinoplastia' },
+  { label: 'Mentoplastia', href: '/procedimientos' },
+  { label: 'Otoplastia', href: '/procedimientos' },
+  { label: 'Blefaroplastia', href: '/procedimientos' },
+] as const
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))', gap: '1.5rem' }}>
-        <div style={{ background: '#fff', borderRadius: '20px', padding: 'clamp(1.25rem, 4vw, 2rem)', border: '1px solid rgba(0,0,0,0.07)', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#2D4A3E', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <span style={{ color: '#fff', fontSize: '1rem', fontWeight: 700 }}>◈</span>
+export const SurgeryTypesSection = () => {
+  const sectionRef = useRef<HTMLElement>(null)
+  const imgRef = useRef<HTMLImageElement>(null)
+
+  // Zoom de la imagen ligado al scroll (marco fijo, solo la imagen escala).
+  useLayoutEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const section = sectionRef.current
+    const img = imgRef.current
+    if (!section || !img) return
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        img,
+        { scale: 1 },
+        {
+          scale: 1.15,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: section,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: 0.6,
+            invalidateOnRefresh: true,
+          },
+        }
+      )
+    }, section)
+
+    return () => ctx.revert()
+  }, [])
+
+  return (
+    <section
+      id="procedimientos-intro"
+      ref={sectionRef}
+      style={{
+        background: 'linear-gradient(180deg, #EFE8DC 0%, #F4EFE6 100%)',
+        borderTop: '1px solid rgba(0,0,0,0.06)',
+        padding: 'clamp(3.5rem, 8vw, 7rem) clamp(1.25rem, 4vw, 4rem)',
+      }}
+    >
+      <div style={{ maxWidth: '82rem', margin: '0 auto' }}>
+        {/* ── Fila superior: texto (44%) + imagen (56%) ── */}
+        <div className="proc-intro__row">
+          {/* Izquierda: bloque centrado verticalmente a la altura de la imagen */}
+          <div className="proc-intro__text">
+            <p
+              style={{
+                fontSize: '0.72rem',
+                fontWeight: 600,
+                letterSpacing: '0.2em',
+                textTransform: 'uppercase',
+                color: '#94a3b8',
+                margin: '0 0 1.5rem 0',
+              }}
+            >
+              Procedimientos
+            </p>
+
+            <h2
+              className="section-reveal-header"
+              style={{
+                color: '#1A1A1A',
+                fontSize: 'clamp(2.5rem, 4.5vw, 3.75rem)',
+                letterSpacing: '-0.02em',
+                lineHeight: 1.12,
+                margin: '0 0 1.75rem 0',
+              }}
+            >
+              <span style={{ fontFamily: 'var(--font-sans)', fontWeight: 400, display: 'block', whiteSpace: 'nowrap' }}>
+                Cada rostro pide
+              </span>
+              <span style={{ fontFamily: 'var(--font-sans)', fontWeight: 700, display: 'block', whiteSpace: 'nowrap' }}>
+                una cirugía diferente
+              </span>
+            </h2>
+
+            <p
+              style={{
+                color: '#475569',
+                fontSize: '1.0625rem',
+                lineHeight: 1.75,
+                margin: 0,
+                maxWidth: '34rem',
+              }}
+            >
+              El rostro es un conjunto en equilibrio: la nariz, el mentón, los
+              párpados y el perfil dialogan entre sí, y un resultado natural nace
+              de respetar esa armonía. Por eso el Dr. Agudelo no aplica la misma
+              técnica a todos —estudia tu anatomía, tu respiración y tus
+              proporciones para definir qué procedimiento, o combinación de
+              procedimientos, te corresponde. Elegir bien la cirugía es el primer
+              paso para lograr un resultado que se vea —y funcione— como debe ser.
+            </p>
           </div>
-          <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.4rem', fontWeight: 600, color: '#1A1A1A', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
-            Rinoplastias
-          </h3>
-          <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.45rem' }}>
-            {['Rinoplastia Estética', 'Rinoplastia Afrolatina', 'Rinoplastia Secundaria'].map(item => (
-              <li key={item} style={{ fontSize: '0.875rem', color: '#475569', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <span style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#2D4A3E', flexShrink: 0 }} />
-                {item}
-              </li>
-            ))}
-          </ul>
-          <Link
-            to="/rinoplastia"
-            style={{ marginTop: 'auto', display: 'inline-flex', alignItems: 'center', gap: '0.375rem', color: '#2D4A3E', fontSize: '0.875rem', fontWeight: 600, textDecoration: 'none' }}
-          >
-            Ver tipos de rinoplastia →
-          </Link>
+
+          {/* Derecha: marco rectangular fijo + imagen con zoom (placeholder por ahora) */}
+          <div className="proc-intro__frame" aria-hidden="true">
+            <img
+              ref={imgRef}
+              className="proc-intro__img"
+              src="/photos/dr-agudelo-placeholder.jpg"
+              alt=""
+              loading="lazy"
+              decoding="async"
+              onError={(e) => {
+                // Placeholder verde mientras llega la foto real del Dr. Agudelo
+                const el = e.currentTarget
+                el.style.display = 'none'
+                const frame = el.parentElement
+                if (frame && !frame.querySelector('.proc-intro__ph')) {
+                  const ph = document.createElement('span')
+                  ph.className = 'proc-intro__ph'
+                  ph.textContent = 'Dr. Víctor Agudelo'
+                  frame.appendChild(ph)
+                }
+              }}
+            />
+          </div>
         </div>
 
-        <div style={{ background: '#fff', borderRadius: '20px', padding: 'clamp(1.25rem, 4vw, 2rem)', border: '1px solid rgba(0,0,0,0.07)', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#1A1A1A', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <span style={{ color: '#fff', fontSize: '1rem', fontWeight: 700 }}>◆</span>
-          </div>
-          <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.4rem', fontWeight: 600, color: '#1A1A1A', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
-            Procedimientos Faciales
-          </h3>
-          <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.45rem' }}>
-            {['Mentoplastia', 'Otoplastia', 'Blefaroplastia', 'Reducción de papada · Mínimamente invasivos'].map(item => (
-              <li key={item} style={{ fontSize: '0.875rem', color: '#475569', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <span style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#1A1A1A', flexShrink: 0 }} />
-                {item}
-              </li>
-            ))}
-          </ul>
-          <Link
-            to="/procedimientos"
-            style={{ marginTop: 'auto', display: 'inline-flex', alignItems: 'center', gap: '0.375rem', color: '#1A1A1A', fontSize: '0.875rem', fontWeight: 600, textDecoration: 'none' }}
-          >
-            Ver procedimientos faciales →
+        {/* ── Pills de procedimientos (ancho completo) ── */}
+        <div
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: '0.75rem',
+            justifyContent: 'center',
+            marginTop: 'clamp(2.5rem, 5vw, 4rem)',
+          }}
+        >
+          {PROCEDURE_PILLS.map((pill) => (
+            <Link key={pill.label} to={pill.href} className="proc-intro__pill">
+              {pill.label}
+            </Link>
+          ))}
+          <Link to="/procedimientos" className="proc-intro__pill proc-intro__pill--ghost">
+            Ver todos los procedimientos
           </Link>
         </div>
       </div>
-
-      <div style={{ marginTop: 'clamp(2.5rem, 5vw, 3.5rem)', textAlign: 'center' }}>
-        <a href="#agendar" style={{
-          display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
-          background: '#2D4A3E', color: '#fff', borderRadius: '100px',
-          padding: '0.85rem 1.75rem', fontSize: '0.875rem', fontWeight: 600,
-          textDecoration: 'none', letterSpacing: '0.01em',
-        }}>
-          <Calendar className="w-4 h-4" /> Pedir evaluación gratuita
-        </a>
-      </div>
-    </div>
-  </section>
-)
+    </section>
+  )
+}

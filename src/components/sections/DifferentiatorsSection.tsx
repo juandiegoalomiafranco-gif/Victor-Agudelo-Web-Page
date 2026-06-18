@@ -1,8 +1,8 @@
-import { useLayoutEffect, useRef } from 'react'
-import { Calendar } from 'lucide-react'
+import { useLayoutEffect, useRef, type CSSProperties } from 'react'
+import { Link } from 'react-router-dom'
 import gsap from 'gsap'
 
-import { DOCTOR_PHOTO_URL } from '../../lib/assets'
+import { BACKGROUND_FOLIAGE_URL, DIFFERENTIATORS_PHOTO_URL } from '../../lib/assets'
 
 const pillars = [
   {
@@ -48,20 +48,24 @@ export const DifferentiatorsSection = () => {
     const mm = gsap.matchMedia()
     mm.add('(min-width: 992px)', () => {
       gsap.set(wrap, { yPercent: 100 })
-      gsap.to(wrap, {
+      const tween = gsap.to(wrap, {
         yPercent: 0,
         ease: 'none',
         scrollTrigger: {
           trigger: section,
           start: 'top top',
-          end: '+=120%',
+          end: '+=140%',
           pin: true,
-          scrub: 0.6,
-          anticipatePin: 1,
+          pinSpacing: true,
+          scrub: 1.1,
           invalidateOnRefresh: true,
         },
       })
-      return () => { gsap.set(wrap, { clearProps: 'transform' }) }
+      return () => {
+        tween.scrollTrigger?.kill()
+        tween.kill()
+        gsap.set(wrap, { clearProps: 'transform' })
+      }
     })
     mm.add('(max-width: 991px)', () => {
       gsap.set(wrap, { clearProps: 'transform' })
@@ -71,11 +75,16 @@ export const DifferentiatorsSection = () => {
   }, [])
 
   return (
-    <section id="diferenciadores" ref={sectionRef} className="diff-section">
+    <section
+      id="diferenciadores"
+      ref={sectionRef}
+      className="diff-section"
+      style={{ '--diff-bg': `url('${BACKGROUND_FOLIAGE_URL}')` } as CSSProperties}
+    >
       <div className="diff-photo-col">
         <div ref={photoWrapRef} className="diff-photo-wrap" aria-hidden="true">
           <img
-            src={DOCTOR_PHOTO_URL}
+            src={DIFFERENTIATORS_PHOTO_URL}
             alt=""
             className="diff-photo"
             loading="lazy"
@@ -83,11 +92,15 @@ export const DifferentiatorsSection = () => {
           />
         </div>
         <div className="diff-overlay-text">
-          <p className="diff-eyebrow">Por qué el Dr. Agudelo</p>
-          <h2 className="diff-title">La clave detrás de cada resultado natural.</h2>
-          <a href="#agendar" className="diff-cta">
-            <Calendar className="w-4 h-4" /> Solicita tu evaluación gratuita
-          </a>
+          <h2 className="diff-title">
+            La clave detrás<br />
+            de cada resultado<br />
+            natural
+          </h2>
+          <p className="diff-subtitle">
+            Redefiniendo la armonía facial a través de la rinoplastia natural
+          </p>
+          <Link to="/sobre-el-dr-agudelo" className="diff-cta">Conoce al Dr. Agudelo</Link>
         </div>
       </div>
 
