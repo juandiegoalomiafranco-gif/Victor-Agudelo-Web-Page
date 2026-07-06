@@ -31,6 +31,34 @@ const stripPrerenderArtifacts = (): Plugin => ({
   },
 });
 
+// El scheduler de react-dom (build de navegador, compartido por el chunk de
+// pre-render) crea un MessageChannel al renderizar en Node y nunca lo cierra:
+// el proceso de `vite build` quedaba vivo tras escribir dist hasta que el CI
+// lo mataba (timeout de 45 min en Vercel). Con los puertos unref() el event
+// loop puede vaciarse y el build termina en segundos. Solo afecta al proceso
+// de build; el bundle del navegador no pasa por aquí.
+const unrefPrerenderChannels = (): Plugin => ({
+  name: 'unref-prerender-message-channels',
+  apply: 'build',
+  configResolved() {
+    const NativeChannel = globalThis.MessageChannel
+    if (!NativeChannel) return
+    globalThis.MessageChannel = class extends NativeChannel {
+      constructor() {
+        super()
+        const unref = () => {
+          ;(this.port1 as unknown as { unref?: () => void }).unref?.()
+          ;(this.port2 as unknown as { unref?: () => void }).unref?.()
+        }
+        unref()
+        // Asignar onmessage vuelve a referenciar el puerto (Node); el segundo
+        // unref corre tras la evaluación síncrona del módulo que lo crea.
+        queueMicrotask(unref)
+      }
+    } as typeof MessageChannel
+  },
+})
+
 export default defineConfig(() => {
   return {
     plugins: [
@@ -42,6 +70,7 @@ export default defineConfig(() => {
         additionalPrerenderRoutes: [...ROUTES_TO_PRERENDER],
       }),
       stripPrerenderArtifacts(),
+      unrefPrerenderChannels(),
     ],
     resolve: {
       alias: {
