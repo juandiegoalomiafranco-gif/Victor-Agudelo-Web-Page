@@ -275,6 +275,15 @@
   outline-offset: 3px;
 }
 
+/* ── Navbar desktop links ────────────────────────────── */
+/* Entre 768 y ~1080px los 5 links + CTA no cabían en la píldora (el CTA
+   quedaba fuera de pantalla). El menú desktop ahora aparece desde lg
+   (1024px) con gap compacto, y recupera el gap original desde 1200px. */
+.nav-links-desktop { gap: 1.1rem; }
+@media (min-width: 1200px) {
+  .nav-links-desktop { gap: 2rem; }
+}
+
 /* ── Section reveal header (3D fade-in) ─────────────── */
 .section-reveal-header {
   will-change: opacity, transform;

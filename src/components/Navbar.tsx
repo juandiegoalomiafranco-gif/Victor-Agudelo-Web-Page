@@ -217,7 +217,7 @@ export function Navbar({ ctaVariant = 'evaluacion', darkSectionIds }: NavbarProp
             </Link>
 
             {/* ── Desktop links ── */}
-            <ul className="hidden md:flex items-center" style={{ gap: '2rem' }}>
+            <ul className="hidden lg:flex items-center nav-links-desktop">
               {NAV_LINKS.map(l => (
                 <li key={l.href}>
                   <Link
@@ -243,7 +243,7 @@ export function Navbar({ ctaVariant = 'evaluacion', darkSectionIds }: NavbarProp
             <a
               href={ctaHref}
               {...ctaExternalProps}
-              className="hidden md:flex items-center gap-2"
+              className="hidden lg:flex items-center gap-2"
               style={{
                 textDecoration: 'none',
                 background: ctaBg,
@@ -268,7 +268,7 @@ export function Navbar({ ctaVariant = 'evaluacion', darkSectionIds }: NavbarProp
             {/* ── Mobile hamburger ── */}
             <button
               onClick={() => setOpen(!open)}
-              className="md:hidden p-2"
+              className="lg:hidden p-2"
               style={{
                 background: 'none',
                 border: 'none',
