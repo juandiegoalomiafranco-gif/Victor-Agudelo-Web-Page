@@ -23,6 +23,7 @@ import { TestimoniosPage } from './pages/TestimoniosPage'
 import { PreguntasFrecuentesPage } from './pages/PreguntasFrecuentesPage'
 import { PrivacidadPage } from './pages/PrivacidadPage'
 import { SobreElDrPage } from './pages/SobreElDrPage'
+import { NotFoundPage } from './pages/NotFoundPage'
 
 // ScrollTrigger se registra solo en cliente para no romper el pre-render en Node.
 if (typeof window !== 'undefined') {
@@ -115,6 +116,7 @@ export default function App() {
         <Route path="/preguntas-frecuentes" element={<PreguntasFrecuentesPage />} />
         <Route path="/sobre-el-dr-agudelo" element={<SobreElDrPage />} />
         <Route path="/privacidad" element={<PrivacidadPage />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </>
   )
