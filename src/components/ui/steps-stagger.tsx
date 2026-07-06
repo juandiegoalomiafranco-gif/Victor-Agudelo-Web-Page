@@ -35,11 +35,12 @@ function useScrollInView(ref: React.RefObject<HTMLElement | null>, margin = '-15
 }
 
 function useIsDesktop() {
-  const [desktop, setDesktop] = useState(() =>
-    typeof window !== 'undefined' ? window.innerWidth >= 768 : true
-  )
+  // Arranca en true (igual que el HTML pre-renderizado en Node) para que la
+  // hidratación coincida; el efecto corrige al valor real ya en cliente.
+  const [desktop, setDesktop] = useState(true)
   useEffect(() => {
     const mq = window.matchMedia('(min-width: 768px)')
+    setDesktop(mq.matches)
     const fn = (e: MediaQueryListEvent) => setDesktop(e.matches)
     mq.addEventListener('change', fn)
     return () => mq.removeEventListener('change', fn)
