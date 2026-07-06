@@ -21,6 +21,16 @@ interface NavbarProps {
 
 const WHATSAPP_CTA_TEXT = 'Pregúntanos por WhatsApp'
 
+// Fuente única de los links de navegación (desktop los muestra en mayúsculas,
+// el overlay móvil tal cual). Todos son rutas de página.
+const NAV_LINKS = [
+  { label: 'Sobre el doctor', href: '/sobre-el-dr-agudelo' },
+  { label: 'Rinoplastia', href: '/rinoplastia' },
+  { label: 'Procedimientos', href: '/procedimientos' },
+  { label: 'Testimonios', href: '/testimonios' },
+  { label: 'Preguntas frecuentes', href: '/preguntas-frecuentes' },
+] as const
+
 export function Navbar({ ctaVariant = 'evaluacion', darkSectionIds }: NavbarProps) {
   const [open, setOpen]         = useState(false)
   const [scrolled, setScrolled] = useState(false)
@@ -68,14 +78,6 @@ export function Navbar({ ctaVariant = 'evaluacion', darkSectionIds }: NavbarProp
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [darkSectionIds])
-
-  const links = [
-    { label: 'SOBRE EL DOCTOR', href: '/sobre-el-dr-agudelo', isPage: true },
-    { label: 'RINOPLASTIA',    href: '/rinoplastia',    isPage: true },
-    { label: 'PROCEDIMIENTOS', href: '/procedimientos', isPage: true },
-    { label: 'TESTIMONIOS',    href: '/testimonios',    isPage: true },
-    { label: 'PREGUNTAS FRECUENTES', href: '/preguntas-frecuentes', isPage: true },
-  ]
 
   /* ─── derived style tokens ─────────────────────────────────────── */
   // Phase A: hero (not scrolled) — pure transparent, white text
@@ -167,8 +169,13 @@ export function Navbar({ ctaVariant = 'evaluacion', darkSectionIds }: NavbarProp
             }}
           >
             {/* ── Logo ── */}
-            <a
-              href="#inicio"
+            <Link
+              to="/"
+              aria-label="Ir al inicio"
+              onClick={() => {
+                // En el home el logo conserva su comportamiento original: subir al hero.
+                if (window.location.pathname === '/') window.scrollTo({ top: 0, behavior: 'smooth' })
+              }}
               style={{
                 textDecoration: 'none',
                 display: 'flex',
@@ -207,43 +214,29 @@ export function Navbar({ ctaVariant = 'evaluacion', darkSectionIds }: NavbarProp
               >
                 Dr. Agudelo
               </span>
-            </a>
+            </Link>
 
             {/* ── Desktop links ── */}
             <ul className="hidden md:flex items-center" style={{ gap: '2rem' }}>
-              {links.map(l => {
-                const sharedStyle: React.CSSProperties = {
-                  textDecoration: 'none',
-                  fontSize: '0.78rem',
-                  fontWeight: 500,
-                  letterSpacing: '0.09em',
-                  color: linkColor,
-                  transition: 'color 0.25s ease',
-                }
-                return (
-                  <li key={l.href}>
-                    {l.isPage ? (
-                      <Link
-                        to={l.href}
-                        style={sharedStyle}
-                        onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = linkHoverColor }}
-                        onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = linkColor }}
-                      >
-                        {l.label}
-                      </Link>
-                    ) : (
-                      <a
-                        href={l.href}
-                        style={sharedStyle}
-                        onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = linkHoverColor }}
-                        onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = linkColor }}
-                      >
-                        {l.label}
-                      </a>
-                    )}
-                  </li>
-                )
-              })}
+              {NAV_LINKS.map(l => (
+                <li key={l.href}>
+                  <Link
+                    to={l.href}
+                    style={{
+                      textDecoration: 'none',
+                      fontSize: '0.78rem',
+                      fontWeight: 500,
+                      letterSpacing: '0.09em',
+                      color: linkColor,
+                      transition: 'color 0.25s ease',
+                    }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = linkHoverColor }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = linkColor }}
+                  >
+                    {l.label.toUpperCase()}
+                  </Link>
+                </li>
+              ))}
             </ul>
 
             {/* ── CTA button ── */}
@@ -305,29 +298,21 @@ export function Navbar({ ctaVariant = 'evaluacion', darkSectionIds }: NavbarProp
           >
             <div className="flex-1 flex flex-col px-8 pt-28 pb-12 overflow-y-auto">
               <nav className="flex flex-col gap-6 mb-auto">
-                {[
-                  { label: 'Sobre el doctor', href: '/sobre-el-dr-agudelo', isPage: true },
-                  { label: 'Rinoplastia', href: '/rinoplastia', isPage: true },
-                  { label: 'Procedimientos', href: '/procedimientos', isPage: true },
-                  { label: 'Testimonios', href: '/testimonios', isPage: true },
-                  { label: 'Preguntas frecuentes', href: '/preguntas-frecuentes', isPage: true },
-                  { label: 'Contacto', href: '#agendar', isPage: false },
-                ].map(l => l.isPage ? (
+                {NAV_LINKS.map(l => (
                   <Link key={l.href} to={l.href} onClick={() => setOpen(false)}
                     style={{ color: 'var(--color-4)', fontWeight: 700, fontSize: '1.75rem', letterSpacing: '-0.02em', textDecoration: 'none' }}
                   >{l.label}</Link>
-                ) : (
-                  <a key={l.href} href={l.href} onClick={() => setOpen(false)}
-                    style={{ color: 'var(--color-4)', fontWeight: 700, fontSize: '1.75rem', letterSpacing: '-0.02em', textDecoration: 'none' }}
-                  >{l.label}</a>
                 ))}
+                <a href="/#agendar" onClick={() => setOpen(false)}
+                  style={{ color: 'var(--color-4)', fontWeight: 700, fontSize: '1.75rem', letterSpacing: '-0.02em', textDecoration: 'none' }}
+                >Contacto</a>
               </nav>
               <a
                 href={ctaHref}
                 {...ctaExternalProps}
                 onClick={() => setOpen(false)}
                 className="mt-8 flex items-center justify-center gap-2 text-sm"
-                style={{ background: '#2d5016', color: '#fff', fontWeight: 600, borderRadius: '100px', padding: '1rem', textDecoration: 'none' }}
+                style={{ background: '#2D4A3E', color: '#fff', fontWeight: 600, borderRadius: '100px', padding: '1rem', textDecoration: 'none' }}
               >
                 {isWhatsapp ? <MessageCircle className="w-4 h-4" /> : <Calendar className="w-4 h-4" />} {ctaText}
               </a>
