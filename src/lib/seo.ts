@@ -82,7 +82,6 @@ const HOME_BUSINESS_SCHEMA = {
       closes: '18:00',
     },
   ],
-  aggregateRating: { '@type': 'AggregateRating', ratingValue: '4.9', reviewCount: '47' },
   priceRange: '$$',
   currenciesAccepted: 'COP',
   paymentAccepted: 'Efectivo, Tarjeta de crédito, Transferencia bancaria',
