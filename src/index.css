@@ -674,6 +674,13 @@
   border: 1px solid #1A1A1A;
 }
 
+/* Título en una sola línea solo en pantallas anchas; en móvil el nowrap
+   forzaba ~460px de ancho mínimo y desbordaba la página (overflow-x). */
+.proc-intro__title-line { white-space: normal; }
+@media (min-width: 768px) {
+  .proc-intro__title-line { white-space: nowrap; }
+}
+
 @media (max-width: 860px) {
   .proc-intro__row {
     grid-template-columns: 1fr;

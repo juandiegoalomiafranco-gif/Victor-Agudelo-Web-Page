@@ -82,10 +82,10 @@ export const SurgeryTypesSection = () => {
                 margin: '0 0 1.75rem 0',
               }}
             >
-              <span style={{ fontFamily: 'var(--font-sans)', fontWeight: 400, display: 'block', whiteSpace: 'nowrap' }}>
+              <span className="proc-intro__title-line" style={{ fontFamily: 'var(--font-sans)', fontWeight: 400, display: 'block' }}>
                 Cada rostro pide
               </span>
-              <span style={{ fontFamily: 'var(--font-sans)', fontWeight: 700, display: 'block', whiteSpace: 'nowrap' }}>
+              <span className="proc-intro__title-line" style={{ fontFamily: 'var(--font-sans)', fontWeight: 700, display: 'block' }}>
                 una cirugía diferente
               </span>
             </h2>
