@@ -7,10 +7,34 @@ import { TESTIMONIALS } from '../../lib/testimonials'
 export const TestimonialsSection = () => {
   const [idx, setIdx]         = useState(0)
   const [progress, setProgress] = useState(0)
+  const [inView, setInView] = useState(false)
+  const [pausedByTouch, setPausedByTouch] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
+  const sectionRef = useRef<HTMLElement>(null)
+  const touchResumeTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
   const DURATION = 5000
 
+  // Pausa el autoplay cuando la sección no está visible (batería/CPU en móvil)
   useEffect(() => {
+    const section = sectionRef.current
+    if (!section) return
+    const observer = new IntersectionObserver(
+      ([entry]) => setInView(entry.isIntersecting),
+      { threshold: 0.1 }
+    )
+    observer.observe(section)
+    return () => observer.disconnect()
+  }, [])
+
+  // Limpia el timer de reanudación al desmontar
+  useEffect(() => {
+    return () => {
+      if (touchResumeTimeoutRef.current) clearTimeout(touchResumeTimeoutRef.current)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!inView || pausedByTouch) return
     setProgress(0)
     const start = performance.now()
     let raf: number
@@ -22,20 +46,29 @@ export const TestimonialsSection = () => {
     }
     raf = requestAnimationFrame(step)
     return () => cancelAnimationFrame(raf)
-  }, [idx])
+  }, [idx, inView, pausedByTouch])
 
   // Scroll to active card
   useEffect(() => {
+    if (pausedByTouch) return
     const container = scrollRef.current
     if (!container) return
     const card = container.children[idx] as HTMLElement | undefined
     if (!card) return
     const left = card.offsetLeft - container.offsetWidth / 2 + card.offsetWidth / 2
     container.scrollTo({ left, behavior: 'smooth' })
-  }, [idx])
+  }, [idx, pausedByTouch])
+
+  // No interrumpir un swipe táctil en curso con el scrollTo programático
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType !== 'touch') return
+    setPausedByTouch(true)
+    if (touchResumeTimeoutRef.current) clearTimeout(touchResumeTimeoutRef.current)
+    touchResumeTimeoutRef.current = setTimeout(() => setPausedByTouch(false), DURATION + 1000)
+  }
 
   return (
-    <section id="testimonios" className="py-14 md:py-28" style={{ background: '#f5f5f0' }}>
+    <section id="testimonios" ref={sectionRef} className="py-14 md:py-28" style={{ background: '#f5f5f0' }}>
       <div className="max-w-7xl mx-auto px-4 md:px-6">
         {/* Header */}
         <div className="text-center mb-14">
@@ -53,6 +86,7 @@ export const TestimonialsSection = () => {
         {/* Text cards */}
         <div
           ref={scrollRef}
+          onPointerDown={handlePointerDown}
           className="flex gap-4 md:gap-5 overflow-x-auto no-scrollbar pb-4"
           style={{ scrollSnapType: 'x mandatory' }}
         >
