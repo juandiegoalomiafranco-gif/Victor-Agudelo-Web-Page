@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
-  ArrowLeft,
   Calendar,
   ChevronRight,
   Heart,
@@ -14,8 +13,10 @@ import {
   Star,
   X,
 } from 'lucide-react'
+import { PageHeader } from '../components/PageHeader'
 import { CONTACT } from '../lib/contact'
 import { COPY } from '../lib/copy'
+import { TESTIMONIALS } from '../lib/testimonials'
 
 // ───────────────────────────────────────────────
 // Types
@@ -42,142 +43,22 @@ interface WrittenReview {
 }
 
 // ───────────────────────────────────────────────
-// Data (placeholders)
+// Data
 // ───────────────────────────────────────────────
 
-const videoTestimonials: VideoTestimonial[] = [
-  // TODO: reemplazar con material real
-  {
-    id: 'v1',
-    name: 'Daniela R.',
-    procedure: 'Rinoplastia Estética',
-    city: 'Cali',
-    poster: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=720&q=80',
-    embedUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-    quote: 'Lo que más me sorprendió: nadie nota que me operé. Solo dicen que me veo descansada.',
-  },
-  {
-    id: 'v2',
-    name: 'María José L.',
-    procedure: 'Rinoplastia Secundaria',
-    city: 'Bogotá',
-    poster: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=720&q=80',
-    embedUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-    quote: 'Después de una cirugía previa fallida, recuperé la confianza para volver a operarme.',
-  },
-  {
-    id: 'v3',
-    name: 'Andrés P.',
-    procedure: 'Rinoplastia Masculina',
-    city: 'Medellín',
-    poster: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=720&q=80',
-    embedUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-    quote: 'Buscaba un cambio sin perder mis rasgos. Sigo siendo yo, solo más equilibrado.',
-  },
-  {
-    id: 'v4',
-    name: 'Valeria C.',
-    procedure: 'Rinoplastia + Mentoplastia',
-    city: 'Cali',
-    poster: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=720&q=80',
-    embedUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-    quote: 'La armonía facial completa fue lo que cambió todo. Mi perfil ahora se siente mío.',
-  },
-  {
-    id: 'v5',
-    name: 'Camila S.',
-    procedure: 'Rinoplastia Afrolatina',
-    city: 'Cartagena',
-    poster: 'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=720&q=80',
-    embedUrl: 'https://www.instagram.com/reel/CxYZ123abc/embed',
-    quote: 'Cuidó mi identidad cultural. Nunca sentí que quisiera borrar quién soy.',
-  },
-  {
-    id: 'v6',
-    name: 'Laura M.',
-    procedure: 'Rinoplastia Ultrasónica',
-    city: 'Pereira',
-    poster: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=720&q=80',
-    embedUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-    quote: 'La recuperación fue mucho más rápida y predecible de lo que esperaba.',
-  },
-]
+// Videos de pacientes reales: agregar aquí cuando exista el material
+// (name, procedure, poster, embedUrl, quote). La grilla y el modal se
+// reactivan solos cuando el array tenga elementos.
+const videoTestimonials: VideoTestimonial[] = []
 
-const writtenReviews: WrittenReview[] = [
-  // TODO: reemplazar con material real
-  {
-    id: 'w1',
-    author: 'Andrea G.',
-    procedure: 'Rinoplastia Estética',
-    text: 'Investigué durante más de un año antes de decidirme. Lo que más valoré fue la honestidad del doctor: me mostró simulaciones y casos similares antes de cualquier compromiso. El resultado es exactamente lo que me prometió — y la nariz se ve como si siempre la hubiera tenido.',
-    source: 'RealSelf',
-    rating: 5,
-    date: '2026-03-12',
-  },
-  {
-    id: 'w2',
-    author: 'Sofía N.',
-    procedure: 'Rinoplastia Secundaria',
-    text: 'Después de quedar inconforme con una primera cirugía hecha por otro cirujano, encontré al Dr. Agudelo. Su seguridad técnica y su transparencia me dieron la confianza para volver a operarme. Hoy puedo respirar bien y mirarme al espejo sin pensar en la nariz.',
-    source: 'Google',
-    rating: 5,
-    date: '2026-02-04',
-  },
-  {
-    id: 'w3',
-    author: 'Juan David R.',
-    procedure: 'Rinoplastia Masculina',
-    text: 'Me preocupaba quedar con una nariz demasiado retocada. Eso jamás pasó. El doctor entendió desde la primera consulta lo que buscaba: mantener mis rasgos y solo equilibrar la punta y el dorso. Excelente trabajo.',
-    source: 'Instagram',
-    rating: 5,
-    date: '2026-01-22',
-  },
-  {
-    id: 'w4',
-    author: 'Mariana T.',
-    procedure: 'Rinoplastia + Mentoplastia',
-    text: 'Combinar las dos cirugías fue la mejor decisión. El Dr. Agudelo me explicó por qué tenía sentido para mi rostro y respetó mis tiempos para decidir. Cero presión comercial. El resultado superó mis expectativas.',
-    source: 'WhatsApp',
-    rating: 5,
-    date: '2025-12-18',
-  },
-  {
-    id: 'w5',
-    author: 'Isabella P.',
-    procedure: 'Rinoplastia Afrolatina',
-    text: 'Tenía miedo de perder mi identidad. El doctor fue muy claro: el objetivo era armonizar, no transformar. Mi familia me dice que me veo igual pero "mejor". Es exactamente lo que quería.',
-    source: 'RealSelf',
-    rating: 5,
-    date: '2025-11-30',
-  },
-  {
-    id: 'w6',
-    author: 'Carolina V.',
-    procedure: 'Rinoplastia Ultrasónica',
-    text: 'Lo elegí por la técnica ultrasónica. Tenía mucho miedo del postoperatorio pero la recuperación fue sorprendentemente cómoda. A los 4 meses ya me sentía 100% yo, con mucha menos inflamación de la que esperaba.',
-    source: 'Google',
-    rating: 5,
-    date: '2025-11-05',
-  },
-  {
-    id: 'w7',
-    author: 'Daniel O.',
-    procedure: 'Otoplastia',
-    text: 'Algo que me marcó toda la vida. Lo que más me impactó del doctor fue que estuvo presente en cada cita — no en delegaciones. Sentí que era importante para él, no un número más.',
-    source: 'Instagram',
-    rating: 5,
-    date: '2025-10-14',
-  },
-  {
-    id: 'w8',
-    author: 'Valentina Q.',
-    procedure: 'Rinoplastia Estética',
-    text: 'Consulté con tres cirujanos antes. La diferencia con el Dr. Agudelo fue que no me prometió cosas imposibles. Me explicó qué era realista y qué no — y eso me dio la tranquilidad para confiarle el procedimiento.',
-    source: 'Google',
-    rating: 5,
-    date: '2025-09-21',
-  },
-]
+// Reseñas escritas reales (misma fuente que el carrusel del home).
+const writtenReviews: WrittenReview[] = TESTIMONIALS.map(t => ({
+  id: t.id,
+  author: t.name,
+  procedure: t.procedure,
+  text: t.text,
+  source: 'RealSelf',
+}))
 
 const pillars = [
   {
@@ -306,34 +187,10 @@ export function TestimoniosPage() {
 
   return (
     <div style={{ minHeight: '100vh', background: '#fff', fontFamily: 'var(--font-sans, DM Sans, sans-serif)' }}>
-      {/* Navbar simple — mirror de RinoplastiaPage / ProcedimientosPage, fondo crema */}
-      <header style={{
-        position: 'sticky', top: 0, zIndex: 50,
-        background: 'rgba(250,247,242,0.94)', backdropFilter: 'blur(16px)',
-        borderBottom: '1px solid rgba(0,0,0,0.07)',
-        padding: '0.75rem 1rem',
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        gap: '0.5rem',
-      }}>
-        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none', color: '#475569', fontSize: '0.875rem', fontWeight: 500 }}>
-          <ArrowLeft style={{ width: '16px', height: '16px' }} aria-hidden="true" />
-          Volver
-        </Link>
-        <Link to="/" style={{ textDecoration: 'none', fontWeight: 700, fontSize: '1rem', color: '#1A1A1A', letterSpacing: '-0.02em' }}>
-          Dr. Agudelo
-        </Link>
-        <a
-          href="/#agendar"
-          style={{
-            background: '#C9A84C', color: '#1A1A1A', borderRadius: '100px',
-            padding: '0.5rem 0.95rem', fontSize: '0.72rem', fontWeight: 700,
-            textDecoration: 'none', letterSpacing: '0.04em', whiteSpace: 'nowrap',
-            textTransform: 'uppercase',
-          }}
-        >
-          Pedir cita
-        </a>
-      </header>
+      <PageHeader
+        background="rgba(250,247,242,0.94)"
+        cta={{ href: '/#agendar', label: 'Pedir cita', variant: 'gold' }}
+      />
 
       {/* Hero */}
       <section style={{
@@ -379,7 +236,7 @@ export function TestimoniosPage() {
             fontSize: 'clamp(0.95rem, 1.5vw, 1.05rem)',
             lineHeight: 1.7, maxWidth: '560px', margin: '0 auto',
           }}>
-            Más de 200 pacientes documentados. Reseñas verificadas en RealSelf, Google e Instagram — de personas que pasaron por la misma decisión que tú estás considerando ahora.
+            Más de 200 casos documentados. Reseñas publicadas por pacientes en RealSelf — de personas que pasaron por la misma decisión que tú estás considerando ahora.
           </p>
         </div>
       </section>
@@ -417,9 +274,10 @@ export function TestimoniosPage() {
         </div>
       </section>
 
-      {/* Video grid */}
+      {/* Video grid — se muestra solo cuando haya videos reales */}
       <section style={{ background: '#fff', padding: 'clamp(3rem, 7vw, 5rem) 1.25rem' }}>
         <div style={{ maxWidth: '78rem', margin: '0 auto' }}>
+          {videoTestimonials.length > 0 && (
           <ul style={{
             listStyle: 'none', margin: 0, padding: 0,
             display: 'grid',
@@ -510,9 +368,10 @@ export function TestimoniosPage() {
               </li>
             ))}
           </ul>
+          )}
 
           {/* Instagram link */}
-          <div style={{ textAlign: 'center', marginTop: 'clamp(2rem, 4vw, 3rem)' }}>
+          <div style={{ textAlign: 'center', marginTop: videoTestimonials.length > 0 ? 'clamp(2rem, 4vw, 3rem)' : 0 }}>
             <a
               href={CONTACT.instagram}
               target="_blank"
@@ -551,9 +410,8 @@ export function TestimoniosPage() {
               Palabras de pacientes que ya tomaron la decisión.
             </h2>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.65rem', flexWrap: 'wrap', justifyContent: 'center' }}>
-              <FiveStars rating={5} />
               <span style={{ fontSize: '0.85rem', color: '#475569', fontWeight: 500 }}>
-                5.0 promedio en RealSelf · Google · Instagram
+                Reseñas publicadas por pacientes en RealSelf
               </span>
             </div>
           </div>
@@ -580,7 +438,7 @@ export function TestimoniosPage() {
                 />
                 {/* Top meta row */}
                 <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '0.65rem', marginBottom: '1rem' }}>
-                  <FiveStars rating={r.rating ?? 5} />
+                  {r.rating && <FiveStars rating={r.rating} />}
                   <SourceBadge source={r.source} />
                   {r.date && (
                     <span style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: 500 }}>

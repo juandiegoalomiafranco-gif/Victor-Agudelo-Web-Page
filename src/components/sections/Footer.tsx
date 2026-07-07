@@ -55,7 +55,8 @@ export const Footer = () => (
           <p className="text-xs uppercase tracking-widest mb-5" style={{ color: 'rgba(255,255,255,0.35)', fontWeight: 600 }}>Contacto</p>
           <ul className="flex flex-col gap-3">
             <li><a href={CONTACT.whatsapp} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm" style={{ color: 'rgba(255,255,255,0.5)', fontWeight: 400, textDecoration: 'none' }}><MessageSquare className="w-4 h-4 shrink-0" style={{ color: 'rgba(255,255,255,0.4)' }} />{CONTACT.phoneDisplay}</a></li>
-            <li><a href={`mailto:${CONTACT.email}`} className="flex items-center gap-2 text-sm" style={{ color: 'rgba(255,255,255,0.5)', fontWeight: 400, textDecoration: 'none' }}><Mail className="w-4 h-4 shrink-0" style={{ color: 'rgba(255,255,255,0.4)' }} />{CONTACT.email}</a></li>
+            {/* overflowWrap: el correo no tiene puntos de quiebre y desbordaba su columna del grid entre 768 y ~1080px */}
+            <li><a href={`mailto:${CONTACT.email}`} className="flex items-center gap-2 text-sm" style={{ color: 'rgba(255,255,255,0.5)', fontWeight: 400, textDecoration: 'none', minWidth: 0, overflowWrap: 'anywhere' }}><Mail className="w-4 h-4 shrink-0" style={{ color: 'rgba(255,255,255,0.4)' }} />{CONTACT.email}</a></li>
             <li><a href={`tel:${CONTACT.phone}`} className="flex items-center gap-2 text-sm" style={{ color: 'rgba(255,255,255,0.5)', fontWeight: 400, textDecoration: 'none' }}><Phone className="w-4 h-4 shrink-0" style={{ color: 'rgba(255,255,255,0.4)' }} />{CONTACT.phoneDisplay}</a></li>
           </ul>
         </div>

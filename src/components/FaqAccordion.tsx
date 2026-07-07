@@ -68,67 +68,83 @@ export function FaqAccordion() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
           {FAQS.map((faq, i) => (
             <div key={i}>
-              {/* Question — right aligned like user message */}
+              {/* Question — right aligned like user message.
+                  Un solo <button> accesible por teclado engloba el círculo +/− y la burbuja. */}
               <div
                 style={{
                   display: 'flex',
                   justifyContent: 'flex-end',
-                  alignItems: 'center',
-                  gap: '0.625rem',
                   marginBottom: openIndex === i ? '0.75rem' : '0',
                 }}
               >
-                {/* +/– toggle button */}
                 <button
+                  type="button"
                   onClick={() => toggle(i)}
-                  aria-label={openIndex === i ? 'Cerrar' : 'Abrir'}
+                  aria-expanded={openIndex === i}
+                  aria-controls={`faq-answer-${i}`}
                   style={{
-                    width: '36px',
-                    height: '36px',
-                    minWidth: '36px',
-                    minHeight: '36px',
-                    borderRadius: '50%',
-                    border: '1px solid rgba(255,255,255,0.22)',
-                    background: 'transparent',
-                    color: '#fff',
-                    fontSize: '1.1rem',
-                    lineHeight: 1,
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center',
+                    gap: '0.625rem',
+                    background: 'none',
+                    border: 'none',
+                    padding: 0,
+                    margin: 0,
                     cursor: 'pointer',
-                    flexShrink: 0,
-                    transition: 'all 0.3s ease',
+                    // 82% para la burbuja (como antes) + círculo 36px + gap
+                    maxWidth: 'min(calc(82% + 2.9rem), 100%)',
+                    fontFamily: 'inherit',
+                    textAlign: 'left',
                   }}
                 >
-                  {openIndex === i ? '−' : '+'}
-                </button>
+                  {/* +/– indicator (decorativo, el botón es todo el bloque) */}
+                  <span
+                    aria-hidden="true"
+                    style={{
+                      width: '36px',
+                      height: '36px',
+                      minWidth: '36px',
+                      minHeight: '36px',
+                      borderRadius: '50%',
+                      border: '1px solid rgba(255,255,255,0.22)',
+                      background: 'transparent',
+                      color: '#fff',
+                      fontSize: '1.1rem',
+                      lineHeight: 1,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexShrink: 0,
+                      transition: 'all 0.3s ease',
+                    }}
+                  >
+                    {openIndex === i ? '−' : '+'}
+                  </span>
 
-                {/* Bubble */}
-                <div
-                  onClick={() => toggle(i)}
-                  style={{
-                    background: openIndex === i ? 'rgba(38,38,42,0.95)' : '#1c1c20',
-                    border: `1px solid ${openIndex === i ? 'rgba(125,195,255,0.35)' : 'rgba(255,255,255,0.07)'}`,
-                    borderRadius: '18px 18px 4px 18px',
-                    padding: '0.875rem 1.375rem',
-                    color: '#ffffff',
-                    fontSize: '0.9375rem',
-                    fontWeight: 500,
-                    cursor: 'pointer',
-                    maxWidth: 'min(82%, calc(100vw - 5rem))',
-                    lineHeight: 1.5,
-                    transition: 'all 0.3s ease',
-                    userSelect: 'none',
-                  }}
-                >
-                  {faq.question}
-                </div>
+                  {/* Bubble */}
+                  <span
+                    style={{
+                      display: 'block',
+                      background: openIndex === i ? 'rgba(38,38,42,0.95)' : '#1c1c20',
+                      border: `1px solid ${openIndex === i ? 'rgba(125,195,255,0.35)' : 'rgba(255,255,255,0.07)'}`,
+                      borderRadius: '18px 18px 4px 18px',
+                      padding: '0.875rem 1.375rem',
+                      color: '#ffffff',
+                      fontSize: '0.9375rem',
+                      fontWeight: 500,
+                      lineHeight: 1.5,
+                      transition: 'all 0.3s ease',
+                    }}
+                  >
+                    {faq.question}
+                  </span>
+                </button>
               </div>
 
               {/* Answer — left aligned like doctor reply */}
               {openIndex === i && (
                 <div
+                  id={`faq-answer-${i}`}
                   style={{
                     display: 'flex',
                     alignItems: 'flex-start',

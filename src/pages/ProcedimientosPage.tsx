@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
-import { Calendar, ArrowLeft, CheckCircle } from 'lucide-react'
+import { Calendar, CheckCircle } from 'lucide-react'
+import { PageHeader } from '../components/PageHeader'
 import { COPY } from '../lib/copy'
 
 const procedimientos = [
@@ -78,33 +79,7 @@ const procedimientos = [
 export function ProcedimientosPage() {
   return (
     <div style={{ minHeight: '100vh', background: '#fff', fontFamily: 'var(--font-sans, DM Sans, sans-serif)' }}>
-      {/* Navbar simple */}
-      <header style={{
-        position: 'sticky', top: 0, zIndex: 50,
-        background: 'rgba(255,255,255,0.96)', backdropFilter: 'blur(16px)',
-        borderBottom: '1px solid rgba(0,0,0,0.07)',
-        padding: '0.75rem 1rem',
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        gap: '0.5rem',
-      }}>
-        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none', color: '#475569', fontSize: '0.875rem', fontWeight: 500 }}>
-          <ArrowLeft style={{ width: '16px', height: '16px' }} />
-          Volver
-        </Link>
-        <Link to="/" style={{ textDecoration: 'none', fontWeight: 700, fontSize: '1rem', color: '#1A1A1A', letterSpacing: '-0.02em' }}>
-          Dr. Agudelo
-        </Link>
-        <a
-          href="/#agendar"
-          style={{
-            background: '#2D4A3E', color: '#fff', borderRadius: '100px',
-            padding: '0.5rem 0.875rem', fontSize: '0.72rem', fontWeight: 600,
-            textDecoration: 'none', letterSpacing: '0.02em', whiteSpace: 'nowrap',
-          }}
-        >
-          {COPY.ctaSecondary}
-        </a>
-      </header>
+      <PageHeader cta={{ href: '/#agendar', label: COPY.ctaSecondary }} />
 
       {/* Hero */}
       <section style={{ background: '#1A1A1A', padding: 'clamp(3rem, 8vw, 5rem) 1.25rem clamp(2.5rem, 6vw, 4rem)', textAlign: 'center' }}>

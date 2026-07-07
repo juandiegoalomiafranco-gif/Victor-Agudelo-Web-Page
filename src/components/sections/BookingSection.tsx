@@ -16,12 +16,13 @@ export const BookingSection = () => {
   const markTouched = (k: string) => () => setTouched(t => ({ ...t, [k]: true }))
 
   const errors = {
-    name: !form.name,
-    email: !form.email,
-    phone: !form.phone,
+    name: !form.name.trim(),
+    email: !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(form.email.trim()),
+    phone: form.phone.replace(/\D/g, '').length < 7,
   }
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
     setTouched({ name: true, email: true, phone: true })
     if (errors.name || errors.email || errors.phone) return
     setStatus('loading')
@@ -100,30 +101,30 @@ export const BookingSection = () => {
                 </p>
               </motion.div>
             ) : (
-              <motion.div key="form" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="grid gap-5">
+              <motion.form key="form" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="grid gap-5" onSubmit={handleSubmit} noValidate>
                 <div className="grid sm:grid-cols-2 gap-5">
                   <div>
-                    <label className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--color-5)', fontWeight: 400 }}>Nombre completo *</label>
-                    <input type="text" placeholder="Ej. Ana García" value={form.name} onChange={set('name')} onBlur={markTouched('name')}
+                    <label htmlFor="booking-name" className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--color-5)', fontWeight: 400 }}>Nombre completo *</label>
+                    <input id="booking-name" name="name" autoComplete="name" type="text" placeholder="Ej. Ana García" value={form.name} onChange={set('name')} onBlur={markTouched('name')}
                       aria-invalid={touched.name && errors.name}
                       style={{ ...inputCls, borderColor: touched.name && errors.name ? 'rgba(248,113,113,0.6)' : 'rgba(255,255,255,0.12)' }} />
                   </div>
                   <div>
-                    <label className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--color-5)', fontWeight: 400 }}>Correo electrónico *</label>
-                    <input type="email" placeholder="ana@correo.com" value={form.email} onChange={set('email')} onBlur={markTouched('email')}
+                    <label htmlFor="booking-email" className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--color-5)', fontWeight: 400 }}>Correo electrónico *</label>
+                    <input id="booking-email" name="email" autoComplete="email" type="email" placeholder="ana@correo.com" value={form.email} onChange={set('email')} onBlur={markTouched('email')}
                       aria-invalid={touched.email && errors.email}
                       style={{ ...inputCls, borderColor: touched.email && errors.email ? 'rgba(248,113,113,0.6)' : 'rgba(255,255,255,0.12)' }} />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--color-5)', fontWeight: 400 }}>Teléfono / WhatsApp *</label>
-                  <input type="tel" placeholder="+57 300 000 0000" value={form.phone} onChange={set('phone')} onBlur={markTouched('phone')}
+                  <label htmlFor="booking-phone" className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--color-5)', fontWeight: 400 }}>Teléfono / WhatsApp *</label>
+                  <input id="booking-phone" name="phone" autoComplete="tel" type="tel" placeholder="+57 300 000 0000" value={form.phone} onChange={set('phone')} onBlur={markTouched('phone')}
                     aria-invalid={touched.phone && errors.phone}
                     style={{ ...inputCls, borderColor: touched.phone && errors.phone ? 'rgba(248,113,113,0.6)' : 'rgba(255,255,255,0.12)' }} />
                 </div>
                 <div>
-                  <label className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--color-5)', fontWeight: 400 }}>Procedimiento de interés</label>
-                  <select value={form.procedimiento} onChange={set('procedimiento')}
+                  <label htmlFor="booking-proc" className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--color-5)', fontWeight: 400 }}>Procedimiento de interés</label>
+                  <select id="booking-proc" name="procedimiento" value={form.procedimiento} onChange={set('procedimiento')}
                     style={{ ...inputCls, appearance: 'none', backgroundImage: 'url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'12\' height=\'8\' viewBox=\'0 0 12 8\' fill=\'none\'><path d=\'M1 1L6 6L11 1\' stroke=\'%23ffffff80\' stroke-width=\'1.5\' stroke-linecap=\'round\'/></svg>")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 1rem center', paddingRight: '2.5rem' }}>
                     <option value="" style={{ background: '#1A1A1A' }}>Selecciona una opción</option>
                     <option value="Rinoplastia Estética" style={{ background: '#1A1A1A' }}>Rinoplastia Estética</option>
@@ -134,12 +135,12 @@ export const BookingSection = () => {
                     <option value="Blefaroplastia" style={{ background: '#1A1A1A' }}>Blefaroplastia</option>
                     <option value="Reducción de Papada" style={{ background: '#1A1A1A' }}>Reducción de Papada</option>
                     <option value="No Quirúrgicos" style={{ background: '#1A1A1A' }}>No Quirúrgicos · Toxina · Ácido</option>
-                    <option value="No estoy seguro" style={{ background: '#1A1A1A' }}>Aún no estoy segura</option>
+                    <option value="Aún no estoy segura" style={{ background: '#1A1A1A' }}>Aún no estoy segura</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--color-5)', fontWeight: 400 }}>Mensaje (opcional)</label>
-                  <textarea rows={3} placeholder="Cuéntanos brevemente tu caso..." value={form.message} onChange={set('message')} style={{ ...inputCls, resize: 'none' }} />
+                  <label htmlFor="booking-message" className="block text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--color-5)', fontWeight: 400 }}>Mensaje (opcional)</label>
+                  <textarea id="booking-message" name="message" rows={3} placeholder="Cuéntanos brevemente tu caso..." value={form.message} onChange={set('message')} style={{ ...inputCls, resize: 'none' }} />
                 </div>
                 <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.78rem', lineHeight: 1.55 }}>
                   ¿Quieres enviar fotos? Tras recibir tu solicitud te escribimos por WhatsApp para coordinar el envío seguro de imágenes.
@@ -156,7 +157,7 @@ export const BookingSection = () => {
                   </div>
                 )}
                 <button
-                  onClick={handleSubmit}
+                  type="submit"
                   disabled={status === 'loading'}
                   className="flex items-center justify-center gap-2 w-full py-4 mt-2 text-sm transition-all"
                   style={{
@@ -171,7 +172,7 @@ export const BookingSection = () => {
                 >
                   {status === 'loading' ? 'Enviando…' : <><Calendar className="w-4 h-4" /> {COPY.ctaPrimary}</>}
                 </button>
-              </motion.div>
+              </motion.form>
             )}
           </AnimatePresence>
         </div>

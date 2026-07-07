@@ -11,6 +11,7 @@ export const ROUTES_TO_PRERENDER = [
   '/',
   '/rinoplastia',
   '/procedimientos',
+  '/testimonios',
   '/preguntas-frecuentes',
   '/sobre-el-dr-agudelo',
   '/privacidad',
@@ -81,7 +82,6 @@ const HOME_BUSINESS_SCHEMA = {
       closes: '18:00',
     },
   ],
-  aggregateRating: { '@type': 'AggregateRating', ratingValue: '4.9', reviewCount: '47' },
   priceRange: '$$',
   currenciesAccepted: 'COP',
   paymentAccepted: 'Efectivo, Tarjeta de crédito, Transferencia bancaria',
@@ -206,6 +206,23 @@ const ROUTES: Record<string, SeoData> = {
         'Toxina botulínica, ácido hialurónico y láser CO₂ para rejuvenecimiento facial sin cirugía mayor.',
         'Cara',
       ),
+    ],
+  },
+
+  '/testimonios': {
+    title: 'Testimonios de Pacientes — Rinoplastia en Cali | Dr. Víctor Agudelo',
+    description:
+      'Testimonios reales de pacientes del Dr. Víctor Agudelo en Cali: rinoplastia estética, secundaria y afrolatina. Experiencias verificadas en RealSelf de quienes ya pasaron por esta decisión.',
+    canonical: `${SITE_URL}/testimonios`,
+    ogTitle: 'Testimonios de pacientes — Dr. Víctor Agudelo',
+    ogDescription:
+      'Experiencias reales de pacientes de rinoplastia en Cali, con sus propias palabras.',
+    ogImage: DEFAULT_OG_IMAGE,
+    jsonLd: [
+      breadcrumb([
+        { name: 'Inicio', url: `${SITE_URL}/` },
+        { name: 'Testimonios', url: `${SITE_URL}/testimonios` },
+      ]),
     ],
   },
 
