@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowLeft, ChevronRight } from 'lucide-react'
+import { ChevronRight } from 'lucide-react'
+import { PageHeader } from '../components/PageHeader'
 
 // 404 genérica para rutas desconocidas (catch-all del Router).
 // Marca noindex en cliente; las rutas válidas se prerenderizan aparte.
@@ -15,22 +16,7 @@ export function NotFoundPage() {
 
   return (
     <div style={{ minHeight: '100vh', background: '#fff', display: 'flex', flexDirection: 'column', fontFamily: 'var(--font-sans, DM Sans, sans-serif)' }}>
-      <header style={{
-        position: 'sticky', top: 0, zIndex: 50,
-        background: 'rgba(255,255,255,0.96)', backdropFilter: 'blur(16px)',
-        borderBottom: '1px solid rgba(0,0,0,0.07)',
-        padding: '0.75rem 1rem',
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        gap: '0.5rem',
-      }}>
-        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none', color: '#475569', fontSize: '0.875rem', fontWeight: 500 }}>
-          <ArrowLeft style={{ width: 16, height: 16 }} /> Volver al inicio
-        </Link>
-        <Link to="/" style={{ textDecoration: 'none', fontWeight: 700, fontSize: '1rem', color: '#1A1A1A', letterSpacing: '-0.02em' }}>
-          Dr. Agudelo
-        </Link>
-        <span style={{ width: 16 }} />
-      </header>
+      <PageHeader backLabel="Volver al inicio" />
 
       <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '4rem 1.5rem', textAlign: 'center' }}>
         <div style={{ maxWidth: '32rem' }}>

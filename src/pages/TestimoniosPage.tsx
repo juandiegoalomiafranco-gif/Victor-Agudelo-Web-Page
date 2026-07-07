@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
-  ArrowLeft,
   Calendar,
   ChevronRight,
   Heart,
@@ -14,6 +13,7 @@ import {
   Star,
   X,
 } from 'lucide-react'
+import { PageHeader } from '../components/PageHeader'
 import { CONTACT } from '../lib/contact'
 import { COPY } from '../lib/copy'
 import { TESTIMONIALS } from '../lib/testimonials'
@@ -187,34 +187,10 @@ export function TestimoniosPage() {
 
   return (
     <div style={{ minHeight: '100vh', background: '#fff', fontFamily: 'var(--font-sans, DM Sans, sans-serif)' }}>
-      {/* Navbar simple — mirror de RinoplastiaPage / ProcedimientosPage, fondo crema */}
-      <header style={{
-        position: 'sticky', top: 0, zIndex: 50,
-        background: 'rgba(250,247,242,0.94)', backdropFilter: 'blur(16px)',
-        borderBottom: '1px solid rgba(0,0,0,0.07)',
-        padding: '0.75rem 1rem',
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        gap: '0.5rem',
-      }}>
-        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none', color: '#475569', fontSize: '0.875rem', fontWeight: 500 }}>
-          <ArrowLeft style={{ width: '16px', height: '16px' }} aria-hidden="true" />
-          Volver
-        </Link>
-        <Link to="/" style={{ textDecoration: 'none', fontWeight: 700, fontSize: '1rem', color: '#1A1A1A', letterSpacing: '-0.02em' }}>
-          Dr. Agudelo
-        </Link>
-        <a
-          href="/#agendar"
-          style={{
-            background: '#C9A84C', color: '#1A1A1A', borderRadius: '100px',
-            padding: '0.5rem 0.95rem', fontSize: '0.72rem', fontWeight: 700,
-            textDecoration: 'none', letterSpacing: '0.04em', whiteSpace: 'nowrap',
-            textTransform: 'uppercase',
-          }}
-        >
-          Pedir cita
-        </a>
-      </header>
+      <PageHeader
+        background="rgba(250,247,242,0.94)"
+        cta={{ href: '/#agendar', label: 'Pedir cita', variant: 'gold' }}
+      />
 
       {/* Hero */}
       <section style={{

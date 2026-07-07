@@ -1,6 +1,7 @@
 import type React from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { ArrowLeft, Calendar, CheckCircle, ChevronRight, MessageSquare, Phone, Image as ImageIcon, AlertCircle } from 'lucide-react'
+import { Calendar, CheckCircle, ChevronRight, MessageSquare, Phone, Image as ImageIcon, AlertCircle } from 'lucide-react'
+import { PageHeader } from '../components/PageHeader'
 import { CONTACT } from '../lib/contact'
 import { COPY } from '../lib/copy'
 import { PROCEDIMIENTOS, getProcedimientoBySlug } from '../lib/procedimientos'
@@ -21,13 +22,7 @@ const SERIF = "var(--font-serif, 'Cormorant Garamond', Georgia, serif)"
 function NotFound() {
   return (
     <div style={{ minHeight: '100vh', background: '#fff', display: 'flex', flexDirection: 'column' }}>
-      <header style={navbarStyle}>
-        <Link to="/rinoplastia" style={navbarBackLink}>
-          <ArrowLeft style={{ width: 16, height: 16 }} /> Volver a Rinoplastia
-        </Link>
-        <Link to="/" style={navbarBrand}>Dr. Agudelo</Link>
-        <Link to="/#agendar" style={navbarCta}>{COPY.ctaSecondary}</Link>
-      </header>
+      <PageHeader backTo="/rinoplastia" backLabel="Volver a Rinoplastia" cta={{ href: '/#agendar', label: COPY.ctaSecondary }} />
 
       <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '4rem 1.5rem', textAlign: 'center' }}>
         <div style={{ maxWidth: '32rem' }}>
@@ -60,14 +55,7 @@ export function ProcedimientoDetallePage() {
 
   return (
     <div style={{ minHeight: '100vh', background: '#fff', fontFamily: 'var(--font-sans, DM Sans, sans-serif)' }}>
-      {/* Navbar */}
-      <header style={navbarStyle}>
-        <Link to="/rinoplastia" style={navbarBackLink}>
-          <ArrowLeft style={{ width: 16, height: 16 }} /> Rinoplastia
-        </Link>
-        <Link to="/" style={navbarBrand}>Dr. Agudelo</Link>
-        <Link to="/#agendar" style={navbarCta}>{COPY.ctaSecondary}</Link>
-      </header>
+      <PageHeader backTo="/rinoplastia" backLabel="Rinoplastia" cta={{ href: '/#agendar', label: COPY.ctaSecondary }} />
 
       {/* HERO */}
       <Hero proc={proc} />
@@ -406,28 +394,6 @@ function CandidatoCard({ tono, titulo, items }: { tono: 'positivo' | 'negativo';
 }
 
 // ─── Estilos compartidos ────────────────────────────────────────────────────
-const navbarStyle: React.CSSProperties = {
-  position: 'sticky', top: 0, zIndex: 50,
-  background: 'rgba(255,255,255,0.96)', backdropFilter: 'blur(16px)',
-  borderBottom: '1px solid rgba(0,0,0,0.07)',
-  padding: '0.75rem 1rem',
-  display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-  gap: '0.5rem',
-}
-const navbarBackLink: React.CSSProperties = {
-  display: 'flex', alignItems: 'center', gap: '0.5rem',
-  textDecoration: 'none', color: '#475569', fontSize: '0.875rem', fontWeight: 500,
-}
-const navbarBrand: React.CSSProperties = {
-  textDecoration: 'none', fontWeight: 700, fontSize: '1rem',
-  color: TEXT_DARK, letterSpacing: '-0.02em',
-}
-const navbarCta: React.CSSProperties = {
-  background: ACCENT, color: '#fff', borderRadius: '100px',
-  padding: '0.5rem 0.875rem', fontSize: '0.72rem', fontWeight: 600,
-  textDecoration: 'none', letterSpacing: '0.02em', whiteSpace: 'nowrap',
-}
-
 const eyebrowStyle = (color: string): React.CSSProperties => ({
   fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.2em',
   textTransform: 'uppercase', color, marginBottom: '1rem',
