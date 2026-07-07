@@ -150,6 +150,7 @@ export function ProcedimientoDetallePage() {
             <Link
               key={p.slug}
               to={p.path}
+              className="tap-feedback"
               style={otroProcCard}
               onMouseEnter={e => { e.currentTarget.style.borderColor = ACCENT; e.currentTarget.style.transform = 'translateY(-2px)' }}
               onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(0,0,0,0.08)'; e.currentTarget.style.transform = 'translateY(0)' }}

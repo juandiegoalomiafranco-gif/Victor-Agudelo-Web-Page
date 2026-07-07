@@ -147,6 +147,7 @@ export function RinoplastiaPage() {
               <Link
                 key={p.slug}
                 to={p.path}
+                className="tap-feedback"
                 style={{
                   display: 'flex', flexDirection: 'column',
                   background: '#F7F5F0', borderRadius: '18px',

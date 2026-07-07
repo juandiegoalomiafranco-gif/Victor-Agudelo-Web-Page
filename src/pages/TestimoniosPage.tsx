@@ -500,6 +500,7 @@ export function TestimoniosPage() {
               return (
                 <li
                   key={p.title}
+                  className="tap-feedback"
                   onMouseEnter={() => setHoveredPillar(i)}
                   onMouseLeave={() => setHoveredPillar(null)}
                   style={{

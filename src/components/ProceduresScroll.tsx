@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useMediaQuery } from '../lib/hooks'
 
 interface Procedure {
   title: string
@@ -81,15 +82,7 @@ export function ProceduresScroll() {
   const rightColRef = useRef<HTMLDivElement>(null)
   const [activeIdx, setActiveIdx] = useState(0)
   const cardRefs = useRef<(HTMLDivElement | null)[]>([])
-  const [isMobile, setIsMobile] = useState(false)
-
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 767px)')
-    setIsMobile(mq.matches)
-    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
-    mq.addEventListener('change', handler)
-    return () => mq.removeEventListener('change', handler)
-  }, [])
+  const isMobile = useMediaQuery('(max-width: 767px)', false)
 
   useEffect(() => {
     if (isMobile) return
@@ -300,10 +293,10 @@ export function ProceduresScroll() {
 function ProcedureCard({ proc, isActive, isMobile }: { proc: Procedure; isActive: boolean; isMobile: boolean }) {
   return (
     <div
+      className="procedure-card"
       style={{
         position: 'relative',
         width: '100%',
-        minHeight: '80vh',
         overflow: 'hidden',
         background: '#1A1A1A',
         display: 'flex',
