@@ -3,6 +3,8 @@ import { Routes, Route } from 'react-router-dom'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
+import { getLenis, setLenis } from './lib/lenisInstance'
+
 import { Navbar } from './components/Navbar'
 import { ProceduresScroll } from './components/ProceduresScroll'
 import { FaqAccordion } from './components/FaqAccordion'
@@ -48,9 +50,28 @@ function HomePage() {
       lenis.on('scroll', ScrollTrigger.update)
       const raf = (time: number) => { lenis.raf(time); rafId = requestAnimationFrame(raf) }
       rafId = requestAnimationFrame(raf)
+      setLenis(lenis)
     }).catch((err) => { console.error('Lenis no se pudo cargar; scroll suave deshabilitado.', err) })
+
+    // Enruta los clicks en anclas internas (#hash) por Lenis para evitar que
+    // compitan con el scroll nativo de `scroll-behavior: smooth` (index.css).
+    const handleAnchorClick = (e: MouseEvent) => {
+      const anchor = (e.target as HTMLElement | null)?.closest('a[href^="#"]')
+      if (!anchor) return
+      const hash = anchor.getAttribute('href')?.slice(1)
+      if (!hash) return
+      const target = document.getElementById(hash)
+      const activeLenis = getLenis()
+      if (!target || !activeLenis) return
+      e.preventDefault()
+      activeLenis.scrollTo(target, { offset: -80 })
+    }
+    document.addEventListener('click', handleAnchorClick)
+
     return () => {
+      document.removeEventListener('click', handleAnchorClick)
       if (rafId !== null) cancelAnimationFrame(rafId)
+      setLenis(null)
       lenis?.destroy()
     }
   }, [])

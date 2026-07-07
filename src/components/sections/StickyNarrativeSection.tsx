@@ -28,14 +28,18 @@ export const StickyNarrativeSection = () => {
       return
     }
     let cancelled = false
+    let timeoutId: ReturnType<typeof setTimeout>
     const start = () => {
       requestAnimationFrame(() =>
         requestAnimationFrame(() => { if (!cancelled) setReady(true) })
       )
     }
-    if (document.fonts?.ready) document.fonts.ready.then(start)
-    else start()
-    return () => { cancelled = true }
+    // Red de seguridad: si document.fonts.ready nunca resuelve (navegadores
+    // in-app rotos), no dejamos el headline invisible para siempre.
+    const fontsReady = document.fonts?.ready ?? Promise.resolve()
+    const timeout = new Promise<void>((resolve) => { timeoutId = setTimeout(resolve, 2500) })
+    Promise.race([fontsReady, timeout]).then(start)
+    return () => { cancelled = true; clearTimeout(timeoutId) }
   }, [])
 
   return (
