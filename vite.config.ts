@@ -16,6 +16,24 @@ const stripPrerenderArtifacts = (): Plugin => ({
   generateBundle(_options, bundle) {
     const prerenderChunks = Object.keys(bundle).filter((n) => n.includes('entry-prerender'));
     if (prerenderChunks.length === 0) return;
+    // Salvaguarda: si otro chunk del bundle importa el chunk de prerender
+    // (Rollup pudo haber colocado módulos compartidos ahí), borrarlo rompería
+    // la app entera en el navegador (import 404 → sin hidratación). En ese
+    // caso se conserva y solo se limpia el modulepreload.
+    const referenced = prerenderChunks.filter((p) =>
+      Object.values(bundle).some(
+        (c) =>
+          c.type === 'chunk' &&
+          !prerenderChunks.includes(c.fileName) &&
+          [...c.imports, ...c.dynamicImports].some((i) => prerenderChunks.includes(i)),
+      ),
+    );
+    if (referenced.length > 0) {
+      this.warn(
+        `stripPrerenderArtifacts: ${referenced.join(', ')} es importado por otros chunks; no se elimina. ` +
+          'Revisa manualChunks para separar los módulos compartidos.',
+      );
+    }
     const stripPattern = new RegExp(
       `<link rel="modulepreload"[^>]*(?:${prerenderChunks
         .map((n) => n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
@@ -27,7 +45,9 @@ const stripPrerenderArtifacts = (): Plugin => ({
         asset.source = asset.source.replace(stripPattern, '');
       }
     }
-    for (const name of prerenderChunks) delete bundle[name];
+    for (const name of prerenderChunks) {
+      if (!referenced.includes(name)) delete bundle[name];
+    }
   },
 });
 
@@ -72,6 +92,20 @@ export default defineConfig(() => {
       stripPrerenderArtifacts(),
       unrefPrerenderChannels(),
     ],
+    build: {
+      rollupOptions: {
+        output: {
+          // React y el router van a un chunk vendor compartido. Sin esto,
+          // Rollup los hoistea dentro del chunk de entry-prerender (la otra
+          // entrada del build) y el bundle del navegador termina importando
+          // desde un archivo que stripPrerenderArtifacts elimina → 404 y la
+          // app carga sin JavaScript.
+          manualChunks: {
+            'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          },
+        },
+      },
+    },
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),

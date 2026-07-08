@@ -378,6 +378,9 @@ export function TestimoniosPage() {
               rel="noopener noreferrer"
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: '0.55rem',
+                // flexWrap + maxWidth: en 320px el pill envuelve a dos líneas
+                // en vez de desbordar; en pantallas normales cabe en una.
+                flexWrap: 'wrap', justifyContent: 'center', maxWidth: '100%',
                 color: '#1A1A1A', textDecoration: 'none',
                 fontSize: '0.875rem', fontWeight: 500,
                 padding: '0.7rem 1.25rem',
