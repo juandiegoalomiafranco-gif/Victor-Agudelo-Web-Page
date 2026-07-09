@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { AnimatePresence, motion } from 'motion/react'
 import { Menu, X, Calendar, MessageCircle } from 'lucide-react'
 
 import { CONTACT } from '../lib/contact'
 import { COPY } from '../lib/copy'
+import { getLenis } from '../lib/lenisInstance'
 
 export type CtaVariant = 'evaluacion' | 'whatsapp'
 
@@ -36,23 +37,29 @@ export function Navbar({ ctaVariant = 'evaluacion', darkSectionIds }: NavbarProp
   const [scrolled, setScrolled] = useState(false)
   const [darkSection, setDarkSection] = useState(true) // true = dark bg underneath
 
-  useEffect(() => {
-    const onScroll = () => {
-      const y = window.scrollY
-      setScrolled(y > 60)
-      const mid = y + 40 // sample point slightly below header
+  // Cache de posiciones de las secciones consultadas por el cálculo de fase.
+  // Se calcula una vez al montar (y se recalcula en resize/load) para que el
+  // listener de scroll no tenga que tocar el DOM en cada evento.
+  type SectionCache =
+    | { mode: 'ids'; ranges: ({ top: number; bottom: number } | null)[] }
+    | { mode: 'default'; difTop: number; agendarTop: number }
 
-      // Detección genérica: oscuro si el punto de muestreo cae dentro de
-      // alguna de las secciones marcadas como oscuras para esta página.
+  useEffect(() => {
+    let cache: SectionCache | null = null
+    let ticking = false
+
+    const computeCache = () => {
       if (darkSectionIds) {
-        const isDark = darkSectionIds.some(id => {
-          const el = document.getElementById(id)
-          if (!el) return false
-          const top = (el as HTMLElement).offsetTop
-          const bottom = top + (el as HTMLElement).offsetHeight
-          return mid >= top && mid < bottom
-        })
-        setDarkSection(isDark)
+        cache = {
+          mode: 'ids',
+          ranges: darkSectionIds.map(id => {
+            const el = document.getElementById(id)
+            if (!el) return null
+            const top = (el as HTMLElement).offsetTop
+            const bottom = top + (el as HTMLElement).offsetHeight
+            return { top, bottom }
+          }),
+        }
         return
       }
 
@@ -65,6 +72,30 @@ export function Navbar({ ctaVariant = 'evaluacion', darkSectionIds }: NavbarProp
       const difTop = diferenciadores ? (diferenciadores as HTMLElement).offsetTop : heroBottom
       const agendar = document.getElementById('agendar')
       const agendarTop = agendar ? (agendar as HTMLElement).offsetTop : Infinity
+      cache = { mode: 'default', difTop, agendarTop }
+    }
+
+    const update = () => {
+      const y = window.scrollY
+      setScrolled(y > 60)
+      const mid = y + 40 // sample point slightly below header
+
+      if (!cache) computeCache()
+
+      // Detección genérica: oscuro si el punto de muestreo cae dentro de
+      // alguna de las secciones marcadas como oscuras para esta página.
+      if (darkSectionIds) {
+        const c = cache as Extract<SectionCache, { mode: 'ids' }>
+        const isDark = darkSectionIds.some((_, i) => {
+          const r = c.ranges[i]
+          if (!r) return false
+          return mid >= r.top && mid < r.bottom
+        })
+        setDarkSection(isDark)
+        return
+      }
+
+      const { difTop, agendarTop } = cache as Extract<SectionCache, { mode: 'default' }>
 
       if (mid < difTop) {
         setDarkSection(true)
@@ -74,10 +105,73 @@ export function Navbar({ ctaVariant = 'evaluacion', darkSectionIds }: NavbarProp
         setDarkSection(false)
       }
     }
-    onScroll()
+
+    const onScroll = () => {
+      if (ticking) return
+      ticking = true
+      requestAnimationFrame(() => {
+        update()
+        ticking = false
+      })
+    }
+
+    // Contenido que carga tarde (imágenes, etc.) puede desplazar las
+    // secciones — recalculamos el cache en resize y en load.
+    const onResize = () => { computeCache() }
+    const onLoad = () => { computeCache() }
+
+    computeCache()
+    update()
     window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+    window.addEventListener('resize', onResize, { passive: true })
+    window.addEventListener('load', onLoad)
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onResize)
+      window.removeEventListener('load', onLoad)
+    }
   }, [darkSectionIds])
+
+  // Scroll-lock del menú móvil (iOS-compatible): fija el body en su posición
+  // actual mientras el overlay está abierto y restaura el scroll al cerrar.
+  useEffect(() => {
+    if (!open) return
+    const scrollY = window.scrollY
+    const { style } = document.body
+    style.position = 'fixed'
+    style.top = `-${scrollY}px`
+    style.left = '0'
+    style.right = '0'
+    style.width = '100%'
+    return () => {
+      style.position = ''
+      style.top = ''
+      style.left = ''
+      style.right = ''
+      style.width = ''
+      window.scrollTo(0, scrollY)
+    }
+  }, [open])
+
+  // Escape cierra el menú móvil.
+  useEffect(() => {
+    if (!open) return
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false)
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [open])
+
+  // Mueve el foco al primer link del menú al abrir (accesibilidad).
+  const firstMobileLinkRef = useRef<HTMLAnchorElement>(null)
+  useEffect(() => {
+    if (!open) return
+    const raf = requestAnimationFrame(() => {
+      firstMobileLinkRef.current?.focus()
+    })
+    return () => cancelAnimationFrame(raf)
+  }, [open])
 
   /* ─── derived style tokens ─────────────────────────────────────── */
   // Phase A: hero (not scrolled) — pure transparent, white text
@@ -174,7 +268,11 @@ export function Navbar({ ctaVariant = 'evaluacion', darkSectionIds }: NavbarProp
               aria-label="Ir al inicio"
               onClick={() => {
                 // En el home el logo conserva su comportamiento original: subir al hero.
-                if (window.location.pathname === '/') window.scrollTo({ top: 0, behavior: 'smooth' })
+                if (window.location.pathname === '/') {
+                  const lenis = getLenis()
+                  if (lenis) lenis.scrollTo(0)
+                  else window.scrollTo({ top: 0, behavior: 'smooth' })
+                }
               }}
               style={{
                 textDecoration: 'none',
@@ -268,16 +366,19 @@ export function Navbar({ ctaVariant = 'evaluacion', darkSectionIds }: NavbarProp
             {/* ── Mobile hamburger ── */}
             <button
               onClick={() => setOpen(!open)}
-              className="lg:hidden p-2"
+              className="flex lg:hidden items-center justify-center p-2"
               style={{
                 background: 'none',
                 border: 'none',
                 cursor: 'pointer',
                 color: hamburgerColor,
                 transition: 'color 0.4s ease',
+                minWidth: '44px',
+                minHeight: '44px',
               }}
               aria-label="Menú"
               aria-expanded={open}
+              aria-controls="mobile-menu"
             >
               {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -289,6 +390,9 @@ export function Navbar({ ctaVariant = 'evaluacion', darkSectionIds }: NavbarProp
       <AnimatePresence>
         {open && (
           <motion.div
+            id="mobile-menu"
+            role="dialog"
+            aria-modal="true"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -298,8 +402,9 @@ export function Navbar({ ctaVariant = 'evaluacion', darkSectionIds }: NavbarProp
           >
             <div className="flex-1 flex flex-col px-8 pt-28 pb-12 overflow-y-auto">
               <nav className="flex flex-col gap-6 mb-auto">
-                {NAV_LINKS.map(l => (
+                {NAV_LINKS.map((l, i) => (
                   <Link key={l.href} to={l.href} onClick={() => setOpen(false)}
+                    ref={i === 0 ? firstMobileLinkRef : undefined}
                     style={{ color: 'var(--color-4)', fontWeight: 700, fontSize: '1.75rem', letterSpacing: '-0.02em', textDecoration: 'none' }}
                   >{l.label}</Link>
                 ))}

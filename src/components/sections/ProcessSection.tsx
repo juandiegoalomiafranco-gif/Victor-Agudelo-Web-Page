@@ -79,7 +79,7 @@ export const ProcessSection = () => {
 
           <motion.a
             href="#agendar"
-            className="process-cta-link"
+            className="process-cta-link tap-feedback"
             style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', border: '1px solid rgba(45,74,62,0.45)', color: '#2D4A3E', borderRadius: '100px', padding: '0.75rem 1.875rem', fontSize: '0.82rem', fontFamily: 'var(--font-sans)', fontWeight: 500, textDecoration: 'none', letterSpacing: '0.1em', textTransform: 'uppercase' }}
             initial={{ opacity: 0, y: 20 }}
             animate={headerInView ? { opacity: 1, y: 0 } : {}}

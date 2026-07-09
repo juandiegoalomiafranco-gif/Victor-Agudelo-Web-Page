@@ -44,11 +44,11 @@ export function PageHeader({
       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       gap: '0.5rem',
     }}>
-      <Link to={backTo} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none', color: '#475569', fontSize: '0.875rem', fontWeight: 500 }}>
-        <ArrowLeft style={{ width: 16, height: 16 }} aria-hidden="true" />
-        {backLabel}
+      <Link to={backTo} aria-label={backLabel} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none', color: '#475569', fontSize: '0.875rem', fontWeight: 500, minWidth: 0 }}>
+        <ArrowLeft style={{ width: 16, height: 16, flexShrink: 0 }} aria-hidden="true" />
+        <span className="pageheader-backlabel" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{backLabel}</span>
       </Link>
-      <Link to="/" style={{ textDecoration: 'none', fontWeight: 700, fontSize: '1rem', color: '#1A1A1A', letterSpacing: '-0.02em' }}>
+      <Link to="/" style={{ textDecoration: 'none', fontWeight: 700, fontSize: '1rem', color: '#1A1A1A', letterSpacing: '-0.02em', flexShrink: 0, whiteSpace: 'nowrap' }}>
         Dr. Agudelo
       </Link>
       {cta

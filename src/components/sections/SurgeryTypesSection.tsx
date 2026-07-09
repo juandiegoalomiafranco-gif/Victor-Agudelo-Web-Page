@@ -23,8 +23,9 @@ export const SurgeryTypesSection = () => {
     const img = imgRef.current
     if (!section || !img) return
 
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
+    const mm = gsap.matchMedia()
+    mm.add('(min-width: 992px)', () => {
+      const tween = gsap.fromTo(
         img,
         { scale: 1 },
         {
@@ -39,9 +40,16 @@ export const SurgeryTypesSection = () => {
           },
         }
       )
-    }, section)
+      return () => {
+        tween.scrollTrigger?.kill()
+        tween.kill()
+      }
+    })
+    mm.add('(max-width: 991px)', () => {
+      gsap.set(img, { clearProps: 'transform' })
+    })
 
-    return () => ctx.revert()
+    return () => mm.revert()
   }, [])
 
   return (

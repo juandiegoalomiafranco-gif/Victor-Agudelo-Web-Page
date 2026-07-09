@@ -62,7 +62,7 @@
 }
 @media (max-width: 991px) {
   .testimonials-h2 {
-    font-size: 4.3rem;
+    font-size: clamp(2.6rem, 5vw, 3.4rem);
   }
 }
 /* ≤767px y ≤479px se definen en el bloque MOBILE RESPONSIVENESS de abajo. */
@@ -250,7 +250,7 @@
     overflow: visible;
     grid-template-columns: 1fr;
   }
-  .diff-photo-col { min-height: 75vh; }
+  .diff-photo-col { min-height: 75vh; min-height: 75svh; }
   .diff-photo-wrap {
     position: absolute;
     inset: 0;
@@ -698,5 +698,25 @@
     aspect-ratio: 4 / 3;
     order: -1;
   }
+}
+
+/* ── steps-stagger: en móvil el árbol desktop nunca se pinta (mata el flash pre-hidratación) ── */
+@media (max-width: 767px) {
+  .steps-stagger-desktop { display: none !important; }
+  .steps-stagger-mobile  { display: flex !important; }
+}
+
+/* ── ProcedureCard: svh evita saltos con la barra de direcciones móvil ── */
+.procedure-card { min-height: 80vh; min-height: 80svh; }
+
+/* ── Feedback táctil en dispositivos sin hover ── */
+@media (hover: none) and (pointer: coarse) {
+  .tap-feedback { transition: transform 0.15s ease, opacity 0.15s ease; }
+  .tap-feedback:active { transform: scale(0.98); opacity: 0.85; }
+}
+
+/* ── PageHeader: bajo 360px solo la flecha (el Link lleva aria-label) ── */
+@media (max-width: 360px) {
+  .pageheader-backlabel { display: none; }
 }
 

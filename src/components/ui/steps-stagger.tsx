@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState } from 'react'
 import { motion, useScroll, useTransform, type MotionValue } from 'motion/react'
+import { useMediaQuery } from '../../lib/hooks'
 
 interface Step {
   number: string
@@ -35,17 +36,11 @@ function useScrollInView(ref: React.RefObject<HTMLElement | null>, margin = '-15
 }
 
 function useIsDesktop() {
-  // Arranca en true (igual que el HTML pre-renderizado en Node) para que la
-  // hidratación coincida; el efecto corrige al valor real ya en cliente.
-  const [desktop, setDesktop] = useState(true)
-  useEffect(() => {
-    const mq = window.matchMedia('(min-width: 768px)')
-    setDesktop(mq.matches)
-    const fn = (e: MediaQueryListEvent) => setDesktop(e.matches)
-    mq.addEventListener('change', fn)
-    return () => mq.removeEventListener('change', fn)
-  }, [])
-  return desktop
+  // ssrDefault=true: el prerender pinta desktop; el CSS de index.css evita el flash en móvil.
+  const isDesktop = useMediaQuery('(min-width: 768px)', true)
+  const [hydrated, setHydrated] = useState(false)
+  useEffect(() => { setHydrated(true) }, [])
+  return { isDesktop, hydrated }
 }
 
 // ── Desktop step
@@ -204,7 +199,7 @@ export function StepsStagger({ steps }: StepsStaggerProps) {
   const dotRefs       = useRef<Array<HTMLDivElement | null>>([])
   const sectionRef    = useRef<HTMLDivElement>(null)
   const reduced       = usePrefersReducedMotion()
-  const isDesktop     = useIsDesktop()
+  const { isDesktop, hydrated } = useIsDesktop()
 
   const [lineSegment, setLineSegment] = useState<{ top: number; height: number } | null>(null)
   const [thresholds, setThresholds]   = useState<number[]>(() =>
@@ -262,67 +257,72 @@ export function StepsStagger({ steps }: StepsStaggerProps) {
     <div ref={sectionRef} style={{ marginTop: '4rem' }}>
 
       {/* Desktop: alternating layout + continuous scroll-tied line */}
-      <div
-        ref={containerRef}
-        style={{
-          display: isDesktop ? 'flex' : 'none',
-          flexDirection: 'column',
-          gap: 'clamp(3rem, 6vw, 5rem)',
-          position: 'relative',
-        }}
-      >
-        {/* Continuous timeline: shadow track + green scroll-tied fill + leading glow */}
-        {lineSegment && (
-          <div
-            aria-hidden="true"
-            style={{
-              position: 'absolute',
-              left: 'calc(50% - 1px)',
-              top: lineSegment.top,
-              height: lineSegment.height,
-              width: '2px',
-              background: 'rgba(45,74,62,0.12)',
-              borderRadius: '2px',
-              pointerEvents: 'none',
-              zIndex: 0,
-            }}
-          >
-            {/* Green progress fill */}
-            <motion.div
+      {(!hydrated || isDesktop) && (
+        <div
+          ref={containerRef}
+          className="steps-stagger-desktop"
+          style={{
+            display: isDesktop ? 'flex' : 'none',
+            flexDirection: 'column',
+            gap: 'clamp(3rem, 6vw, 5rem)',
+            position: 'relative',
+          }}
+        >
+          {/* Continuous timeline: shadow track + green scroll-tied fill + leading glow */}
+          {lineSegment && (
+            <div
+              aria-hidden="true"
               style={{
                 position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: reduced ? '100%' : fillHeight,
-                background: 'linear-gradient(to bottom, rgba(45,74,62,0.85) 0%, #2D4A3E 10%, #2D4A3E 92%, rgba(45,74,62,0.65) 100%)',
+                left: 'calc(50% - 1px)',
+                top: lineSegment.top,
+                height: lineSegment.height,
+                width: '2px',
+                background: 'rgba(45,74,62,0.12)',
                 borderRadius: '2px',
-                boxShadow: '0 0 10px rgba(45,74,62,0.28)',
+                pointerEvents: 'none',
+                zIndex: 0,
               }}
+            >
+              {/* Green progress fill */}
+              <motion.div
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: reduced ? '100%' : fillHeight,
+                  background: 'linear-gradient(to bottom, rgba(45,74,62,0.85) 0%, #2D4A3E 10%, #2D4A3E 92%, rgba(45,74,62,0.65) 100%)',
+                  borderRadius: '2px',
+                  boxShadow: '0 0 10px rgba(45,74,62,0.28)',
+                }}
+              />
+
+            </div>
+          )}
+
+          {steps.map((step, i) => (
+            <DesktopStep
+              key={step.number}
+              step={step}
+              index={i}
+              isOdd={i % 2 === 0}
+              onDotRef={(el) => { dotRefs.current[i] = el }}
+              scrollYProgress={scrollYProgress}
+              threshold={thresholds[i] ?? (steps.length > 1 ? i / (steps.length - 1) : 0)}
             />
-
-          </div>
-        )}
-
-        {steps.map((step, i) => (
-          <DesktopStep
-            key={step.number}
-            step={step}
-            index={i}
-            isOdd={i % 2 === 0}
-            onDotRef={(el) => { dotRefs.current[i] = el }}
-            scrollYProgress={scrollYProgress}
-            threshold={thresholds[i] ?? (steps.length > 1 ? i / (steps.length - 1) : 0)}
-          />
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
       {/* Mobile: columna simple, sin línea */}
-      <div style={{ display: isDesktop ? 'none' : 'flex', flexDirection: 'column', gap: '2.5rem' }}>
-        {steps.map((step, i) => (
-          <MobileStep key={step.number} step={step} index={i} />
-        ))}
-      </div>
+      {(!hydrated || !isDesktop) && (
+        <div className="steps-stagger-mobile" style={{ display: isDesktop ? 'none' : 'flex', flexDirection: 'column', gap: '2.5rem' }}>
+          {steps.map((step, i) => (
+            <MobileStep key={step.number} step={step} index={i} />
+          ))}
+        </div>
+      )}
     </div>
   )
 }

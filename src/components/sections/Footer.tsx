@@ -7,7 +7,7 @@ import { PROCEDIMIENTOS } from '../../lib/procedimientos'
 export const Footer = () => (
   <footer style={{ background: 'var(--color-1)' }}>
     <div className="max-w-7xl mx-auto px-6 pt-20 pb-10">
-      <div className="grid md:grid-cols-4 gap-8 md:gap-12 mb-12 md:mb-16">
+      <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 mb-12 md:mb-16">
         <div>
           <p style={{ color: '#ffffff', fontWeight: 700, fontSize: '1.1rem', letterSpacing: '-0.02em', marginBottom: '1rem' }}>Dr. Agudelo</p>
           <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.5)', fontWeight: 400, maxWidth: '18rem' }}>

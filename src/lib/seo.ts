@@ -310,6 +310,18 @@ const ROUTES: Record<string, SeoData> = {
     ],
   },
 
+  // Página 404 pre-renderizada: su HTML se emite como /404.html (Vercel lo
+  // sirve para rutas inexistentes) y coincide con lo que el catch-all del
+  // Router renderiza, evitando el mismatch de hidratación.
+  '/404': {
+    title: 'Página no encontrada | Dr. Víctor Agudelo',
+    description: 'La página que buscas no existe o fue movida.',
+    canonical: `${SITE_URL}/404`,
+    ogImage: DEFAULT_OG_IMAGE,
+    noindex: true,
+    jsonLd: [],
+  },
+
   // ─── Páginas individuales por procedimiento (generadas desde procedimientos.ts) ──
   ...Object.fromEntries(
     PROCEDIMIENTOS.map(p => [
@@ -371,8 +383,13 @@ const ELEMENTS_CACHE: Record<string, HeadElement[]> = Object.fromEntries(
   Object.entries(ROUTES).map(([path, seo]) => [path, buildElements(seo)]),
 )
 
+// El pre-render puede pedir rutas como "/404.html" (artefacto emitido para
+// Vercel); normalizamos el sufijo para que resuelvan a su entrada canónica.
+const normalizeRoute = (pathname: string): string =>
+  pathname.endsWith('.html') ? pathname.slice(0, -'.html'.length) : pathname
+
 export const getSeoForRoute = (pathname: string): SeoData =>
-  ROUTES[pathname] ?? ROUTES['/']
+  ROUTES[normalizeRoute(pathname)] ?? ROUTES['/']
 
 export const getHeadElements = (pathname: string): HeadElement[] =>
-  ELEMENTS_CACHE[pathname] ?? ELEMENTS_CACHE['/']
+  ELEMENTS_CACHE[normalizeRoute(pathname)] ?? ELEMENTS_CACHE['/']
