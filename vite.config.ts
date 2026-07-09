@@ -87,7 +87,12 @@ export default defineConfig(() => {
       vitePrerenderPlugin({
         renderTarget: '#root',
         prerenderScript: path.resolve(__dirname, 'src/entry-prerender.tsx'),
-        additionalPrerenderRoutes: [...ROUTES_TO_PRERENDER],
+        // '/404' → dist/404/index.html (fallback del preview local);
+        // '/404.html' → dist/404.html (Vercel lo sirve para rutas inexistentes).
+        // Ambas renderizan NotFoundPage vía el catch-all del Router, así el HTML
+        // servido coincide con lo que React hidrata (sin mismatch #418).
+        additionalPrerenderRoutes: [...ROUTES_TO_PRERENDER, '/404', '/404.html'],
+        previewMiddlewareFallback: '/404',
       }),
       stripPrerenderArtifacts(),
       unrefPrerenderChannels(),
