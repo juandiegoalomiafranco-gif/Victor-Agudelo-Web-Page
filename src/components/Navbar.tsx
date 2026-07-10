@@ -6,6 +6,7 @@ import { Menu, X, Calendar, MessageCircle } from 'lucide-react'
 import { CONTACT } from '../lib/contact'
 import { COPY } from '../lib/copy'
 import { getLenis } from '../lib/lenisInstance'
+import { BrandLogo } from './BrandLogo'
 import { HashLink } from './HashLink'
 
 export type CtaVariant = 'evaluacion' | 'whatsapp'
@@ -196,11 +197,9 @@ export function Navbar({ ctaVariant = 'evaluacion', darkSectionIds }: NavbarProp
     phase === 'dark-glass'  ? '0 4px 28px rgba(0,0,0,0.35)' :
                               '0 2px 24px rgba(0,0,0,0.10)'
 
-  const logoColor =
-    (phase === 'hero' || phase === 'dark-glass') ? '#ffffff' : '#0a0a0a'
-
-  const logoBg =
-    (phase === 'hero' || phase === 'dark-glass') ? 'rgba(255,255,255,0.18)' : '#242424'
+  // El logo invierte colores sobre fondos oscuros (hero, dark-glass) y
+  // también mientras el overlay móvil (fondo oscuro) está abierto.
+  const logoOnDark = open || phase === 'hero' || phase === 'dark-glass'
 
   const linkColor =
     (phase === 'hero' || phase === 'dark-glass') ? 'rgba(255,255,255,0.78)' : '#475569'
@@ -231,7 +230,7 @@ export function Navbar({ ctaVariant = 'evaluacion', darkSectionIds }: NavbarProp
       <header
         className="fixed inset-x-0 top-0 z-50"
         style={{
-          padding: '0.75rem 0',
+          padding: '0.35rem 0',
           transition: 'padding 0.45s ease',
         }}
       >
@@ -248,7 +247,7 @@ export function Navbar({ ctaVariant = 'evaluacion', darkSectionIds }: NavbarProp
               WebkitBackdropFilter: backdropBlur,
               border: pillBorder,
               borderRadius: '100px',
-              padding: scrolled ? '0.45rem 0.45rem 0.45rem 1.25rem' : '0.5rem 0.5rem 0.5rem 0',
+              padding: scrolled ? '0.25rem 0.25rem 0.25rem 1rem' : '0.3rem 0.3rem 0.3rem 0',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
@@ -278,40 +277,10 @@ export function Navbar({ ctaVariant = 'evaluacion', darkSectionIds }: NavbarProp
                 textDecoration: 'none',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '0.55rem',
                 flexShrink: 0,
               }}
             >
-              <div
-                style={{
-                  width: '30px',
-                  height: '30px',
-                  borderRadius: '50%',
-                  background: logoBg,
-                  border: phase !== 'light-glass' ? '1px solid rgba(255,255,255,0.22)' : 'none',
-                  color: '#fff',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '0.78rem',
-                  fontWeight: 700,
-                  flexShrink: 0,
-                  transition: 'background 0.55s ease, border-color 0.55s ease',
-                }}
-              >
-                A
-              </div>
-              <span
-                style={{
-                  color: logoColor,
-                  fontWeight: 600,
-                  fontSize: '1.15rem',
-                  letterSpacing: '-0.01em',
-                  transition: 'color 0.55s ease',
-                }}
-              >
-                Dr. Agudelo
-              </span>
+              <BrandLogo onDark={logoOnDark} fontSize="0.82rem" />
             </Link>
 
             {/* ── Desktop links ── */}
@@ -322,7 +291,7 @@ export function Navbar({ ctaVariant = 'evaluacion', darkSectionIds }: NavbarProp
                     to={l.href}
                     style={{
                       textDecoration: 'none',
-                      fontSize: '0.78rem',
+                      fontSize: '0.7rem',
                       fontWeight: 500,
                       letterSpacing: '0.09em',
                       color: linkColor,
@@ -348,8 +317,8 @@ export function Navbar({ ctaVariant = 'evaluacion', darkSectionIds }: NavbarProp
                 border: ctaBorder,
                 color: '#fff',
                 borderRadius: '100px',
-                padding: '0.6rem 1.25rem',
-                fontSize: '0.78rem',
+                padding: '0.45rem 1rem',
+                fontSize: '0.7rem',
                 fontWeight: 600,
                 letterSpacing: '0.04em',
                 transition: 'background 0.3s ease, border-color 0.3s ease',
@@ -373,8 +342,10 @@ export function Navbar({ ctaVariant = 'evaluacion', darkSectionIds }: NavbarProp
                 cursor: 'pointer',
                 color: hamburgerColor,
                 transition: 'color 0.4s ease',
+                // 44x44 de área táctil (accesibilidad) sin engordar la píldora:
                 minWidth: '44px',
                 minHeight: '44px',
+                margin: '-6px 0',
               }}
               aria-label="Menú"
               aria-expanded={open}
