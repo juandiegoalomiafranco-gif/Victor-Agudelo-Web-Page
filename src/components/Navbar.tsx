@@ -230,14 +230,16 @@ export function Navbar({ ctaVariant = 'evaluacion', darkSectionIds }: NavbarProp
       <header
         className="fixed inset-x-0 top-0 z-50"
         style={{
-          padding: '0.35rem 0',
+          padding: '0.75rem 0',
           transition: 'padding 0.45s ease',
         }}
       >
         <div
-          className="max-w-6xl mx-auto px-4 md:px-6"
+          className="mx-auto px-4 md:px-6"
           style={{
-            transform: scrolled ? 'translateY(0)' : 'translateY(0)',
+            // Píldora compacta: lo justo para logo + 4 links + CTA con poco
+            // aire entre secciones (antes max-w-6xl, 72rem).
+            maxWidth: '68rem',
           }}
         >
           <nav
@@ -247,7 +249,7 @@ export function Navbar({ ctaVariant = 'evaluacion', darkSectionIds }: NavbarProp
               WebkitBackdropFilter: backdropBlur,
               border: pillBorder,
               borderRadius: '100px',
-              padding: scrolled ? '0.25rem 0.25rem 0.25rem 1rem' : '0.3rem 0.3rem 0.3rem 0',
+              padding: scrolled ? '0.45rem 0.45rem 0.45rem 1.25rem' : '0.5rem 0.5rem 0.5rem 0',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
@@ -280,7 +282,7 @@ export function Navbar({ ctaVariant = 'evaluacion', darkSectionIds }: NavbarProp
                 flexShrink: 0,
               }}
             >
-              <BrandLogo onDark={logoOnDark} fontSize="0.82rem" />
+              <BrandLogo onDark={logoOnDark} fontSize="0.95rem" />
             </Link>
 
             {/* ── Desktop links ── */}
@@ -291,10 +293,11 @@ export function Navbar({ ctaVariant = 'evaluacion', darkSectionIds }: NavbarProp
                     to={l.href}
                     style={{
                       textDecoration: 'none',
-                      fontSize: '0.7rem',
+                      fontSize: '0.78rem',
                       fontWeight: 500,
                       letterSpacing: '0.09em',
                       color: linkColor,
+                      whiteSpace: 'nowrap',
                       transition: 'color 0.25s ease',
                     }}
                     onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = linkHoverColor }}
@@ -317,8 +320,8 @@ export function Navbar({ ctaVariant = 'evaluacion', darkSectionIds }: NavbarProp
                 border: ctaBorder,
                 color: '#fff',
                 borderRadius: '100px',
-                padding: '0.45rem 1rem',
-                fontSize: '0.7rem',
+                padding: '0.6rem 1.25rem',
+                fontSize: '0.78rem',
                 fontWeight: 600,
                 letterSpacing: '0.04em',
                 transition: 'background 0.3s ease, border-color 0.3s ease',
@@ -342,10 +345,8 @@ export function Navbar({ ctaVariant = 'evaluacion', darkSectionIds }: NavbarProp
                 cursor: 'pointer',
                 color: hamburgerColor,
                 transition: 'color 0.4s ease',
-                // 44x44 de área táctil (accesibilidad) sin engordar la píldora:
                 minWidth: '44px',
                 minHeight: '44px',
-                margin: '-6px 0',
               }}
               aria-label="Menú"
               aria-expanded={open}
