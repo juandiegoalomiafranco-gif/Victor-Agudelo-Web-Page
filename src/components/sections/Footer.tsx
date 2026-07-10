@@ -3,6 +3,7 @@ import { Phone, Mail, MapPin, Instagram, Facebook, MessageSquare } from 'lucide-
 
 import { CONTACT } from '../../lib/contact'
 import { PROCEDIMIENTOS } from '../../lib/procedimientos'
+import { HashLink } from '../HashLink'
 
 export const Footer = () => (
   <footer style={{ background: 'var(--color-1)' }}>
@@ -36,9 +37,9 @@ export const Footer = () => (
                   ? <Link to={href} className="text-sm transition-colors"
                       style={{ color: 'rgba(255,255,255,0.55)', fontWeight: 400, textDecoration: 'none' }}
                     >{label}</Link>
-                  : <a href={href} className="text-sm transition-colors"
+                  : <HashLink to={href} className="text-sm transition-colors"
                       style={{ color: 'rgba(255,255,255,0.55)', fontWeight: 400, textDecoration: 'none' }}
-                    >{label}</a>
+                    >{label}</HashLink>
                 }
               </li>
             ))}
@@ -68,7 +69,7 @@ export const Footer = () => (
         <div className="flex flex-col gap-1">
           <p className="text-xs" style={{ color: 'rgba(255,255,255,0.3)', fontWeight: 400 }}>© 2026 Dr. Víctor Manuel Agudelo · Todos los derechos reservados</p>
           <p className="text-xs" style={{ color: 'rgba(255,255,255,0.2)', fontWeight: 400 }}>Las cirugías son realizadas por un médico especialista certificado. Los resultados pueden variar según cada paciente.</p>
-          <a href="/privacidad" className="text-xs" style={{ color: 'rgba(255,255,255,0.25)', fontWeight: 400, textDecoration: 'none' }}>Política de Privacidad y Habeas Data</a>
+          <Link to="/privacidad" className="text-xs" style={{ color: 'rgba(255,255,255,0.25)', fontWeight: 400, textDecoration: 'none' }}>Política de Privacidad y Habeas Data</Link>
         </div>
         <p className="text-xs" style={{ color: 'rgba(255,255,255,0.2)', fontWeight: 400 }}>Diseñado por Vanguard Studio</p>
       </div>

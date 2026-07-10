@@ -2,6 +2,7 @@ import { Fragment, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Calendar, ChevronRight, MessageCircle, Minus, Plus } from 'lucide-react'
 import { Navbar } from '../components/Navbar'
+import { HashLink } from '../components/HashLink'
 import { CONTACT } from '../lib/contact'
 import { COPY } from '../lib/copy'
 import { FAQ_CATEGORIES } from '../lib/faqs'
@@ -90,8 +91,8 @@ export function PreguntasFrecuentesPage() {
             Las preguntas que más nos hacen los pacientes — respondidas en detalle, sin promesas vacías y con la honestidad clínica del Dr. Víctor Agudelo. Si tu duda no está aquí, escríbenos directamente: respondemos personalmente.
           </p>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', justifyContent: 'center' }}>
-            <a
-              href="/#agendar"
+            <HashLink
+              to="/#agendar"
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: '0.55rem',
                 background: '#C9A84C', color: '#1A1A1A', borderRadius: '100px',
@@ -101,7 +102,7 @@ export function PreguntasFrecuentesPage() {
             >
               <Calendar style={{ width: '16px', height: '16px' }} aria-hidden="true" />
               {COPY.ctaPrimary}
-            </a>
+            </HashLink>
             <a
               href={CONTACT.whatsapp}
               target="_blank"
@@ -303,8 +304,8 @@ export function PreguntasFrecuentesPage() {
             Envía tus fotos (frente y perfil, sin flash) y recibe una evaluación inicial gratuita en menos de 48 horas. Sin compromiso, con toda la información que necesitas para decidir con tranquilidad.
           </p>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', justifyContent: 'center' }}>
-            <a
-              href="/#agendar"
+            <HashLink
+              to="/#agendar"
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: '0.55rem',
                 background: '#C9A84C', color: '#1A1A1A', borderRadius: '100px',
@@ -314,7 +315,7 @@ export function PreguntasFrecuentesPage() {
             >
               <Calendar style={{ width: '16px', height: '16px' }} aria-hidden="true" />
               {COPY.ctaPrimary}
-            </a>
+            </HashLink>
             <a
               href={CONTACT.whatsapp}
               target="_blank"

@@ -2,6 +2,8 @@ import type React from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
 
+import { HashLink } from './HashLink'
+
 // Header sticky compartido por las subpáginas (antes estaba copiado en cada
 // una). Los estilos replican exactamente los originales; el CTA tiene las dos
 // variantes que existían: verde (por defecto) y dorada (Testimonios).
@@ -52,7 +54,9 @@ export function PageHeader({
         Dr. Agudelo
       </Link>
       {cta
-        ? <a href={cta.href} style={CTA_VARIANTS[cta.variant ?? 'green']}>{cta.label}</a>
+        ? (cta.href.startsWith('/') && cta.href.includes('#')
+            ? <HashLink to={cta.href} style={CTA_VARIANTS[cta.variant ?? 'green']}>{cta.label}</HashLink>
+            : <a href={cta.href} style={CTA_VARIANTS[cta.variant ?? 'green']}>{cta.label}</a>)
         : <span style={{ width: 16 }} />}
     </header>
   )

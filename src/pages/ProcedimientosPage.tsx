@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Calendar, CheckCircle } from 'lucide-react'
 import { PageHeader } from '../components/PageHeader'
+import { HashLink } from '../components/HashLink'
 import { COPY } from '../lib/copy'
 
 const procedimientos = [
@@ -98,7 +99,7 @@ export function ProcedimientosPage() {
           Cada procedimiento se piensa en función del rostro completo.
           La armonía facial viene de entender cómo cada rasgo se relaciona con los demás.
         </p>
-        <a href="/#agendar" style={{
+        <HashLink to="/#agendar" style={{
           display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
           background: '#2D4A3E', color: '#fff', borderRadius: '100px',
           padding: '0.85rem 2rem', fontSize: '0.9rem', fontWeight: 600,
@@ -106,7 +107,7 @@ export function ProcedimientosPage() {
         }}>
           <Calendar style={{ width: '16px', height: '16px' }} />
           {COPY.ctaPrimary}
-        </a>
+        </HashLink>
       </section>
 
       {/* Procedimientos */}
@@ -184,7 +185,7 @@ export function ProcedimientosPage() {
         <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.95rem', lineHeight: 1.7, marginBottom: '2rem' }}>
           Envía tus fotos y recibimos tu caso sin costo ni compromiso.
         </p>
-        <a href="/#agendar" style={{
+        <HashLink to="/#agendar" style={{
           display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
           background: '#2D4A3E', color: '#fff', borderRadius: '100px',
           padding: '0.85rem 2rem', fontSize: '0.9rem', fontWeight: 600,
@@ -192,7 +193,7 @@ export function ProcedimientosPage() {
         }}>
           <Calendar style={{ width: '16px', height: '16px' }} />
           {COPY.ctaPrimary}
-        </a>
+        </HashLink>
       </section>
     </div>
   )

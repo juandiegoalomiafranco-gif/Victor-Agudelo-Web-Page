@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Calendar, CheckCircle, ChevronRight } from 'lucide-react'
 import { PageHeader } from '../components/PageHeader'
+import { HashLink } from '../components/HashLink'
 import { CONTACT } from '../lib/contact'
 import { COPY } from '../lib/copy'
 import { PROCEDIMIENTOS } from '../lib/procedimientos'
@@ -72,7 +73,7 @@ export function RinoplastiaPage() {
           Dos décadas diseñando narices que no se notan operadas.
           Cada resultado se construye para tu rostro — no para un molde.
         </p>
-        <a href="/#agendar" style={{
+        <HashLink to="/#agendar" style={{
           display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
           background: '#2D4A3E', color: '#fff', borderRadius: '100px',
           padding: '0.85rem 2rem', fontSize: '0.9rem', fontWeight: 600,
@@ -80,7 +81,7 @@ export function RinoplastiaPage() {
         }}>
           <Calendar style={{ width: '16px', height: '16px' }} />
           {COPY.ctaPrimary}
-        </a>
+        </HashLink>
       </section>
 
       {/* Tipos */}
@@ -275,7 +276,7 @@ export function RinoplastiaPage() {
           Envía tus fotos (frente y perfil, sin flash) y recibimos tu caso.<br />
           La evaluación inicial es gratuita.
         </p>
-        <a href="/#agendar" style={{
+        <HashLink to="/#agendar" style={{
           display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
           background: '#2D4A3E', color: '#fff', borderRadius: '100px',
           padding: '0.85rem 2rem', fontSize: '0.9rem', fontWeight: 600,
@@ -283,7 +284,7 @@ export function RinoplastiaPage() {
         }}>
           <Calendar style={{ width: '16px', height: '16px' }} />
           {COPY.ctaPrimary}
-        </a>
+        </HashLink>
       </section>
     </div>
   )

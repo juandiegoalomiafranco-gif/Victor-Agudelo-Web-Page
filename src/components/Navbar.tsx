@@ -6,6 +6,7 @@ import { Menu, X, Calendar, MessageCircle } from 'lucide-react'
 import { CONTACT } from '../lib/contact'
 import { COPY } from '../lib/copy'
 import { getLenis } from '../lib/lenisInstance'
+import { HashLink } from './HashLink'
 
 export type CtaVariant = 'evaluacion' | 'whatsapp'
 
@@ -26,7 +27,6 @@ const WHATSAPP_CTA_TEXT = 'Pregúntanos por WhatsApp'
 // el overlay móvil tal cual). Todos son rutas de página.
 const NAV_LINKS = [
   { label: 'Sobre el doctor', href: '/sobre-el-dr-agudelo' },
-  { label: 'Rinoplastia', href: '/rinoplastia' },
   { label: 'Procedimientos', href: '/procedimientos' },
   { label: 'Testimonios', href: '/testimonios' },
   { label: 'Preguntas frecuentes', href: '/preguntas-frecuentes' },
@@ -408,19 +408,30 @@ export function Navbar({ ctaVariant = 'evaluacion', darkSectionIds }: NavbarProp
                     style={{ color: 'var(--color-4)', fontWeight: 700, fontSize: '1.75rem', letterSpacing: '-0.02em', textDecoration: 'none' }}
                   >{l.label}</Link>
                 ))}
-                <a href="/#agendar" onClick={() => setOpen(false)}
+                <HashLink to="/#agendar" onClick={() => setOpen(false)}
                   style={{ color: 'var(--color-4)', fontWeight: 700, fontSize: '1.75rem', letterSpacing: '-0.02em', textDecoration: 'none' }}
-                >Contacto</a>
+                >Contacto</HashLink>
               </nav>
-              <a
-                href={ctaHref}
-                {...ctaExternalProps}
-                onClick={() => setOpen(false)}
-                className="mt-8 flex items-center justify-center gap-2 text-sm"
-                style={{ background: '#2D4A3E', color: '#fff', fontWeight: 600, borderRadius: '100px', padding: '1rem', textDecoration: 'none' }}
-              >
-                {isWhatsapp ? <MessageCircle className="w-4 h-4" /> : <Calendar className="w-4 h-4" />} {ctaText}
-              </a>
+              {isWhatsapp ? (
+                <a
+                  href={ctaHref}
+                  {...ctaExternalProps}
+                  onClick={() => setOpen(false)}
+                  className="mt-8 flex items-center justify-center gap-2 text-sm"
+                  style={{ background: '#2D4A3E', color: '#fff', fontWeight: 600, borderRadius: '100px', padding: '1rem', textDecoration: 'none' }}
+                >
+                  <MessageCircle className="w-4 h-4" /> {ctaText}
+                </a>
+              ) : (
+                <HashLink
+                  to="/#agendar"
+                  onClick={() => setOpen(false)}
+                  className="mt-8 flex items-center justify-center gap-2 text-sm"
+                  style={{ background: '#2D4A3E', color: '#fff', fontWeight: 600, borderRadius: '100px', padding: '1rem', textDecoration: 'none' }}
+                >
+                  <Calendar className="w-4 h-4" /> {ctaText}
+                </HashLink>
+              )}
             </div>
           </motion.div>
         )}
