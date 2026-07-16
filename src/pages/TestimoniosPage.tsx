@@ -16,7 +16,9 @@ import {
 import { PageHeader } from '../components/PageHeader'
 import { CONTACT } from '../lib/contact'
 import { COPY } from '../lib/copy'
-import { TESTIMONIALS } from '../lib/testimonials'
+import { TESTIMONIALS, GOOGLE_RATING, GOOGLE_REVIEW_URL, formatReviewDate } from '../lib/testimonials'
+import { GoogleG } from '../components/GoogleG'
+import type { Testimonial } from '../types/index'
 
 // ───────────────────────────────────────────────
 // Types
@@ -51,13 +53,23 @@ interface WrittenReview {
 // reactivan solos cuando el array tenga elementos.
 const videoTestimonials: VideoTestimonial[] = []
 
-// Reseñas escritas reales (misma fuente que el carrusel del home).
+// Mapea la fuente interna del testimonio a la etiqueta visible de la reseña.
+const SOURCE_LABEL: Record<NonNullable<Testimonial['verifiedSource']>, WrittenReview['source']> = {
+  google: 'Google',
+  realself: 'RealSelf',
+  instagram: 'Instagram',
+}
+
+// Reseñas escritas reales (misma fuente que el carrusel del home), respetando
+// su origen real (Google / RealSelf), calificación y fecha cuando existen.
 const writtenReviews: WrittenReview[] = TESTIMONIALS.map(t => ({
   id: t.id,
   author: t.name,
   procedure: t.procedure,
   text: t.text,
-  source: 'RealSelf',
+  source: SOURCE_LABEL[t.verifiedSource ?? 'realself'],
+  rating: t.rating,
+  date: formatReviewDate(t.date),
 }))
 
 const pillars = [
@@ -236,7 +248,7 @@ export function TestimoniosPage() {
             fontSize: 'clamp(0.95rem, 1.5vw, 1.05rem)',
             lineHeight: 1.7, maxWidth: '560px', margin: '0 auto',
           }}>
-            Más de 200 casos documentados. Reseñas publicadas por pacientes en RealSelf — de personas que pasaron por la misma decisión que tú estás considerando ahora.
+            Más de 200 casos documentados. Reseñas verificadas de pacientes en Google — de personas que pasaron por la misma decisión que tú estás considerando ahora.
           </p>
         </div>
       </section>
@@ -412,9 +424,25 @@ export function TestimoniosPage() {
             }}>
               Palabras de pacientes que ya tomaron la decisión.
             </h2>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.65rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.85rem' }}>
+              <a
+                href={GOOGLE_REVIEW_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Calificación ${GOOGLE_RATING.toFixed(1)} sobre 5 en Google — ver reseñas`}
+                style={{
+                  display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+                  textDecoration: 'none',
+                  background: '#fff', border: '1px solid rgba(0,0,0,0.12)',
+                  borderRadius: '100px', padding: '0.5rem 1.05rem', color: '#1A1A1A',
+                }}
+              >
+                <Star aria-hidden="true" style={{ width: '16px', height: '16px', color: '#C9A84C', fill: '#C9A84C' }} />
+                <span style={{ fontWeight: 700, fontSize: '0.95rem' }}>{GOOGLE_RATING.toFixed(1)}</span>
+                <span style={{ fontSize: '0.85rem', color: '#475569', fontWeight: 500 }}>en Google</span>
+              </a>
               <span style={{ fontSize: '0.85rem', color: '#475569', fontWeight: 500 }}>
-                Reseñas publicadas por pacientes en RealSelf
+                Reseñas verificadas en Google
               </span>
             </div>
           </div>
@@ -471,6 +499,37 @@ export function TestimoniosPage() {
               </li>
             ))}
           </ul>
+
+          {/* Invitación a dejar reseña en Google — crece el rating real */}
+          <div style={{
+            marginTop: 'clamp(2rem, 4vw, 3rem)',
+            padding: 'clamp(1.5rem, 3vw, 2rem)',
+            borderRadius: '20px',
+            background: '#FAF7F2',
+            border: '1px solid rgba(0,0,0,0.06)',
+            textAlign: 'center',
+          }}>
+            <p style={{ fontSize: '1rem', color: '#1A1A1A', fontWeight: 600, marginBottom: '0.4rem' }}>
+              ¿Fuiste paciente del Dr. Agudelo?
+            </p>
+            <p style={{ fontSize: '0.9rem', color: '#475569', lineHeight: 1.6, marginBottom: '1.25rem', maxWidth: '30rem', margin: '0 auto 1.25rem' }}>
+              Tu experiencia ayuda a que otras personas tomen su decisión con más confianza. Deja tu reseña en Google.
+            </p>
+            <a
+              href={GOOGLE_REVIEW_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+                background: '#fff', color: '#3c4043',
+                border: '1px solid rgba(0,0,0,0.15)',
+                borderRadius: '100px', padding: '0.75rem 1.5rem',
+                fontSize: '0.875rem', fontWeight: 600, textDecoration: 'none',
+              }}
+            >
+              <GoogleG size={16} /> Deja tu reseña en Google
+            </a>
+          </div>
         </div>
       </section>
 

@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Star } from 'lucide-react'
 
-import { TESTIMONIALS } from '../../lib/testimonials'
+import { TESTIMONIALS, GOOGLE_RATING, GOOGLE_REVIEW_URL, formatReviewDate } from '../../lib/testimonials'
+import { GoogleG } from '../GoogleG'
 
 export const TestimonialsSection = () => {
   const [idx, setIdx]         = useState(0)
@@ -81,22 +82,42 @@ export const TestimonialsSection = () => {
           >
             La confianza que buscas, en palabras de quienes ya pasaron por esto
           </h2>
+          <a
+            href={GOOGLE_REVIEW_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`Calificación ${GOOGLE_RATING.toFixed(1)} sobre 5 en Google — ver reseñas`}
+            className="mt-6"
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+              textDecoration: 'none',
+              background: '#ffffff', border: '1px solid rgba(0,0,0,0.1)',
+              borderRadius: '100px', padding: '0.5rem 1.05rem',
+            }}
+          >
+            <Star aria-hidden="true" style={{ width: '16px', height: '16px', color: '#C9A84C', fill: '#C9A84C' }} />
+            <span style={{ fontWeight: 700, fontSize: '0.95rem', color: '#1A1A1A' }}>{GOOGLE_RATING.toFixed(1)}</span>
+            <span style={{ fontSize: '0.85rem', color: '#64748b', fontWeight: 500 }}>en Google</span>
+          </a>
         </div>
 
         {/* Text cards */}
         <div
           ref={scrollRef}
           onPointerDown={handlePointerDown}
-          className="flex gap-4 md:gap-5 overflow-x-auto no-scrollbar pb-4"
+          className="flex items-start gap-4 md:gap-5 overflow-x-auto no-scrollbar pb-4"
           style={{ scrollSnapType: 'x mandatory' }}
         >
-          {TESTIMONIALS.map((t, i) => (
+          {TESTIMONIALS.map((t, i) => {
+            const reviewDate = formatReviewDate(t.date)
+            return (
             <div
               key={t.id}
               onClick={() => setIdx(i)}
               className="flex-shrink-0"
               style={{
                 width: 'clamp(280px, 78vw, 340px)',
+                minHeight: '210px',
                 borderRadius: '20px',
                 padding: '1.75rem',
                 cursor: 'pointer',
@@ -111,15 +132,21 @@ export const TestimonialsSection = () => {
                 gap: '1rem',
               }}
             >
-              {/* Quote mark */}
-              <p style={{ fontFamily: 'var(--font-serif)', fontSize: '3rem', color: '#2D4A3E', lineHeight: 1, marginBottom: '-0.5rem' }}>"</p>
+              {/* Estrellas */}
+              {t.rating && (
+                <div style={{ display: 'flex', gap: '2px' }} aria-label={`${t.rating} de 5 estrellas`}>
+                  {Array.from({ length: t.rating }).map((_, s) => (
+                    <Star key={s} aria-hidden="true" style={{ width: '15px', height: '15px', color: '#C9A84C', fill: '#C9A84C' }} />
+                  ))}
+                </div>
+              )}
 
               {/* Text */}
-              <p style={{ fontSize: '0.9rem', color: '#374151', lineHeight: 1.75, flex: 1 }}>{t.text}</p>
+              <p style={{ fontSize: '0.9rem', color: '#374151', lineHeight: 1.75 }}>{t.text}</p>
 
               {/* Footer */}
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: '1rem', borderTop: '1px solid rgba(0,0,0,0.07)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
+              <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.75rem', paddingTop: '1rem', borderTop: '1px solid rgba(0,0,0,0.07)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', minWidth: 0 }}>
                   <div style={{
                     width: '36px', height: '36px', borderRadius: '50%',
                     background: '#2D4A3E', display: 'flex', alignItems: 'center',
@@ -128,21 +155,25 @@ export const TestimonialsSection = () => {
                   }}>
                     {t.initials}
                   </div>
-                  <div>
-                    <p style={{ fontSize: '0.8rem', fontWeight: 600, color: '#1A1A1A', lineHeight: 1.2 }}>{t.name}</p>
-                    <p style={{ fontSize: '0.7rem', color: '#94a3b8', fontWeight: 400 }}>{t.procedure}</p>
+                  <div style={{ minWidth: 0 }}>
+                    <p style={{ fontSize: '0.8rem', fontWeight: 600, color: '#1A1A1A', lineHeight: 1.2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{t.name}</p>
+                    <p style={{ fontSize: '0.7rem', color: '#94a3b8', fontWeight: 400 }}>
+                      {t.procedure}{reviewDate ? ` · ${reviewDate}` : ''}
+                    </p>
                   </div>
                 </div>
                 <span style={{
-                  fontSize: '0.62rem', fontWeight: 600, color: '#2D4A3E',
-                  background: 'rgba(45,74,62,0.08)', borderRadius: '100px',
-                  padding: '0.25rem 0.6rem', letterSpacing: '0.03em',
+                  display: 'inline-flex', alignItems: 'center', gap: '0.3rem',
+                  fontSize: '0.62rem', fontWeight: 600, color: '#3c4043',
+                  background: '#f1f3f4', borderRadius: '100px',
+                  padding: '0.28rem 0.6rem', letterSpacing: '0.02em', flexShrink: 0,
                 }}>
-                  ✓ {t.verifiedSource === 'google' ? 'Google' : 'RealSelf'}
+                  <GoogleG /> Google
                 </span>
               </div>
             </div>
-          ))}
+            )
+          })}
         </div>
 
         {/* Progress bar */}
