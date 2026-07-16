@@ -16,7 +16,8 @@ import {
 import { PageHeader } from '../components/PageHeader'
 import { CONTACT } from '../lib/contact'
 import { COPY } from '../lib/copy'
-import { TESTIMONIALS, GOOGLE_RATING, GOOGLE_REVIEW_URL } from '../lib/testimonials'
+import { TESTIMONIALS, GOOGLE_RATING, GOOGLE_REVIEW_URL, formatReviewDate } from '../lib/testimonials'
+import { GoogleG } from '../components/GoogleG'
 import type { Testimonial } from '../types/index'
 
 // ───────────────────────────────────────────────
@@ -57,18 +58,6 @@ const SOURCE_LABEL: Record<NonNullable<Testimonial['verifiedSource']>, WrittenRe
   google: 'Google',
   realself: 'RealSelf',
   instagram: 'Instagram',
-}
-
-// ISO (YYYY-MM-DD) → "jun 2025" en español. Formateo determinista (array fijo,
-// sin Intl/locale) para que el string sea idéntico en pre-render (Node) y en
-// hidratación (navegador) y no dispare un mismatch #418. Solo Google trae fecha.
-const MESES_ABBR = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic']
-const formatReviewDate = (iso?: string): string | undefined => {
-  const m = iso ? /^(\d{4})-(\d{2})-\d{2}$/.exec(iso) : null
-  if (!m) return undefined
-  const monthIdx = Number(m[2]) - 1
-  if (monthIdx < 0 || monthIdx > 11) return undefined
-  return `${MESES_ABBR[monthIdx]} ${m[1]}`
 }
 
 // Reseñas escritas reales (misma fuente que el carrusel del home), respetando
@@ -259,7 +248,7 @@ export function TestimoniosPage() {
             fontSize: 'clamp(0.95rem, 1.5vw, 1.05rem)',
             lineHeight: 1.7, maxWidth: '560px', margin: '0 auto',
           }}>
-            Más de 200 casos documentados. Reseñas verificadas de pacientes en Google y RealSelf — de personas que pasaron por la misma decisión que tú estás considerando ahora.
+            Más de 200 casos documentados. Reseñas verificadas de pacientes en Google — de personas que pasaron por la misma decisión que tú estás considerando ahora.
           </p>
         </div>
       </section>
@@ -453,7 +442,7 @@ export function TestimoniosPage() {
                 <span style={{ fontSize: '0.85rem', color: '#475569', fontWeight: 500 }}>en Google</span>
               </a>
               <span style={{ fontSize: '0.85rem', color: '#475569', fontWeight: 500 }}>
-                Reseñas verificadas en Google y RealSelf
+                Reseñas verificadas en Google
               </span>
             </div>
           </div>
@@ -510,6 +499,37 @@ export function TestimoniosPage() {
               </li>
             ))}
           </ul>
+
+          {/* Invitación a dejar reseña en Google — crece el rating real */}
+          <div style={{
+            marginTop: 'clamp(2rem, 4vw, 3rem)',
+            padding: 'clamp(1.5rem, 3vw, 2rem)',
+            borderRadius: '20px',
+            background: '#FAF7F2',
+            border: '1px solid rgba(0,0,0,0.06)',
+            textAlign: 'center',
+          }}>
+            <p style={{ fontSize: '1rem', color: '#1A1A1A', fontWeight: 600, marginBottom: '0.4rem' }}>
+              ¿Fuiste paciente del Dr. Agudelo?
+            </p>
+            <p style={{ fontSize: '0.9rem', color: '#475569', lineHeight: 1.6, marginBottom: '1.25rem', maxWidth: '30rem', margin: '0 auto 1.25rem' }}>
+              Tu experiencia ayuda a que otras personas tomen su decisión con más confianza. Deja tu reseña en Google.
+            </p>
+            <a
+              href={GOOGLE_REVIEW_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+                background: '#fff', color: '#3c4043',
+                border: '1px solid rgba(0,0,0,0.15)',
+                borderRadius: '100px', padding: '0.75rem 1.5rem',
+                fontSize: '0.875rem', fontWeight: 600, textDecoration: 'none',
+              }}
+            >
+              <GoogleG size={16} /> Deja tu reseña en Google
+            </a>
+          </div>
         </div>
       </section>
 

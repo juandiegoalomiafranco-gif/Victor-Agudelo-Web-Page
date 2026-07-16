@@ -233,7 +233,7 @@ const ROUTES: Record<string, SeoData> = {
   '/testimonios': {
     title: 'Testimonios de Pacientes — Rinoplastia en Cali | Dr. Víctor Agudelo',
     description:
-      'Testimonios reales de pacientes del Dr. Víctor Agudelo en Cali: rinoplastia estética, secundaria y afrolatina. Experiencias verificadas en RealSelf de quienes ya pasaron por esta decisión.',
+      'Testimonios reales de pacientes del Dr. Víctor Agudelo en Cali: rinoplastia estética, secundaria y afrolatina. Reseñas verificadas en Google de quienes ya pasaron por esta decisión.',
     canonical: `${SITE_URL}/testimonios`,
     ogTitle: 'Testimonios de pacientes — Dr. Víctor Agudelo',
     ogDescription:
