@@ -1,6 +1,7 @@
 import { CONTACT } from './contact'
 import { PROCEDIMIENTOS } from './procedimientos'
 import { FAQ_SCHEMA_ENTRIES } from './faqs'
+import { TESTIMONIALS, GOOGLE_REVIEW_URL } from './testimonials'
 
 // SEO source of truth: por ruta. Consumido por RouteSeo.tsx en cliente y por
 // el script de pre-render en build (src/entry-prerender.tsx).
@@ -48,6 +49,25 @@ const breadcrumb = (items: { name: string; url: string }[]) => ({
   })),
 })
 
+// Reseñas de Google (5★) marcadas como Review individuales en el schema del
+// negocio. NO se emite aggregateRating: schema.org lo exige con
+// reviewCount/ratingCount, y el titular optó por no fijar un conteo. Las Review
+// individuales son válidas por sí solas y citables por motores de IA.
+const GOOGLE_REVIEWS = TESTIMONIALS
+  .filter((t) => t.verifiedSource === 'google' && t.rating)
+  .map((t) => ({
+    '@type': 'Review',
+    author: { '@type': 'Person', name: t.name },
+    datePublished: t.date,
+    reviewRating: {
+      '@type': 'Rating',
+      ratingValue: String(t.rating),
+      bestRating: '5',
+      worstRating: '1',
+    },
+    reviewBody: t.text,
+  }))
+
 const HOME_BUSINESS_SCHEMA = {
   '@context': 'https://schema.org',
   '@type': ['Physician', 'MedicalBusiness'],
@@ -86,7 +106,8 @@ const HOME_BUSINESS_SCHEMA = {
   currenciesAccepted: 'COP',
   paymentAccepted: 'Efectivo, Tarjeta de crédito, Transferencia bancaria',
   areaServed: { '@type': 'City', name: 'Cali', addressCountry: 'CO' },
-  sameAs: [CONTACT.instagram, CONTACT.facebook],
+  sameAs: [CONTACT.instagram, CONTACT.facebook, GOOGLE_REVIEW_URL],
+  review: GOOGLE_REVIEWS,
   hasOfferCatalog: {
     '@type': 'OfferCatalog',
     name: 'Procedimientos de Rinoplastia',
@@ -290,6 +311,7 @@ const ROUTES: Record<string, SeoData> = {
           'https://acorl.org.co/directorio-otorrino/interno/8-VICTOR-MANUEL-AGUDELO-RAMOS',
           'https://www.instagram.com/doctorvictoragudelo/',
           'https://www.tiktok.com/@dr.victor.agudelo',
+          GOOGLE_REVIEW_URL,
         ],
       },
     ],

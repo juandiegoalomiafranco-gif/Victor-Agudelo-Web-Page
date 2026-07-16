@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Star } from 'lucide-react'
 
-import { TESTIMONIALS } from '../../lib/testimonials'
+import { TESTIMONIALS, GOOGLE_RATING, GOOGLE_REVIEW_URL } from '../../lib/testimonials'
 
 export const TestimonialsSection = () => {
   const [idx, setIdx]         = useState(0)
@@ -81,6 +81,23 @@ export const TestimonialsSection = () => {
           >
             La confianza que buscas, en palabras de quienes ya pasaron por esto
           </h2>
+          <a
+            href={GOOGLE_REVIEW_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`Calificación ${GOOGLE_RATING.toFixed(1)} sobre 5 en Google — ver reseñas`}
+            className="mt-6"
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+              textDecoration: 'none',
+              background: '#ffffff', border: '1px solid rgba(0,0,0,0.1)',
+              borderRadius: '100px', padding: '0.5rem 1.05rem',
+            }}
+          >
+            <Star aria-hidden="true" style={{ width: '16px', height: '16px', color: '#C9A84C', fill: '#C9A84C' }} />
+            <span style={{ fontWeight: 700, fontSize: '0.95rem', color: '#1A1A1A' }}>{GOOGLE_RATING.toFixed(1)}</span>
+            <span style={{ fontSize: '0.85rem', color: '#64748b', fontWeight: 500 }}>en Google</span>
+          </a>
         </div>
 
         {/* Text cards */}
