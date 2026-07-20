@@ -350,7 +350,7 @@
   position: relative;
   isolation: isolate;            /* contiene el z-index:10 de los títulos */
   overflow: clip;                /* clip NO rompe el sticky vs. viewport */
-  background: #1A1A1A;           /* placeholder oscuro (irá la foto de fondo) */
+  background-color: #1A1A1A;     /* respaldo bajo la foto de fondo B/N */
   --min: 556px;
   --max: 3080px;
   --ideal: 100svh;
@@ -360,10 +360,30 @@
   --headerHeight: 64px;
 }
 
+/* ── Fondo: retrato B/N sobre la primera pantalla del hero ──
+   El banner usa margin-top:-100svh en desktop, así que la primera pantalla
+   visible arranca en section-y 100svh; en móvil el banner no se desplaza. */
+.vha-hero__bgphoto {
+  position: absolute;
+  top: 100svh;
+  left: 0;
+  right: 0;
+  height: 100svh;
+  z-index: 0;                     /* detrás del contenido, sobre el color de respaldo */
+  background-position: center 20%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+@media screen and (max-width: 800px) {
+  .vha-hero__bgphoto { top: 0; }
+}
+
 /* ── Banner: intro copy + headline en 2 líneas ── */
 .vha-hero__banner {
   position: sticky;
   top: 0;
+  z-index: 2;                     /* headline por encima de la foto de fondo */
   margin-top: -100svh;
   display: flex;
   flex-direction: column;

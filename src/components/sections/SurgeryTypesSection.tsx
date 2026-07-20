@@ -122,7 +122,7 @@ export const SurgeryTypesSection = () => {
             <img
               ref={imgRef}
               className="proc-intro__img"
-              src="/photos/dr-agudelo-placeholder.jpg"
+              src="/photos/dr-agudelo-consultorio.jpg"
               alt=""
               loading="lazy"
               decoding="async"

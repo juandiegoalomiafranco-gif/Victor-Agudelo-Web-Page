@@ -3,7 +3,7 @@ import {
 } from 'lucide-react'
 import { PageHeader } from '../components/PageHeader'
 import { COPY } from '../lib/copy'
-import { DOCTOR_PHOTO_URL } from '../lib/assets'
+import { DOCTOR_PHOTO_URL, PATIENT_PHOTO_URL } from '../lib/assets'
 
 // ── Datos provistos directamente por el Dr. Víctor Manuel Agudelo ──────────────
 const stats = [
@@ -140,6 +140,51 @@ export function SobreElDrPage() {
             <p style={{ color: '#475569', fontSize: '0.97rem', lineHeight: 1.8 }}>
               Al avanzar en la carrera, descubrí que me apasionaban las cirugías en áreas pequeñas, que requieren movimientos delicados y precisos: por eso elegí la otorrinolaringología. En el año 2000 solo tres universidades habían incorporado la cirugía plástica facial a su posgrado de ORL. Debía entrar a una de ellas para unir mi pasión artística con la medicina — y lo logré.
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Cercanía con el paciente */}
+      <section style={{ padding: 'clamp(1rem, 4vw, 2rem) 1.5rem clamp(3rem, 8vw, 5rem)' }}>
+        <div style={{
+          maxWidth: '64rem', margin: '0 auto',
+          display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))',
+          gap: 'clamp(1.5rem, 4vw, 3rem)', alignItems: 'center',
+        }}>
+          {/* Texto */}
+          <div>
+            <p style={{ fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#2D4A3E', marginBottom: '1rem' }}>
+              La consulta
+            </p>
+            <h2 style={{
+              fontFamily: 'var(--font-serif, Cormorant Garamond, Georgia, serif)',
+              fontSize: 'clamp(1.8rem, 3.5vw, 2.4rem)', fontWeight: 600,
+              color: '#1A1A1A', letterSpacing: '-0.02em', lineHeight: 1.12,
+              marginBottom: '1.25rem',
+            }}>
+              Un plan pensado para cada paciente
+            </h2>
+            <p style={{ color: '#475569', fontSize: '0.97rem', lineHeight: 1.8, marginBottom: '1rem' }}>
+              Cada valoración empieza escuchando: qué te incomoda, cómo respiras y qué esperas de tu rostro. A partir de tu anatomía y tus proporciones, el Dr. Agudelo explica con claridad qué es posible y por qué, para que tomes tu decisión con toda la información.
+            </p>
+            <p style={{ color: '#475569', fontSize: '0.97rem', lineHeight: 1.8 }}>
+              Esa cercanía —antes, durante y después de la cirugía— es parte esencial de un resultado natural y de una experiencia tranquila.
+            </p>
+          </div>
+
+          {/* Foto con paciente */}
+          <div style={{
+            position: 'relative', borderRadius: '20px', overflow: 'hidden',
+            border: '1px solid rgba(0,0,0,0.08)', aspectRatio: '4 / 5',
+            background: '#F7F5F0',
+          }}>
+            <img
+              src={PATIENT_PHOTO_URL}
+              alt="El Dr. Víctor Agudelo en consulta con un paciente"
+              style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 30%', display: 'block' }}
+              loading="lazy"
+              decoding="async"
+            />
           </div>
         </div>
       </section>

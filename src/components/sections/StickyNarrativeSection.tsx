@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
+import { HERO_PHOTO_URL } from '../../lib/assets'
 
 // Hero replicado 1:1 de rejuv-health.com (estructura + animación sticky pura).
-// Copies adaptados a Dr. Víctor Agudelo. Columnas con color placeholder
-// hasta tener las fotos reales.
+// Copies adaptados a Dr. Víctor Agudelo. Fondo: retrato B/N a pantalla completa
+// con overlay oscuro; columnas con color placeholder hasta tener las fotos reales.
 
 const FLOATING_TITLES = [
   'Dr. Víctor Agudelo',
@@ -47,6 +48,16 @@ export const StickyNarrativeSection = () => {
       id="inicio"
       className={`vha-hero${ready ? ' is-ready' : ''}`}
     >
+      {/* ── Fondo: retrato B/N a pantalla completa + overlay oscuro ── */}
+      <div
+        className="vha-hero__bgphoto"
+        aria-hidden="true"
+        style={{
+          backgroundImage:
+            `linear-gradient(180deg, rgba(15,15,15,0.55) 0%, rgba(15,15,15,0.38) 42%, rgba(15,15,15,0.68) 100%), url('${HERO_PHOTO_URL}')`,
+        }}
+      />
+
       {/* ── Banner: intro copy + headline en 2 líneas ── */}
       <div className="vha-hero__banner">
         <div className="vha-hero__row">
