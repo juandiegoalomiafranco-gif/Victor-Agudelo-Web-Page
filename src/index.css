@@ -360,30 +360,37 @@
   --headerHeight: 64px;
 }
 
-/* ── Fondo: retrato B/N sobre la primera pantalla del hero ──
-   El banner usa margin-top:-100svh en desktop, así que la primera pantalla
-   visible arranca en section-y 100svh; en móvil el banner no se desplaza. */
+/* ── Fondo: retrato B/N estático (anclado al viewport, como la referencia) ──
+   En desktop cubre TODO el hero y usa background-attachment:fixed, así la foto
+   queda quieta llenando la pantalla mientras las columnas suben y la cubren.
+   En móvil iOS no soporta `fixed` (bug de zoom), se conserva el scroll normal. */
 .vha-hero__bgphoto {
   position: absolute;
-  top: 100svh;
-  left: 0;
-  right: 0;
-  height: 100svh;
+  inset: 0;
   z-index: 0;                     /* detrás del contenido, sobre el color de respaldo */
   background-position: center 20%;
   background-size: cover;
   background-repeat: no-repeat;
+  background-attachment: fixed;
   pointer-events: none;
 }
 @media screen and (max-width: 800px) {
-  .vha-hero__bgphoto { top: 0; }
+  .vha-hero__bgphoto {
+    inset: auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100svh;
+    background-attachment: scroll;
+  }
 }
 
 /* ── Banner: intro copy + headline en 2 líneas ── */
 .vha-hero__banner {
   position: sticky;
   top: 0;
-  z-index: 2;                     /* headline por encima de la foto de fondo */
+  z-index: 1;                     /* sobre la foto de fondo, pero DEBAJO de las
+                                     columnas: al subir lo cubren (como la referencia) */
   margin-top: -100svh;
   display: flex;
   flex-direction: column;
@@ -480,12 +487,16 @@
 }
 
 /* ── Columnas (suben escalonadas) + bloque blanco que crece ── */
-.vha-hero__columns { pointer-events: none; }
+.vha-hero__columns {
+  pointer-events: none;
+  position: relative;
+  z-index: 2;                      /* sobre el banner también en móvil */
+}
 
 @media only screen and (min-width: 801px) {
   .vha-hero__columns {
     position: relative;
-    z-index: 0;
+    z-index: 2;                    /* sobre el banner (z1): al subir cubren el texto */
     height: calc(clamp(var(--min), var(--ideal), var(--max)) * 2);
     margin-top: 10vh;
   }
@@ -541,19 +552,15 @@
   }
 }
 
-/* Etiqueta placeholder dentro de cada media (quitar al poner fotos) */
-.vha-hero__media {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.vha-hero__media-label {
-  font-family: var(--font-sans);
-  font-size: 0.7rem;
-  font-weight: 500;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.35);
+/* Foto full-bleed dentro de cada columna (el gradiente ::after queda encima
+   para dar contraste a los títulos flotantes, como en la referencia) */
+.vha-hero__media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 /* ── Mobile (≤ 800px): columnas apiladas, títulos absolutos ── */

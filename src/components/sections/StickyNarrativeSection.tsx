@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 import { HERO_PHOTO_URL } from '../../lib/assets'
 
 // Hero replicado 1:1 de rejuv-health.com (estructura + animación sticky pura).
-// Copies adaptados a Dr. Víctor Agudelo. Fondo: retrato B/N a pantalla completa
-// con overlay oscuro; columnas con color placeholder hasta tener las fotos reales.
+// Copies adaptados a Dr. Víctor Agudelo. Fondo: retrato B/N estático (anclado
+// al viewport) con overlay oscuro; las 3 columnas con fotos suben cubriéndolo.
 
 const FLOATING_TITLES = [
   'Dr. Víctor Agudelo',
@@ -11,11 +11,12 @@ const FLOATING_TITLES = [
   'Cirugía Plástica Facial y Rinoplastia',
 ] as const
 
-// Placeholders de color para las 3 columnas (reemplazar por <img>/<video> luego)
-const COLUMN_PLACEHOLDERS = [
-  { bg: '#2D4A3E', label: 'Retrato' },
-  { bg: '#3D5249', label: 'Consulta' },
-  { bg: '#243730', label: 'Resultados' },
+// Fotos de las 3 columnas (patrón de la referencia: B/N — color — detalle B/N).
+// El color `bg` queda como respaldo mientras carga la imagen.
+const COLUMN_MEDIA = [
+  { key: 'retrato', src: '/photos/dr-agudelo-3.jpg', pos: 'center 20%', bw: true, bg: '#2D4A3E' },
+  { key: 'consulta', src: '/photos/dr-agudelo-paciente.jpg', pos: 'center 30%', bw: false, bg: '#3D5249' },
+  { key: 'detalle', src: '/photos/dr-agudelo-4.jpg', pos: 'center 25%', bw: true, bg: '#243730' },
 ] as const
 
 export const StickyNarrativeSection = () => {
@@ -88,10 +89,19 @@ export const StickyNarrativeSection = () => {
       {/* ── Columnas que suben escalonadas + bloque blanco que crece ── */}
       <div className="vha-hero__columns">
         <div className="vha-hero__cols">
-          {COLUMN_PLACEHOLDERS.map((c) => (
-            <div className="vha-hero__col" key={c.label}>
+          {COLUMN_MEDIA.map((c) => (
+            <div className="vha-hero__col" key={c.key}>
               <div className="vha-hero__media" style={{ background: c.bg }}>
-                <span className="vha-hero__media-label">{c.label}</span>
+                <img
+                  src={c.src}
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                  style={{
+                    objectPosition: c.pos,
+                    ...(c.bw ? { filter: 'grayscale(1)' } : null),
+                  }}
+                />
               </div>
             </div>
           ))}
