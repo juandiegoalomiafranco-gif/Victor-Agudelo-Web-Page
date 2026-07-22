@@ -6,6 +6,8 @@ import { Menu, X, Calendar, MessageCircle } from 'lucide-react'
 import { CONTACT } from '../lib/contact'
 import { COPY } from '../lib/copy'
 import { getLenis } from '../lib/lenisInstance'
+import { BrandLogo } from './BrandLogo'
+import { HashLink } from './HashLink'
 
 export type CtaVariant = 'evaluacion' | 'whatsapp'
 
@@ -26,7 +28,6 @@ const WHATSAPP_CTA_TEXT = 'Pregúntanos por WhatsApp'
 // el overlay móvil tal cual). Todos son rutas de página.
 const NAV_LINKS = [
   { label: 'Sobre el doctor', href: '/sobre-el-dr-agudelo' },
-  { label: 'Rinoplastia', href: '/rinoplastia' },
   { label: 'Procedimientos', href: '/procedimientos' },
   { label: 'Testimonios', href: '/testimonios' },
   { label: 'Preguntas frecuentes', href: '/preguntas-frecuentes' },
@@ -196,11 +197,9 @@ export function Navbar({ ctaVariant = 'evaluacion', darkSectionIds }: NavbarProp
     phase === 'dark-glass'  ? '0 4px 28px rgba(0,0,0,0.35)' :
                               '0 2px 24px rgba(0,0,0,0.10)'
 
-  const logoColor =
-    (phase === 'hero' || phase === 'dark-glass') ? '#ffffff' : '#0a0a0a'
-
-  const logoBg =
-    (phase === 'hero' || phase === 'dark-glass') ? 'rgba(255,255,255,0.18)' : '#242424'
+  // El logo invierte colores sobre fondos oscuros (hero, dark-glass) y
+  // también mientras el overlay móvil (fondo oscuro) está abierto.
+  const logoOnDark = open || phase === 'hero' || phase === 'dark-glass'
 
   const linkColor =
     (phase === 'hero' || phase === 'dark-glass') ? 'rgba(255,255,255,0.78)' : '#475569'
@@ -236,9 +235,11 @@ export function Navbar({ ctaVariant = 'evaluacion', darkSectionIds }: NavbarProp
         }}
       >
         <div
-          className="max-w-6xl mx-auto px-4 md:px-6"
+          className="mx-auto px-4 md:px-6"
           style={{
-            transform: scrolled ? 'translateY(0)' : 'translateY(0)',
+            // Píldora compacta: lo justo para logo + 4 links + CTA con poco
+            // aire entre secciones (antes max-w-6xl, 72rem).
+            maxWidth: '68rem',
           }}
         >
           <nav
@@ -278,40 +279,10 @@ export function Navbar({ ctaVariant = 'evaluacion', darkSectionIds }: NavbarProp
                 textDecoration: 'none',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '0.55rem',
                 flexShrink: 0,
               }}
             >
-              <div
-                style={{
-                  width: '30px',
-                  height: '30px',
-                  borderRadius: '50%',
-                  background: logoBg,
-                  border: phase !== 'light-glass' ? '1px solid rgba(255,255,255,0.22)' : 'none',
-                  color: '#fff',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '0.78rem',
-                  fontWeight: 700,
-                  flexShrink: 0,
-                  transition: 'background 0.55s ease, border-color 0.55s ease',
-                }}
-              >
-                A
-              </div>
-              <span
-                style={{
-                  color: logoColor,
-                  fontWeight: 600,
-                  fontSize: '1.15rem',
-                  letterSpacing: '-0.01em',
-                  transition: 'color 0.55s ease',
-                }}
-              >
-                Dr. Agudelo
-              </span>
+              <BrandLogo onDark={logoOnDark} fontSize="0.95rem" />
             </Link>
 
             {/* ── Desktop links ── */}
@@ -326,6 +297,7 @@ export function Navbar({ ctaVariant = 'evaluacion', darkSectionIds }: NavbarProp
                       fontWeight: 500,
                       letterSpacing: '0.09em',
                       color: linkColor,
+                      whiteSpace: 'nowrap',
                       transition: 'color 0.25s ease',
                     }}
                     onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = linkHoverColor }}
@@ -408,19 +380,30 @@ export function Navbar({ ctaVariant = 'evaluacion', darkSectionIds }: NavbarProp
                     style={{ color: 'var(--color-4)', fontWeight: 700, fontSize: '1.75rem', letterSpacing: '-0.02em', textDecoration: 'none' }}
                   >{l.label}</Link>
                 ))}
-                <a href="/#agendar" onClick={() => setOpen(false)}
+                <HashLink to="/#agendar" onClick={() => setOpen(false)}
                   style={{ color: 'var(--color-4)', fontWeight: 700, fontSize: '1.75rem', letterSpacing: '-0.02em', textDecoration: 'none' }}
-                >Contacto</a>
+                >Contacto</HashLink>
               </nav>
-              <a
-                href={ctaHref}
-                {...ctaExternalProps}
-                onClick={() => setOpen(false)}
-                className="mt-8 flex items-center justify-center gap-2 text-sm"
-                style={{ background: '#2D4A3E', color: '#fff', fontWeight: 600, borderRadius: '100px', padding: '1rem', textDecoration: 'none' }}
-              >
-                {isWhatsapp ? <MessageCircle className="w-4 h-4" /> : <Calendar className="w-4 h-4" />} {ctaText}
-              </a>
+              {isWhatsapp ? (
+                <a
+                  href={ctaHref}
+                  {...ctaExternalProps}
+                  onClick={() => setOpen(false)}
+                  className="mt-8 flex items-center justify-center gap-2 text-sm"
+                  style={{ background: '#2D4A3E', color: '#fff', fontWeight: 600, borderRadius: '100px', padding: '1rem', textDecoration: 'none' }}
+                >
+                  <MessageCircle className="w-4 h-4" /> {ctaText}
+                </a>
+              ) : (
+                <HashLink
+                  to="/#agendar"
+                  onClick={() => setOpen(false)}
+                  className="mt-8 flex items-center justify-center gap-2 text-sm"
+                  style={{ background: '#2D4A3E', color: '#fff', fontWeight: 600, borderRadius: '100px', padding: '1rem', textDecoration: 'none' }}
+                >
+                  <Calendar className="w-4 h-4" /> {ctaText}
+                </HashLink>
+              )}
             </div>
           </motion.div>
         )}

@@ -14,6 +14,7 @@ import {
   X,
 } from 'lucide-react'
 import { PageHeader } from '../components/PageHeader'
+import { HashLink } from '../components/HashLink'
 import { CONTACT } from '../lib/contact'
 import { COPY } from '../lib/copy'
 import { TESTIMONIALS, GOOGLE_RATING, GOOGLE_REVIEW_URL, formatReviewDate } from '../lib/testimonials'
@@ -637,8 +638,8 @@ export function TestimoniosPage() {
             Envía tus fotos (frente y perfil, sin flash) y recibe una evaluación inicial gratuita. Sin compromiso, con toda la información.
           </p>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', justifyContent: 'center' }}>
-            <a
-              href="/#agendar"
+            <HashLink
+              to="/#agendar"
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: '0.55rem',
                 background: '#C9A84C', color: '#1A1A1A',
@@ -651,7 +652,7 @@ export function TestimoniosPage() {
             >
               <Calendar style={{ width: '16px', height: '16px' }} aria-hidden="true" />
               {COPY.ctaPrimary}
-            </a>
+            </HashLink>
             <a
               href="https://wa.me/573023234594?text=Hola%20Dr.%20Agudelo%2C%20quisiera%20una%20evaluaci%C3%B3n%20inicial."
               target="_blank"

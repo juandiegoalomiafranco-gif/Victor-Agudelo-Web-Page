@@ -134,9 +134,31 @@ export function ProceduresScroll() {
           <p style={{ fontSize: '1rem', color: '#475569', lineHeight: 1.6, marginBottom: '2rem', fontWeight: 500 }}>
             Impulsado por los principios de la cirugía plástica facial avanzada.
           </p>
-          <div style={{ display: 'flex', flexWrap: 'nowrap', gap: '0.5rem' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
             <a
-              href="#procedimientos"
+              href="#agendar"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: '#C9A84C',
+                border: '1px solid #C9A84C',
+                color: '#1A1A1A',
+                borderRadius: '100px',
+                padding: '0.75rem 1.1rem',
+                fontFamily: 'var(--font-sans)',
+                fontSize: '0.68rem',
+                fontWeight: 700,
+                textDecoration: 'none',
+                letterSpacing: '0.04em',
+                whiteSpace: 'nowrap',
+                textAlign: 'center',
+              }}
+            >
+              AGENDAR EVALUACIÓN
+            </a>
+            <Link
+              to="/procedimientos"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -145,7 +167,7 @@ export function ProceduresScroll() {
                 border: '1px solid #1A1A1A',
                 color: '#1A1A1A',
                 borderRadius: '100px',
-                padding: '0.75rem 1.5rem',
+                padding: '0.75rem 1.1rem',
                 fontFamily: 'var(--font-sans)',
                 fontSize: '0.68rem',
                 fontWeight: 600,
@@ -156,7 +178,7 @@ export function ProceduresScroll() {
               }}
             >
               VER PROCEDIMIENTOS
-            </a>
+            </Link>
           </div>
         </div>
 
@@ -228,9 +250,41 @@ export function ProceduresScroll() {
               Impulsado por los principios de la cirugía plástica<br/>facial avanzada.
             </p>
 
-            <div style={{ display: 'flex', flexWrap: 'nowrap', gap: '0.75rem', alignItems: 'center' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', alignItems: 'center' }}>
               <a
-                href="#procedimientos"
+                href="#agendar"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: '#C9A84C',
+                  border: '1px solid #C9A84C',
+                  color: '#1A1A1A',
+                  borderRadius: '100px',
+                  padding: '0.875rem 1.25rem',
+                  fontFamily: 'var(--font-sans)',
+                  fontSize: '0.78rem',
+                  fontWeight: 700,
+                  textDecoration: 'none',
+                  letterSpacing: '0.06em',
+                  whiteSpace: 'nowrap',
+                  transition: 'background 0.3s ease, border-color 0.3s ease',
+                }}
+                onMouseEnter={(e) => {
+                  const el = e.currentTarget as HTMLAnchorElement
+                  el.style.background = '#B8963F'
+                  el.style.borderColor = '#B8963F'
+                }}
+                onMouseLeave={(e) => {
+                  const el = e.currentTarget as HTMLAnchorElement
+                  el.style.background = '#C9A84C'
+                  el.style.borderColor = '#C9A84C'
+                }}
+              >
+                AGENDAR EVALUACIÓN
+              </a>
+              <Link
+                to="/procedimientos"
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -239,7 +293,7 @@ export function ProceduresScroll() {
                   border: '1px solid #1A1A1A',
                   color: '#1A1A1A',
                   borderRadius: '100px',
-                  padding: '0.875rem 1.75rem',
+                  padding: '0.875rem 1.25rem',
                   fontFamily: 'var(--font-sans)',
                   fontSize: '0.78rem',
                   fontWeight: 600,
@@ -260,7 +314,7 @@ export function ProceduresScroll() {
                 }}
               >
                 VER PROCEDIMIENTOS
-              </a>
+              </Link>
             </div>
           </div>
         </div>

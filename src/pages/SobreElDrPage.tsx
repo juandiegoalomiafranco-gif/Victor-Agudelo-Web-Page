@@ -2,6 +2,7 @@ import {
   Calendar, CheckCircle, GraduationCap, Award, Globe, ExternalLink,
 } from 'lucide-react'
 import { PageHeader } from '../components/PageHeader'
+import { HashLink } from '../components/HashLink'
 import { COPY } from '../lib/copy'
 import { DOCTOR_PHOTO_URL, PATIENT_PHOTO_URL } from '../lib/assets'
 
@@ -403,7 +404,7 @@ export function SobreElDrPage() {
           La evaluación inicial es gratuita. Te atiende siempre el Dr. Agudelo,<br />
           de la primera consulta al último control.
         </p>
-        <a href="/#agendar" style={{
+        <HashLink to="/#agendar" style={{
           display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
           background: '#2D4A3E', color: '#fff', borderRadius: '100px',
           padding: '0.85rem 2rem', fontSize: '0.9rem', fontWeight: 600,
@@ -411,7 +412,7 @@ export function SobreElDrPage() {
         }}>
           <Calendar style={{ width: '16px', height: '16px' }} />
           {COPY.ctaPrimary}
-        </a>
+        </HashLink>
       </section>
     </div>
   )

@@ -1,9 +1,10 @@
 import { useEffect, useLayoutEffect } from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 import { getLenis, setLenis } from './lib/lenisInstance'
+import { scrollToHash } from './lib/scrollToHash'
 
 import { Navbar } from './components/Navbar'
 import { ProceduresScroll } from './components/ProceduresScroll'
@@ -34,6 +35,13 @@ if (typeof window !== 'undefined') {
 
 // ─── Home Page ────────────────────────────────────────────────────────────────
 function HomePage() {
+  // Al llegar con un ancla (p. ej. navegación SPA desde una subpágina vía
+  // HashLink, o carga directa de /#agendar), baja suave hasta la sección.
+  const { hash } = useLocation()
+  useEffect(() => {
+    if (hash) scrollToHash(hash.slice(1))
+  }, [hash])
+
   // Lenis smooth scroll + GSAP ScrollTrigger sync
   useEffect(() => {
     let lenis: any

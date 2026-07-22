@@ -2,6 +2,7 @@ import type React from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Calendar, CheckCircle, ChevronRight, MessageSquare, Phone, Image as ImageIcon, AlertCircle } from 'lucide-react'
 import { PageHeader } from '../components/PageHeader'
+import { HashLink } from '../components/HashLink'
 import { CONTACT } from '../lib/contact'
 import { COPY } from '../lib/copy'
 import { PROCEDIMIENTOS, getProcedimientoBySlug } from '../lib/procedimientos'
@@ -219,9 +220,9 @@ function Hero({ proc }: { proc: Procedimiento }) {
         }}>
           Duración aproximada: {proc.duracion}
         </span>
-        <a href="/#agendar" style={ctaSolid}>
+        <HashLink to="/#agendar" style={ctaSolid}>
           <Calendar style={{ width: 16, height: 16 }} /> Agenda tu valoración
-        </a>
+        </HashLink>
       </div>
     </section>
   )
@@ -335,9 +336,9 @@ function CTAFinal() {
         La evaluación inicial es gratuita y sin compromiso.
       </p>
       <div style={{ display: 'inline-flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0.75rem' }}>
-        <a href="/#agendar" style={ctaSolid}>
+        <HashLink to="/#agendar" style={ctaSolid}>
           <Calendar style={{ width: 16, height: 16 }} /> {COPY.ctaPrimary}
-        </a>
+        </HashLink>
         <a href={CONTACT.whatsapp} target="_blank" rel="noopener noreferrer" style={ctaGhost}>
           <MessageSquare style={{ width: 16, height: 16 }} /> {COPY.ctaWhatsapp}
         </a>
