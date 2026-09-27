@@ -42,7 +42,7 @@ export function Navbar({ ctaVariant = 'evaluacion', darkSectionIds }: NavbarProp
   // listener de scroll no tenga que tocar el DOM en cada evento.
   type SectionCache =
     | { mode: 'ids'; ranges: ({ top: number; bottom: number } | null)[] }
-    | { mode: 'default'; difTop: number; agendarTop: number }
+    | { mode: 'default'; difTop: number; agendarTop: number; casosTop: number; casosBottom: number }
 
   useEffect(() => {
     let cache: SectionCache | null = null
@@ -72,7 +72,12 @@ export function Navbar({ ctaVariant = 'evaluacion', darkSectionIds }: NavbarProp
       const difTop = diferenciadores ? (diferenciadores as HTMLElement).offsetTop : heroBottom
       const agendar = document.getElementById('agendar')
       const agendarTop = agendar ? (agendar as HTMLElement).offsetTop : Infinity
-      cache = { mode: 'default', difTop, agendarTop }
+      // Casos de éxito: sección oscura en medio de las claras.
+      const casos = document.getElementById('casos-exito')
+      // Posición absoluta en el documento (offsetTop sería relativo al wrapper posicionado del inicio).
+      const casosTop = casos ? casos.getBoundingClientRect().top + window.scrollY : Infinity
+      const casosBottom = casos ? casosTop + casos.offsetHeight : -Infinity
+      cache = { mode: 'default', difTop, agendarTop, casosTop, casosBottom }
     }
 
     const update = () => {
@@ -95,9 +100,11 @@ export function Navbar({ ctaVariant = 'evaluacion', darkSectionIds }: NavbarProp
         return
       }
 
-      const { difTop, agendarTop } = cache as Extract<SectionCache, { mode: 'default' }>
+      const { difTop, agendarTop, casosTop, casosBottom } = cache as Extract<SectionCache, { mode: 'default' }>
 
       if (mid < difTop) {
+        setDarkSection(true)
+      } else if (mid >= casosTop && mid < casosBottom) {
         setDarkSection(true)
       } else if (mid >= agendarTop) {
         setDarkSection(true)

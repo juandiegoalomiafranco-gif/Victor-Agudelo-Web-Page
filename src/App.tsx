@@ -13,6 +13,7 @@ import { RouteSeo } from './components/RouteSeo'
 import { StickyNarrativeSection } from './components/sections/StickyNarrativeSection'
 import { DifferentiatorsSection } from './components/sections/DifferentiatorsSection'
 import { TestimonialsSection } from './components/sections/TestimonialsSection'
+import { CasosExitoSection } from './components/sections/CasosExitoSection'
 import { BookingSection } from './components/sections/BookingSection'
 import { SurgeryTypesSection } from './components/sections/SurgeryTypesSection'
 import { ProcessSection } from './components/sections/ProcessSection'
@@ -112,6 +113,7 @@ function HomePage() {
           <SurgeryTypesSection />
           <DifferentiatorsSection />
           <TestimonialsSection />
+          <CasosExitoSection />
           <ProcessSection />
           <FaqAccordion />
           <BookingSection />
