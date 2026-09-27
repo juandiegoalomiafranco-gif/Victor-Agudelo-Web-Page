@@ -24,8 +24,8 @@ const PROCEDURES: Procedure[] = [
     subtitle: 'Técnica especializada',
     description:
       'Técnica diseñada para narices con características afrolatinas, preservando la identidad étnica del paciente y logrando resultados completamente naturales.',
-    image: '/photos/dr-agudelo-1.jpg',
-    href: '/rinoplastia',
+    image: '/images/procedimientos/afrolatina/card-afrolatina.webp',
+    href: '/rinoplastia/afrolatina',
   },
   {
     title: 'Rinoplastia Secundaria',

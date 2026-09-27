@@ -5,7 +5,7 @@ import gsap from 'gsap'
 // Pills de procedimientos (abajo, ancho completo). Cada uno enlaza a su página.
 const PROCEDURE_PILLS = [
   { label: 'Rinoplastia Estética', href: '/rinoplastia' },
-  { label: 'Rinoplastia Afrolatina', href: '/rinoplastia' },
+  { label: 'Rinoplastia Afrolatina', href: '/rinoplastia/afrolatina' },
   { label: 'Rinoplastia Secundaria', href: '/rinoplastia' },
   { label: 'Mentoplastia', href: '/procedimientos' },
   { label: 'Otoplastia', href: '/procedimientos' },

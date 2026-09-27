@@ -18,6 +18,8 @@ import { CONTACT } from '../lib/contact'
 import { COPY } from '../lib/copy'
 import { TESTIMONIALS, GOOGLE_RATING, GOOGLE_REVIEW_URL, formatReviewDate } from '../lib/testimonials'
 import { GoogleG } from '../components/GoogleG'
+import { BeforeAfterSlider } from '../components/ui/BeforeAfterSlider'
+import { CASOS_DESTACADOS, altCaso } from '../lib/casos'
 import type { Testimonial } from '../types/index'
 
 // ───────────────────────────────────────────────
@@ -281,17 +283,75 @@ export function TestimoniosPage() {
             Cada testimonio es una decisión que tomó tiempo, <em style={{ fontStyle: 'italic', color: '#2D4A3E', fontWeight: 500 }}>y un resultado que cambió algo.</em>
           </h2>
           <p style={{ color: '#475569', fontSize: '1rem', lineHeight: 1.75, maxWidth: '40rem', margin: '0 auto' }}>
-            La mayoría de pacientes consultó con uno o dos cirujanos antes de elegir. Lo que vas a escuchar a continuación no es marketing: son personas reales contando, con sus palabras, cómo fue el proceso — desde la primera consulta hasta el resultado final.
+            La mayoría de pacientes consultó con uno o dos cirujanos antes de elegir. Lo que vas a ver y leer a continuación no es marketing: son personas reales contando, con sus palabras, cómo fue el proceso — desde la primera consulta hasta el resultado final.
           </p>
         </div>
       </section>
 
-      {/* Video grid — se muestra solo cuando haya videos reales */}
+      {/* Resultados reales (antes/después) + video grid (solo cuando haya videos reales) */}
       <section style={{ background: '#fff', padding: 'clamp(3rem, 7vw, 5rem) 1.25rem' }}>
         <div style={{ maxWidth: '78rem', margin: '0 auto' }}>
-          {videoTestimonials.length > 0 && (
+          <div style={{ textAlign: 'center', marginBottom: 'clamp(2rem, 4vw, 3rem)' }}>
+            <p style={{ fontSize: '0.72rem', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#525252', marginBottom: '1rem' }}>
+              Resultados reales
+            </p>
+            <h2 style={{
+              fontFamily: 'var(--font-serif, Cormorant Garamond, Georgia, serif)',
+              fontSize: 'clamp(1.9rem, 3.6vw, 2.8rem)',
+              fontWeight: 500, lineHeight: 1.15, letterSpacing: '-0.01em',
+              color: '#1A1A1A', marginBottom: '1rem',
+            }}>
+              El antes y el después, <em style={{ fontStyle: 'italic', color: '#2D4A3E', fontWeight: 500 }}>sin filtros.</em>
+            </h2>
+            <p style={{ color: '#475569', fontSize: '1rem', lineHeight: 1.75, maxWidth: '38rem', margin: '0 auto' }}>
+              Desliza la línea sobre cada foto para comparar. Pacientes de rinoplastia afrolatina del Dr. Agudelo, con el mismo encuadre antes y después.
+            </p>
+          </div>
+
           <ul style={{
             listStyle: 'none', margin: 0, padding: 0,
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))',
+            gap: 'clamp(1rem, 1.6vw, 1.5rem)',
+          }}>
+            {CASOS_DESTACADOS.map(({ caso, vista }, i) => (
+              <li key={caso.id}>
+                <BeforeAfterSlider
+                  antes={vista.antes}
+                  despues={vista.despues}
+                  altAntes={altCaso('Rinoplastia afrolatina', i + 1, vista.vista, 'antes')}
+                  altDespues={altCaso('Rinoplastia afrolatina', i + 1, vista.vista, 'después')}
+                  sizes="(max-width: 767px) 100vw, 400px"
+                />
+                {caso.nota && (
+                  <p style={{ margin: '0.85rem 0.25rem 0', fontSize: '0.85rem', color: '#475569', lineHeight: 1.55 }}>
+                    {caso.nota}
+                  </p>
+                )}
+              </li>
+            ))}
+          </ul>
+
+          <div style={{ textAlign: 'center', marginTop: 'clamp(2rem, 4vw, 2.75rem)' }}>
+            <Link
+              to="/rinoplastia/afrolatina#casos"
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+                background: '#1A1A1A', color: '#fff', borderRadius: '100px',
+                padding: '0.85rem 1.75rem', fontSize: '0.875rem', fontWeight: 600,
+                textDecoration: 'none',
+              }}
+            >
+              Ver más casos <ChevronRight style={{ width: '16px', height: '16px' }} aria-hidden="true" />
+            </Link>
+            <p style={{ marginTop: '1rem', fontSize: '0.75rem', color: '#94a3b8', fontStyle: 'italic' }}>
+              Imágenes publicadas con el consentimiento de cada paciente. Los resultados pueden variar según cada caso.
+            </p>
+          </div>
+
+          {videoTestimonials.length > 0 && (
+          <ul style={{
+            listStyle: 'none', margin: 'clamp(3rem, 6vw, 4.5rem) 0 0', padding: 0,
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
             gap: 'clamp(1rem, 1.6vw, 1.5rem)',
@@ -383,7 +443,7 @@ export function TestimoniosPage() {
           )}
 
           {/* Instagram link */}
-          <div style={{ textAlign: 'center', marginTop: videoTestimonials.length > 0 ? 'clamp(2rem, 4vw, 3rem)' : 0 }}>
+          <div style={{ textAlign: 'center', marginTop: 'clamp(2rem, 4vw, 3rem)' }}>
             <a
               href={CONTACT.instagram}
               target="_blank"

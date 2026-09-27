@@ -12,7 +12,6 @@
 
 export type FaqItem = { q: string; a: string }
 export type RecoveryStep = { etapa: string; titulo: string; detalle: string }
-export type CasoGaleria = { alt: string; nota?: string }
 
 export type Procedimiento = {
   slug: string                 // ej. 'ultrasonica'
@@ -30,7 +29,6 @@ export type Procedimiento = {
     descripcion: string
     puntosClave: string[]
   }
-  galeria: CasoGaleria[]       // espacios para fotos del Dr. Agudelo
   recuperacion: RecoveryStep[] // timeline día a día
   riesgos: string[]            // honestidad médica → refuerza E-E-A-T
   faqs: FaqItem[]
@@ -41,15 +39,6 @@ export type Procedimiento = {
     procedureDescription: string // descripción para MedicalProcedure schema
   }
 }
-
-// Galería estándar: 3 casos por procedimiento.
-// El doctor solo necesita subir caso-1.jpg, caso-2.jpg, caso-3.jpg en
-// public/images/procedimientos/<slug>/ y las imágenes aparecerán.
-const galeriaCasos = (nombreProc: string): CasoGaleria[] => [
-  { alt: `Resultado de ${nombreProc.toLowerCase()}, caso 1 — Dr. Víctor Agudelo, Cali` },
-  { alt: `Resultado de ${nombreProc.toLowerCase()}, caso 2 — Dr. Víctor Agudelo, Cali` },
-  { alt: `Resultado de ${nombreProc.toLowerCase()}, caso 3 — Dr. Víctor Agudelo, Cali` },
-]
 
 export const PROCEDIMIENTOS: Procedimiento[] = [
   // ────────────────────────────────────────────────────────────────────
@@ -89,7 +78,6 @@ export const PROCEDIMIENTOS: Procedimiento[] = [
         'Acompañamiento postoperatorio directo del Dr. Agudelo',
       ],
     },
-    galeria: galeriaCasos('Rinoplastia Ultrasónica'),
     recuperacion: [
       { etapa: 'Día 1–2',     titulo: 'Reposo en casa',           detalle: 'Férula nasal puesta, congestión nasal marcada y leve hinchazón periorbitaria. Hielo según indicaciones.' },
       { etapa: 'Semana 1',    titulo: 'Retiro de férula',         detalle: 'Se retira la férula nasal externa y se evalúa edema. Apto para trabajo de escritorio o remoto.' }, // VALIDAR día exacto
@@ -156,7 +144,6 @@ export const PROCEDIMIENTOS: Procedimiento[] = [
         'Cirugías típicamente más largas (6+ horas)', // VALIDAR
       ],
     },
-    galeria: galeriaCasos('Rinoplastia Secundaria'),
     recuperacion: [
       { etapa: 'Día 1–2',     titulo: 'Reposo estricto',          detalle: 'Mayor inflamación que en una primaria, sobre todo si se usaron injertos. Reposo y control de hielo.' },
       { etapa: 'Semana 1',    titulo: 'Retiro de férula',         detalle: 'Se retira la férula y se evalúa el postoperatorio inicial. La congestión nasal puede ser más marcada.' }, // VALIDAR
@@ -222,7 +209,6 @@ export const PROCEDIMIENTOS: Procedimiento[] = [
         'Respeto absoluto por la identidad étnica y cultural del paciente',
       ],
     },
-    galeria: galeriaCasos('Rinoplastia Afrolatina'),
     recuperacion: [
       { etapa: 'Día 1–2',     titulo: 'Reposo en casa',           detalle: 'Férula nasal, congestión nasal y leve edema. Indicaciones de hielo y elevación de cabecera.' },
       { etapa: 'Semana 1',    titulo: 'Retiro de férula',         detalle: 'Se retira la férula nasal externa. Apto para trabajo de oficina o remoto.' }, // VALIDAR
@@ -288,7 +274,6 @@ export const PROCEDIMIENTOS: Procedimiento[] = [
         'Resultado natural y estable a largo plazo',
       ],
     },
-    galeria: galeriaCasos('Rinoplastia Masculina'),
     recuperacion: [
       { etapa: 'Día 1–2',     titulo: 'Reposo en casa',           detalle: 'Férula nasal puesta. Congestión nasal y leve edema esperable.' },
       { etapa: 'Semana 1',    titulo: 'Retiro de férula',         detalle: 'Se retira la férula nasal. Apto para trabajo de oficina o teletrabajo.' }, // VALIDAR
@@ -354,7 +339,6 @@ export const PROCEDIMIENTOS: Procedimiento[] = [
         'Recuperación generalmente más corta que una rinoplastia estética',
       ],
     },
-    galeria: galeriaCasos('Septoplastia'),
     recuperacion: [
       { etapa: 'Día 1–2',     titulo: 'Reposo en casa',           detalle: 'Congestión nasal marcada. Sin férula externa (en la mayoría de casos). Hielo y elevación de cabecera.' },
       { etapa: 'Semana 1',    titulo: 'Mejora respiratoria',      detalle: 'Comienza a notarse mejoría en el flujo de aire al ceder la inflamación interna.' }, // VALIDAR

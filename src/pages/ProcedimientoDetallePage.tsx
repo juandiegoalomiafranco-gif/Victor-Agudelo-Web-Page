@@ -1,11 +1,14 @@
+import { useEffect, useState } from 'react'
 import type React from 'react'
-import { Link, useParams } from 'react-router-dom'
-import { Calendar, CheckCircle, ChevronRight, MessageSquare, Phone, Image as ImageIcon, AlertCircle } from 'lucide-react'
+import { Link, useLocation, useParams } from 'react-router-dom'
+import { Calendar, CheckCircle, ChevronRight, MessageSquare, Phone, AlertCircle } from 'lucide-react'
 import { PageHeader } from '../components/PageHeader'
 import { CONTACT } from '../lib/contact'
 import { COPY } from '../lib/copy'
 import { PROCEDIMIENTOS, getProcedimientoBySlug } from '../lib/procedimientos'
 import type { Procedimiento } from '../lib/procedimientos'
+import { casosDe, resultadosDe, altCaso, VISTA_LABEL } from '../lib/casos'
+import { BeforeAfterSlider } from '../components/ui/BeforeAfterSlider'
 
 // ─── Tokens visuales (replicados de RinoplastiaPage) ────────────────────────
 const BG_LIGHT = '#F7F5F0'
@@ -48,6 +51,12 @@ function NotFound() {
 export function ProcedimientoDetallePage() {
   const { slug } = useParams<{ slug: string }>()
   const proc = getProcedimientoBySlug(slug)
+  const { hash } = useLocation()
+
+  // Enlaces con ancla (p. ej. /rinoplastia/afrolatina#casos desde /testimonios).
+  useEffect(() => {
+    if (hash) document.getElementById(hash.slice(1))?.scrollIntoView()
+  }, [slug, hash])
 
   if (!proc) return <NotFound />
 
@@ -104,7 +113,7 @@ export function ProcedimientoDetallePage() {
       </Section>
 
       {/* Galería de resultados — ESPACIO LISTO PARA FOTOS DEL DR. AGUDELO */}
-      <Galeria proc={proc} />
+      <Galeria key={proc.slug} proc={proc} />
 
       {/* Recuperación día a día */}
       <Recuperacion steps={proc.recuperacion} />
@@ -228,47 +237,109 @@ function Hero({ proc }: { proc: Procedimiento }) {
 }
 
 function Galeria({ proc }: { proc: Procedimiento }) {
-  return (
-    <section style={{ background: BG_LIGHT, padding: 'clamp(3rem, 8vw, 5rem) 1.25rem', borderTop: '1px solid rgba(0,0,0,0.06)' }}>
-      <div style={{ maxWidth: '68rem', margin: '0 auto' }}>
-        <p style={eyebrowStyle('#94a3b8')}>Resultados reales</p>
-        <h2 style={titleStyle}>Casos del Dr. Agudelo</h2>
-        <p style={{ ...paragraphStyle, marginBottom: '2.5rem' }}>
-          Estos son espacios listos para mostrar casos reales. El doctor publica fotos
-          comparativas siempre con el consentimiento expreso de cada paciente.
-        </p>
+  const casos = casosDe(proc.slug)
+  const resultados = resultadosDe(proc.slug)
+  const [casoIdx, setCasoIdx] = useState(0)
+  const [vistaIdx, setVistaIdx] = useState(0)
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(240px, 100%), 1fr))', gap: '1.25rem' }}>
-          {proc.galeria.map((caso, i) => {
-            // TODO: reemplazar por fotos reales del Dr. Agudelo.
-            //       Subir archivos a public/images/procedimientos/<slug>/caso-N.jpg
-            const src = `/images/procedimientos/${proc.slug}/caso-${i + 1}.jpg`
-            return (
-              <figure key={i} style={{ margin: 0 }}>
-                <div style={galleryItem}>
-                  {/* Placeholder estético — visible siempre que la imagen no cargue */}
-                  <div style={galleryPlaceholder}>
-                    <ImageIcon style={{ width: 22, height: 22, color: ACCENT, opacity: 0.7 }} />
-                    <span style={{ fontSize: '0.72rem', color: '#94a3b8', textAlign: 'center', padding: '0 0.75rem', letterSpacing: '0.02em' }}>
-                      Foto del procedimiento<br />— Dr. Agudelo —
-                    </span>
-                  </div>
-                  {/* Imagen real (sobre el placeholder). Si falla la carga, se oculta y queda el placeholder. */}
-                  <img
-                    src={src}
-                    alt={caso.alt}
-                    loading="lazy"
-                    onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
-                    style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 1 }}
-                  />
+  // Sin fotos reales para este procedimiento: la sección no se muestra.
+  if (casos.length === 0) return null
+
+  const caso = casos[casoIdx]
+  const vista = caso.vistas[Math.min(vistaIdx, caso.vistas.length - 1)]
+  const n = casoIdx + 1
+
+  return (
+    <section id="casos" style={{ background: BG_LIGHT, padding: 'clamp(3rem, 8vw, 5rem) 1.25rem', borderTop: '1px solid rgba(0,0,0,0.06)' }}>
+      <div style={{ maxWidth: '68rem', margin: '0 auto' }}>
+        <div className="casos-grid">
+          <BeforeAfterSlider
+            key={`${caso.id}-${vista.vista}`}
+            antes={vista.antes}
+            despues={vista.despues}
+            altAntes={altCaso(proc.nombre, n, vista.vista, 'antes')}
+            altDespues={altCaso(proc.nombre, n, vista.vista, 'después')}
+            sizes="(max-width: 860px) 100vw, 560px"
+          />
+
+          <div>
+            <p style={eyebrowStyle('#94a3b8')}>Resultados reales</p>
+            <h2 style={titleStyle}>Casos del Dr. Agudelo</h2>
+            <p style={{ ...paragraphStyle, marginBottom: '1.75rem' }}>
+              Desliza la línea sobre la foto para comparar el antes y el después.
+              Son pacientes reales del Dr. Agudelo, fotografiados con la misma luz
+              y el mismo encuadre antes y después de la cirugía.
+            </p>
+
+            <p style={chipGroupLabel}>Caso</p>
+            <div role="group" aria-label="Elegir caso" style={chipRow}>
+              {casos.map((c, i) => (
+                <button
+                  key={c.id}
+                  type="button"
+                  className="casos-chip"
+                  aria-pressed={i === casoIdx}
+                  onClick={() => { setCasoIdx(i); setVistaIdx(0) }}
+                >
+                  Caso {i + 1}
+                </button>
+              ))}
+            </div>
+
+            {caso.vistas.length > 1 && (
+              <>
+                <p style={chipGroupLabel}>Vista</p>
+                <div role="group" aria-label="Elegir vista" style={chipRow}>
+                  {caso.vistas.map((v, i) => (
+                    <button
+                      key={v.vista}
+                      type="button"
+                      className="casos-chip"
+                      aria-pressed={v === vista}
+                      onClick={() => setVistaIdx(i)}
+                    >
+                      {VISTA_LABEL[v.vista]}
+                    </button>
+                  ))}
                 </div>
-                <figcaption style={{ marginTop: '0.5rem', fontSize: '0.78rem', color: '#94a3b8' }}>
-                  Caso {i + 1} {caso.nota ? `· ${caso.nota}` : ''}
-                </figcaption>
-              </figure>
-            )
-          })}
+              </>
+            )}
+
+            {caso.nota && (
+              <p style={{ fontSize: '0.9rem', color: TEXT_DARK, lineHeight: 1.6, margin: '0.5rem 0 0', paddingLeft: '0.9rem', borderLeft: `2px solid ${ACCENT}` }}>
+                {caso.nota}
+              </p>
+            )}
+          </div>
         </div>
+
+        {resultados.length > 0 && (
+          <div style={{ marginTop: 'clamp(2.5rem, 6vw, 4rem)' }}>
+            <p style={eyebrowStyle('#94a3b8')}>Más resultados</p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))', gap: '1.25rem' }}>
+              {resultados.map(r => (
+                <figure key={r.id} style={{ margin: 0 }}>
+                  <div style={galleryItem}>
+                    <img
+                      src={r.foto.src}
+                      srcSet={`${r.foto.srcSm} 600w, ${r.foto.src} 1000w`}
+                      sizes="(max-width: 767px) 100vw, 340px"
+                      alt={`${proc.nombre}: resultado final, vista de ${VISTA_LABEL[r.vista] === '¾' ? 'tres cuartos' : VISTA_LABEL[r.vista].toLowerCase()} — Dr. Víctor Agudelo, Cali`}
+                      width={1000}
+                      height={1250}
+                      loading="lazy"
+                      decoding="async"
+                      style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+                    />
+                  </div>
+                  <figcaption style={{ marginTop: '0.5rem', fontSize: '0.78rem', color: '#94a3b8' }}>
+                    Resultado · {VISTA_LABEL[r.vista]}
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          </div>
+        )}
 
         <p style={{ marginTop: '2rem', fontSize: '0.78rem', color: '#94a3b8', fontStyle: 'italic', maxWidth: '40rem' }}>
           Imágenes de pacientes reales publicadas con su consentimiento. Los resultados pueden variar según cada caso.
@@ -445,11 +516,12 @@ const galleryItem: React.CSSProperties = {
   border: '1px solid rgba(0,0,0,0.06)',
 }
 
-const galleryPlaceholder: React.CSSProperties = {
-  position: 'absolute', inset: 0,
-  display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-  gap: '0.5rem',
-  background: 'linear-gradient(135deg, #EEEAE2 0%, #E2DCD0 100%)',
+const chipGroupLabel: React.CSSProperties = {
+  fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase',
+  color: '#94a3b8', margin: '0 0 0.6rem',
+}
+const chipRow: React.CSSProperties = {
+  display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1.25rem',
 }
 
 const faqDetails: React.CSSProperties = {
