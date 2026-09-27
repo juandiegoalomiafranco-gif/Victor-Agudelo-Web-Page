@@ -44,111 +44,108 @@ export const CasosExitoSection = () => {
 
   return (
     <section id="casos-exito" className="cx-section" aria-labelledby="casos-exito-title">
-      <div className="cx-inner">
+      <div className="cx-inner cx-layout">
         <header className="cx-header">
           <p className="cx-eyebrow">Casos de éxito</p>
           <h2 id="casos-exito-title" className="cx-title section-reveal-header">
             Resultados reales, <span className="cx-title-soft">rasgos propios.</span>
           </h2>
           <p className="cx-lead">
-            Desliza sobre la foto para comparar el antes y el después. Pacientes reales
-            del Dr. Agudelo, con la misma luz y el mismo encuadre.
+            Desliza sobre la foto para comparar el antes y el después.
           </p>
         </header>
 
-        <div className="cx-grid">
-          <motion.div
-            key={`${caso.id}-${vista.vista}`}
-            className="cx-media"
-            initial={reduced ? false : { opacity: 0, scale: 1.02 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <BeforeAfterSlider
-              antes={vista.antes}
-              despues={vista.despues}
-              altAntes={altCaso(nombreTipo, n, vista.vista, 'antes')}
-              altDespues={altCaso(nombreTipo, n, vista.vista, 'después')}
-              sizes="(max-width: 860px) 100vw, 560px"
-            />
-          </motion.div>
+        <motion.div
+          key={`${caso.id}-${vista.vista}`}
+          className="cx-media"
+          initial={reduced ? false : { opacity: 0, scale: 1.02 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <BeforeAfterSlider
+            antes={vista.antes}
+            despues={vista.despues}
+            altAntes={altCaso(nombreTipo, n, vista.vista, 'antes')}
+            altDespues={altCaso(nombreTipo, n, vista.vista, 'después')}
+            sizes="(max-width: 860px) 80vw, 480px"
+          />
+        </motion.div>
 
-          <div className="cx-info">
-            {tipos.length > 1 && (
-              <div className="cx-chips" role="group" aria-label="Filtrar por tipo de rinoplastia">
-                <button type="button" className="cx-chip" aria-pressed={tipo === null} onClick={() => { setTipo(null); setIdx(0); setVistaIdx(0) }}>
-                  Todos
+        <div className="cx-info">
+          {tipos.length > 1 && (
+            <div className="cx-chips cx-filters" role="group" aria-label="Filtrar por tipo de rinoplastia">
+              <button type="button" className="cx-chip" aria-pressed={tipo === null} onClick={() => { setTipo(null); setIdx(0); setVistaIdx(0) }}>
+                Todos
+              </button>
+              {tipos.map(t => (
+                <button key={t} type="button" className="cx-chip" aria-pressed={tipo === t} onClick={() => { setTipo(t); setIdx(0); setVistaIdx(0) }}>
+                  {tipoLabel(t).replace(/^Rinoplastia /, '')}
                 </button>
-                {tipos.map(t => (
-                  <button key={t} type="button" className="cx-chip" aria-pressed={tipo === t} onClick={() => { setTipo(t); setIdx(0); setVistaIdx(0) }}>
-                    {tipoLabel(t).replace(/^Rinoplastia /, '')}
-                  </button>
-                ))}
-              </div>
-            )}
-
-            <p className="cx-meta">
-              Caso {pad(n)} <span aria-hidden="true">/</span> {pad(casos.length)} · {nombreTipo}
-            </p>
-            {caso.nota && <p className="cx-nota">{caso.nota}</p>}
-
-            {caso.vistas.length > 1 && (
-              <div className="cx-chips" role="group" aria-label="Elegir vista">
-                {caso.vistas.map((v, i) => (
-                  <button key={v.vista} type="button" className="cx-chip" aria-pressed={v === vista} onClick={() => setVistaIdx(i)}>
-                    {VISTA_LABEL[v.vista]}
-                  </button>
-                ))}
-              </div>
-            )}
-
-            <div className="cx-nav">
-              <button type="button" className="cx-arrow" aria-label="Caso anterior" onClick={() => go(idx - 1)}>
-                <ChevronLeft style={{ width: 20, height: 20 }} />
-              </button>
-              <div className="cx-progress" aria-hidden="true">
-                {casos.map((c, i) => (
-                  <span key={c.id} className={i <= idx ? 'is-on' : undefined} />
-                ))}
-              </div>
-              <button type="button" className="cx-arrow" aria-label="Caso siguiente" onClick={() => go(idx + 1)}>
-                <ChevronRight style={{ width: 20, height: 20 }} />
-              </button>
-              <span className="cx-count" aria-hidden="true">{pad(n)} / {pad(casos.length)}</span>
+              ))}
             </div>
+          )}
 
-            <p className="cx-sr" aria-live="polite">
-              Caso {n} de {casos.length}, {nombreTipo}, vista {VISTA_LABEL[vista.vista] === '¾' ? 'tres cuartos' : VISTA_LABEL[vista.vista].toLowerCase()}
-            </p>
-          </div>
-        </div>
+          <p className="cx-meta">
+            Caso {pad(n)} <span aria-hidden="true">/</span> {pad(casos.length)} · {nombreTipo}
+          </p>
+          {caso.nota && <p className="cx-nota">{caso.nota}</p>}
 
-        <div className="cx-thumbs" role="group" aria-label="Elegir caso">
-          {casos.map((c, i) => (
-            <button
-              key={c.id}
-              type="button"
-              className="cx-thumb"
-              aria-pressed={i === idx}
-              aria-label={`Ver caso ${i + 1}`}
-              onClick={() => go(i)}
-            >
-              <img src={c.vistas[0].despues.srcSm} alt="" width={600} height={750} loading="lazy" decoding="async" />
+          {caso.vistas.length > 1 && (
+            <div className="cx-chips cx-vistas" role="group" aria-label="Elegir vista">
+              {caso.vistas.map((v, i) => (
+                <button key={v.vista} type="button" className="cx-chip" aria-pressed={v === vista} onClick={() => setVistaIdx(i)}>
+                  {VISTA_LABEL[v.vista]}
+                </button>
+              ))}
+            </div>
+          )}
+
+          <div className="cx-nav">
+            <button type="button" className="cx-arrow" aria-label="Caso anterior" onClick={() => go(idx - 1)}>
+              <ChevronLeft style={{ width: 20, height: 20 }} />
             </button>
-          ))}
-        </div>
+            <div className="cx-progress" aria-hidden="true">
+              {casos.map((c, i) => (
+                <span key={c.id} className={i <= idx ? 'is-on' : undefined} />
+              ))}
+            </div>
+            <button type="button" className="cx-arrow" aria-label="Caso siguiente" onClick={() => go(idx + 1)}>
+              <ChevronRight style={{ width: 20, height: 20 }} />
+            </button>
+            <span className="cx-count" aria-hidden="true">{pad(n)} / {pad(casos.length)}</span>
+          </div>
 
-        <div className="cx-ctas">
-          <Link to={`/rinoplastia/${caso.procedimiento}#casos`} className="cx-cta cx-cta--ghost">
-            Ver todos los casos <ChevronRight style={{ width: 16, height: 16 }} aria-hidden="true" />
-          </Link>
-          <a href="#agendar" className="cx-cta cx-cta--solid">
-            <Calendar style={{ width: 16, height: 16 }} aria-hidden="true" /> Quiero mi evaluación
-          </a>
+          <p className="cx-sr" aria-live="polite">
+            Caso {n} de {casos.length}, {nombreTipo}, vista {VISTA_LABEL[vista.vista] === '¾' ? 'tres cuartos' : VISTA_LABEL[vista.vista].toLowerCase()}
+          </p>
+
+          <div className="cx-thumbs" role="group" aria-label="Elegir caso">
+            {casos.map((c, i) => (
+              <button
+                key={c.id}
+                type="button"
+                className="cx-thumb"
+                aria-pressed={i === idx}
+                aria-label={`Ver caso ${i + 1}`}
+                onClick={() => go(i)}
+              >
+                <img src={c.vistas[0].despues.srcSm} alt="" width={600} height={750} loading="lazy" decoding="async" />
+              </button>
+            ))}
+          </div>
+
+          <div className="cx-ctas">
+            <Link to={`/rinoplastia/${caso.procedimiento}#casos`} className="cx-cta cx-cta--ghost">
+              Ver todos los casos <ChevronRight style={{ width: 16, height: 16 }} aria-hidden="true" />
+            </Link>
+            <a href="#agendar" className="cx-cta cx-cta--solid">
+              <Calendar style={{ width: 16, height: 16 }} aria-hidden="true" /> Quiero mi evaluación
+            </a>
+          </div>
+          <p className="cx-legal">
+            Imágenes publicadas con el consentimiento de cada paciente. Los resultados pueden variar según cada caso.
+          </p>
         </div>
-        <p className="cx-legal">
-          Imágenes publicadas con el consentimiento de cada paciente. Los resultados pueden variar según cada caso.
-        </p>
       </div>
     </section>
   )
