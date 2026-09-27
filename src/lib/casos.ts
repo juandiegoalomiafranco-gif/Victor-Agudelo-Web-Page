@@ -1,3 +1,5 @@
+import { getProcedimientoBySlug } from './procedimientos'
+
 // Casos reales antes/después del Dr. Agudelo. Fuente única de la galería de
 // cada procedimiento (/rinoplastia/:slug) y de "Resultados reales" en
 // /testimonios.
@@ -96,3 +98,9 @@ export const resultadosDe = (slug: string) => RESULTADOS.filter(r => r.procedimi
 
 export const altCaso = (nombreProc: string, n: number, vista: Vista, momento: 'antes' | 'después') =>
   `${nombreProc}, caso ${n}, vista de ${VISTA_LABEL[vista] === '¾' ? 'tres cuartos' : VISTA_LABEL[vista].toLowerCase()} — ${momento} — Dr. Víctor Agudelo, Cali`
+
+// Nombre visible del tipo de procedimiento de un caso (p. ej. "Rinoplastia Afrolatina").
+export const tipoLabel = (slug: string) => getProcedimientoBySlug(slug)?.nombre ?? slug
+
+// Tipos de procedimiento que tienen al menos un caso, en el orden de CASOS.
+export const tiposConCasos = () => [...new Set(CASOS.map(c => c.procedimiento))]
